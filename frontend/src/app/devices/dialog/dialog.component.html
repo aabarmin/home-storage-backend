@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Add a new device</h1>
+<div mat-dialog-content>
+    <app-devices-form (onValidityChange)="onFormValidStateChange($event)"></app-devices-form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button [disabled]="!formValid" (click)="onSubmit()">Save</button>
+</div>

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Add a new flat</h1>
+<div mat-dialog-content>
+    <app-flats-form (onValidityChange)="onFormValidStateChange($event)"></app-flats-form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button [disabled]="!formValid" (click)="onSubmit()">Save</button>
+</div>

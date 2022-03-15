@@ -1,0 +1,45 @@
+<form [formGroup]="formGroup">
+    <p>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput formControlName="title">
+            <mat-error *ngIf="formGroup.get('title')?.hasError('required')">
+                Name is required
+            </mat-error>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field appearance="fill">
+            <mat-label>Alias</mat-label>
+            <input type="text" matInput formControlName="alias">
+            <mat-error *ngIf="formGroup.get('alias')?.hasError('required')">
+                Alias is required
+            </mat-error>
+            <mat-error *ngIf="formGroup.get('alias')?.hasError('pattern')">
+                Alias should contain only alphabetic
+            </mat-error>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-form-field appearance="fill">
+            <mat-label>Flat</mat-label>
+            <mat-select formControlName="flat">
+                <mat-option *ngFor="let flat of flats$ | async" [value]="flat">{{flat.title}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </p>
+
+    <p>
+        <mat-slide-toggle formControlName="needInvoices">Need Invoices</mat-slide-toggle>
+    </p>
+
+    <p>
+        <mat-slide-toggle formControlName="needBills">Need Bills</mat-slide-toggle>
+    </p>
+
+    <p>
+        <mat-slide-toggle formControlName="needReadings">Need Readings</mat-slide-toggle>
+    </p>
+</form>
