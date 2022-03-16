@@ -11,6 +11,12 @@ import { MatCommonModule } from "@angular/material/core";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatGridListModule } from "@angular/material/grid-list";
+import { MatCardModule } from "@angular/material/card";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
+import { NgxMatFileInputModule } from "@angular-material-components/file-input";
 
 @NgModule({
     imports: [
@@ -25,7 +31,13 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         MatCommonModule,
         MatInputModule,
         MatSelectModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatExpansionModule,
+        MatGridListModule,
+        MatCardModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NgxMatFileInputModule
     ],
     exports: [
         MatToolbarModule,
@@ -39,7 +51,13 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         MatCommonModule,
         MatInputModule,
         MatSelectModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatExpansionModule,
+        MatGridListModule,
+        MatCardModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        NgxMatFileInputModule
     ]
 })
 export class AppAngularModule {}

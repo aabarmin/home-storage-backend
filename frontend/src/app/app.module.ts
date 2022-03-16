@@ -15,6 +15,11 @@ import { StringifyPipe } from './pipes/stringify.pipe';
 import { DeviceListComponent } from './devices/list/list.component';
 import { DeviceDialogComponent } from './devices/dialog/dialog.component';
 import { DeviceFormComponent } from './devices/form/form.component';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
+import { MonthDataComponent } from './dashboard/month-data/month-data.component';
+import { DashboardReadingDialogComponent } from './dashboard/reading-dialog/reading-dialog.component';
+import { DashboardDocumentDialogComponent } from './dashboard/document-dialog/document-dialog.component';
+import { DashboardDeviceDialogComponent } from './dashboard/device-dialog/device-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,12 @@ import { DeviceFormComponent } from './devices/form/form.component';
     StringifyPipe,
     DeviceListComponent,
     DeviceDialogComponent,
-    DeviceFormComponent
+    DeviceFormComponent,
+    DashboardComponent,
+    MonthDataComponent,
+    DashboardReadingDialogComponent,
+    DashboardDocumentDialogComponent,
+    DashboardDeviceDialogComponent
   ],
   imports: [
     AppAngularModule, 

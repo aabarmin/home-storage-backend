@@ -15,7 +15,6 @@ export class FlatService extends LocalStorageService<Flat> implements ProvidesFi
     super();
     if (!localStorage.getItem('flats')) {
       this.setStorage('flats', [{
-        id: "12345-12341234",
         title: "Ufa",
         alias: "ufa"
       }]);
@@ -29,7 +28,6 @@ export class FlatService extends LocalStorageService<Flat> implements ProvidesFi
 
   public save(flat: Flat): Observable<Flat> {
     const items = this.getStorage('flats');
-    flat.id = String(items.length);
     items.push(flat);
     this.setStorage('flats', items);
 

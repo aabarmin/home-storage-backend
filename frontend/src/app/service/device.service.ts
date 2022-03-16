@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { mergeMap } from 'rxjs';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
+import { map } from 'rxjs/internal/operators/map';
 import { Device } from '../model/device';
+import { Flat } from '../model/flat';
 import { LocalStorageService } from './local-storage.service';
 import { ProvidesFindAll } from './provides-find-all';
 
@@ -19,9 +22,18 @@ export class DeviceService extends LocalStorageService<Device> implements Provid
     return of(items);
   }
 
+  findAllByFlat(flat$: Observable<Flat>): Observable<Device[]> {
+    return flat$.pipe(
+      map(flat => {
+        const items = this.getStorage('devices');
+        const filtered = items.filter(device => device.flat.alias == flat.alias)
+        return filtered;
+      })
+    );
+  }
+
   save(device: Device): Observable<Device> {
     const items = this.getStorage('devices');
-    device.id = String(items.length);
     items.push(device);
     this.setStorage('devices', items);
 
