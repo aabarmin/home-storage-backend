@@ -64,10 +64,10 @@
                 </mat-form-field>
             </p>
 
-            <p *ngIf="(features$ | async)?.includes('bills')">
+            <p *ngIf="(features$ | async)?.includes('receipts')">
                 <mat-form-field appearance="fill">
-                    <mat-label>Bill</mat-label>
-                    <ngx-mat-file-input formControlName="billFile"></ngx-mat-file-input>
+                    <mat-label>Receipt</mat-label>
+                    <ngx-mat-file-input formControlName="receiptFile"></ngx-mat-file-input>
                 </mat-form-field>
             </p>
     </div>

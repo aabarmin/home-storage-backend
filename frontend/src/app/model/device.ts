@@ -6,6 +6,6 @@ export interface Device {
     flat: Flat;
 
     needInvoices: boolean;
-    needBills: boolean;
+    needReceipts: boolean;
     needReadings: boolean;
 }

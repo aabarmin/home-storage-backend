@@ -8,5 +8,5 @@ export interface DataRecord {
     device: Device
     reading: number
     invoiceFile?: FileId
-    billFile?: FileId
+    receiptFile?: FileId
 }

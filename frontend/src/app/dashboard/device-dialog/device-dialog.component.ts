@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { from } from 'rxjs';
-import { filter } from 'rxjs';
 import { map } from 'rxjs';
 import { zip } from 'rxjs';
 import { of } from 'rxjs';
-import { forkJoin } from 'rxjs';
 import { Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Device } from 'src/app/model/device';
@@ -34,7 +31,7 @@ export class DashboardDeviceDialogComponent {
     device: new FormControl(null, [Validators.required]),
     reading: new FormControl('', [Validators.pattern('\\d+')]),
     invoiceFile: new FormControl(null),
-    billFile: new FormControl(null)
+    receiptFile: new FormControl(null)
   });
 
   constructor(
@@ -57,8 +54,8 @@ export class DashboardDeviceDialogComponent {
 
   private extractFeatures(device: Device): string[] {
     const result: string[] = [];
-    if (device.needBills) {
-      result.push('bills');
+    if (device.needReceipts) {
+      result.push('receipts');
     }
     if (device.needInvoices) {
       result.push('invoices');
@@ -76,7 +73,7 @@ export class DashboardDeviceDialogComponent {
   onSubmit(form: FormGroup) {
     const dataRecord: DataRecord = form.value as DataRecord;
     zip(this.uploadBill(form), this.uploadInvoice(form)).subscribe(([billId, invoiceId]) => {
-      dataRecord.billFile = billId;
+      dataRecord.receiptFile = billId;
       dataRecord.invoiceFile = invoiceId;
 
       this.dataService.save(dataRecord).subscribe((saved) => {
@@ -86,7 +83,7 @@ export class DashboardDeviceDialogComponent {
   }
 
   private uploadBill(form: FormGroup): Observable<FileId | undefined> {
-    return this.uploadFile(form, 'billFile');
+    return this.uploadFile(form, 'receiptFile');
   }
 
   private uploadInvoice(form: FormGroup): Observable<FileId | undefined> {

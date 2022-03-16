@@ -21,7 +21,7 @@ export class DeviceFormComponent implements OnInit {
     flat: new FormControl('', [Validators.required]),
     alias: new FormControl('', [Validators.required, Validators.pattern('[a-z]+')]),
     needInvoices: new FormControl(true),
-    needBills: new FormControl(true),
+    needReceipts: new FormControl(true),
     needReadings: new FormControl(true)
   });
 
