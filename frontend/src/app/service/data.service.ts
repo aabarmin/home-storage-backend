@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { zip } from 'rxjs';
 import { combineLatest } from 'rxjs';
+import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { mapTo } from 'rxjs';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { DataRecord } from '../model/data-record';
+import { Device } from '../model/device';
 import { Flat } from '../model/flat';
 import { LocalStorageService } from './local-storage.service';
 

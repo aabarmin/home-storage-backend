@@ -4,7 +4,7 @@
     <button mat-raised-button (click)="onNewDevice()">Add device</button>
 </div>
 
-<table mat-table [dataSource]="dataSource">
+<table mat-table [dataSource]="deviceService.devices$">
     <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef>Title</th>
         <td mat-cell *matCellDef="let item">{{item.title}}</td>

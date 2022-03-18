@@ -11,7 +11,6 @@ import { DeviceDialogComponent } from '../dialog/dialog.component';
   styleUrls: ['./list.component.css']
 })
 export class DeviceListComponent implements OnInit {
-  dataSource: BackendDataSource<Device> = new BackendDataSource<Device>(this.service);
   displayedColumns: string[] = [
     "title",
     "flat",
@@ -20,12 +19,12 @@ export class DeviceListComponent implements OnInit {
   ];
 
   constructor(
-    private service: DeviceService,
+    public deviceService: DeviceService,
     private dialog: MatDialog
   ) { } 
 
   ngOnInit(): void {
-    this.dataSource.refresh();
+    
   }
 
   public onNewDevice(): void {
@@ -33,8 +32,8 @@ export class DeviceListComponent implements OnInit {
       if (!result) {
         return;
       }
-      this.service.save(result).subscribe(() => {
-        this.dataSource.refresh();
+      this.deviceService.save(result).subscribe(() => {
+        
       });
     })
   }

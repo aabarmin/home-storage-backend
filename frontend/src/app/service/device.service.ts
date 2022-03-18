@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import { mergeMap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
 import { map } from 'rxjs/internal/operators/map';
 import { Device } from '../model/device';
 import { Flat } from '../model/flat';
 import { LocalStorageService } from './local-storage.service';
-import { ProvidesFindAll } from './provides-find-all';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceService extends LocalStorageService<Device> implements ProvidesFindAll<Device> {
+export class DeviceService extends LocalStorageService<Device> {
+  private devices: Subject<Device[]> = new BehaviorSubject<Device[]>([]);
+  public readonly devices$: Observable<Device[]> = this.devices.asObservable();
 
   constructor() {
     super();
-  }
 
-  findAll(): Observable<Device[]> {
     const items = this.getStorage('devices');
-    return of(items);
+    this.devices.next(items);
   }
 
   findAllByFlat(flat$: Observable<Flat>): Observable<Device[]> {
@@ -36,6 +36,8 @@ export class DeviceService extends LocalStorageService<Device> implements Provid
     const items = this.getStorage('devices');
     items.push(device);
     this.setStorage('devices', items);
+
+    this.devices.next(items);
 
     return of(device);
   }
