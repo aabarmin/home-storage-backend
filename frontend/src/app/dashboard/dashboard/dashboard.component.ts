@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { map, tap } from 'rxjs';
-import { mapTo } from 'rxjs';
-import { of } from 'rxjs';
-import { distinct } from 'rxjs';
+import { map } from 'rxjs';
 import { Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Flat } from 'src/app/model/flat';
@@ -19,7 +16,6 @@ import { DashboardRecord } from './dashboard-record';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  flats$: Observable<Flat[]>;
   years$: Observable<Number[]>;
   dashboard$: Observable<DashboardRecord[]>;
 
@@ -31,14 +27,12 @@ export class DashboardComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private flatService: FlatService,
+    public flatService: FlatService,
     private dataService: DataService
   ) { 
     
     const flatChange$ = this.formGroup.get("flat")?.valueChanges as Observable<Flat>;
     const yearChange$ = this.formGroup.get('year')?.valueChanges as Observable<Number>;
-
-    this.flats$ = this.flatService.findAll();
 
     this.years$ = this.dataService.findRecordsForFlat(flatChange$)
       .pipe(
@@ -111,4 +105,7 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  onRefresh(): void {
+    
+  }
 }

@@ -21,15 +21,14 @@ export class FlatsListComponent implements OnInit {
     "alias",
     "actions"
   ];
-  dataSource: BackendDataSource<Flat> = new BackendDataSource(this.flatService);
 
   constructor(
-    private flatService: FlatService, 
+    public flatService: FlatService, 
     private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
-    this.dataSource.refresh();
+    
   }  
 
   public onNewFlat(): void {
@@ -38,7 +37,6 @@ export class FlatsListComponent implements OnInit {
         return;
       }
       this.flatService.save(result).subscribe(() => {
-        this.dataSource.refresh();
         this.flatsTable.renderRows();
       });
     })

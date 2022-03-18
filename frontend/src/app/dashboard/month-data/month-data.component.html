@@ -7,8 +7,20 @@
     </tr>
     <tr *ngFor="let record of records">
         <td>{{record.device.title}}</td>
-        <td></td>
-        <td></td>
+        <td>
+            <ng-container *ngIf="!shouldDisplayReadings(record)">
+                Not supported
+            </ng-container>
+            <ng-container *ngIf="shouldDisplayReadings(record) && !readingsProvided(record)">
+                Not provided
+            </ng-container>
+            <ng-container *ngIf="shouldDisplayReadings(record) && readingsProvided(record)">
+                {{record.reading}}
+            </ng-container>
+        </td>
+        <td>
+            
+        </td>
         <td></td>
     </tr>
 </table>

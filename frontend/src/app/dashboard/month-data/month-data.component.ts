@@ -32,4 +32,12 @@ export class MonthDataComponent implements OnInit {
       
     });
   }
+
+  public shouldDisplayReadings(record: DataRecord): boolean {
+    return record.device.needReadings;
+  }
+
+  public readingsProvided(record: DataRecord): boolean {
+    return !!record.reading;
+  }
 }

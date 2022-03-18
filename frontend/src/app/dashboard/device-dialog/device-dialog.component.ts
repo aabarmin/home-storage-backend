@@ -20,8 +20,6 @@ import { FlatService } from 'src/app/service/flat.service';
   styleUrls: ['./device-dialog.component.css']
 })
 export class DashboardDeviceDialogComponent {
-
-  flats$: Observable<Flat[]>;
   devices$: Observable<Device[]>;
   features$: Observable<string[]> = new Observable<string[]>();
 
@@ -35,14 +33,12 @@ export class DashboardDeviceDialogComponent {
   });
 
   constructor(
-    private flatService: FlatService,
+    public flatService: FlatService,
     private deviceService: DeviceService, 
     private fileService: FileService, 
     private dataService: DataService, 
     private dialog: MatDialogRef<DashboardDeviceDialogComponent>
-  ) { 
-    this.flats$ = this.flatService.findAll();
-    
+  ) {     
     const flatChange$ = this.formGroup.get('flat')?.valueChanges as Observable<Flat>;
     this.devices$ = this.deviceService.findAllByFlat(flatChange$);
 

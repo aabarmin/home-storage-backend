@@ -25,12 +25,10 @@ export class DeviceFormComponent implements OnInit {
     needReadings: new FormControl(true)
   });
 
-  flats$: Observable<Flat[]>
-
   constructor(
-    private flatService: FlatService
+    public flatService: FlatService
   ) { 
-    this.flats$ = this.flatService.findAll();
+    
   }
 
   ngOnInit(): void {
