@@ -1,0 +1,14 @@
+<div>
+    <input disabled="true" [value]="(file$ | async)?.fileName">
+    <button mat-icon-button *ngIf="(file$ | async) == null">
+        <mat-icon>attach_file</mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="(file$ | async) != null" [matMenuTriggerFor]="removeFileMenu">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>
+<input type="file" #fileControl [multiple]="false" style="display: none;">
+
+<mat-menu #removeFileMenu>
+    <button mat-menu-item>Remove</button>
+</mat-menu>

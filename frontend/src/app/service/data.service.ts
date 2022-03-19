@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { combineLatest } from 'rxjs';
 import { Subject } from 'rxjs';
-import { filter } from 'rxjs';
-import { mapTo } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';

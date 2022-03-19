@@ -12,7 +12,9 @@
                 Not supported
             </ng-container>
             <ng-container *ngIf="shouldDisplayReadings(record) && !readingsProvided(record)">
-                Not provided
+                <button mat-raised-button (click)="onAddReadingClick(record)">
+                    Provide
+                </button>
             </ng-container>
             <ng-container *ngIf="shouldDisplayReadings(record) && readingsProvided(record)">
                 {{record.reading}}

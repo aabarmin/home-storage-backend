@@ -104,8 +104,4 @@ export class DashboardComponent implements OnInit {
       // refresh data here
     })
   }
-
-  onRefresh(): void {
-    
-  }
 }

@@ -20,6 +20,8 @@ import { MonthDataComponent } from './dashboard/month-data/month-data.component'
 import { DashboardReadingDialogComponent } from './dashboard/reading-dialog/reading-dialog.component';
 import { DashboardDocumentDialogComponent } from './dashboard/document-dialog/document-dialog.component';
 import { DashboardDeviceDialogComponent } from './dashboard/device-dialog/device-dialog.component';
+import { FileUploadComponent } from './controls/file-upload/file-upload.component';
+import { TesterComponent } from './controls/tester/tester.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import { DashboardDeviceDialogComponent } from './dashboard/device-dialog/device
     MonthDataComponent,
     DashboardReadingDialogComponent,
     DashboardDocumentDialogComponent,
-    DashboardDeviceDialogComponent
+    DashboardDeviceDialogComponent,
+    FileUploadComponent,
+    TesterComponent
   ],
   imports: [
     AppAngularModule, 

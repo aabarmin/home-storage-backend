@@ -17,6 +17,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
 import { NgxMatFileInputModule } from "@angular-material-components/file-input";
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
     imports: [
@@ -37,7 +38,8 @@ import { NgxMatFileInputModule } from "@angular-material-components/file-input";
         MatCardModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        NgxMatFileInputModule
+        NgxMatFileInputModule,
+        MatMenuModule
     ],
     exports: [
         MatToolbarModule,
@@ -57,7 +59,8 @@ import { NgxMatFileInputModule } from "@angular-material-components/file-input";
         MatCardModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        NgxMatFileInputModule
+        NgxMatFileInputModule,
+        MatMenuModule
     ]
 })
 export class AppAngularModule {}

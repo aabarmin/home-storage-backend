@@ -1,6 +1,8 @@
+import { Input } from '@angular/core';
+import { Inject } from '@angular/core';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { map } from 'rxjs';
 import { zip } from 'rxjs';
 import { of } from 'rxjs';
@@ -13,6 +15,16 @@ import { DataService } from 'src/app/service/data.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FileService } from 'src/app/service/file.service';
 import { FlatService } from 'src/app/service/flat.service';
+import { DeviceDialogData } from './device-dialog-data';
+
+interface FormData {
+  date: Date;
+  flat: Flat;
+  device: Device;
+  reading?: Number;
+  invoiceFile?: File;
+  receiptFile?: File; 
+}
 
 @Component({
   selector: 'app-dashboard-device-dialog',
@@ -37,7 +49,8 @@ export class DashboardDeviceDialogComponent {
     private deviceService: DeviceService, 
     private fileService: FileService, 
     private dataService: DataService, 
-    private dialog: MatDialogRef<DashboardDeviceDialogComponent>
+    private dialog: MatDialogRef<DashboardDeviceDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public dialogData: DeviceDialogData
   ) {     
     const flatChange$ = this.formGroup.get('flat')?.valueChanges as Observable<Flat>;
     this.devices$ = this.deviceService.findAllByFlat(flatChange$);
@@ -46,6 +59,21 @@ export class DashboardDeviceDialogComponent {
     this.features$ = deviceChange$.pipe(
       map(device => this.extractFeatures(device))
     );
+
+    if (this.dialogData?.record) {
+      this.formGroup.setValue(this.toForm(this.dialogData.record));
+    }
+  }
+
+  private toForm(record: DataRecord): FormData {
+    return {
+      flat: record.flat,
+      device: record.device,
+      date: record.date,
+      reading: record.reading,
+      invoiceFile: undefined,
+      receiptFile: undefined
+    }
   }
 
   private extractFeatures(device: Device): string[] {
