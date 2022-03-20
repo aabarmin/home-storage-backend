@@ -7,6 +7,6 @@ export interface DataRecord {
     flat: Flat
     device: Device
     reading: number
-    invoiceFile?: FileId
-    receiptFile?: FileId
+    invoiceFile?: FileId | null
+    receiptFile?: FileId | null
 }

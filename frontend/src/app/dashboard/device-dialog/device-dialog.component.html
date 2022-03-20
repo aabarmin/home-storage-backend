@@ -60,14 +60,14 @@
             <p *ngIf="(features$ | async)?.includes('invoices')">
                 <mat-form-field appearance="fill">
                     <mat-label>Invoice</mat-label>
-                    <ngx-mat-file-input formControlName="invoiceFile"></ngx-mat-file-input>
+                    <app-file-upload formControlName="invoiceFile"></app-file-upload>
                 </mat-form-field>
             </p>
 
             <p *ngIf="(features$ | async)?.includes('receipts')">
                 <mat-form-field appearance="fill">
                     <mat-label>Receipt</mat-label>
-                    <ngx-mat-file-input formControlName="receiptFile"></ngx-mat-file-input>
+                    <app-file-upload formControlName="receiptFile"></app-file-upload>
                 </mat-form-field>
             </p>
     </div>
