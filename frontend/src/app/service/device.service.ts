@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { filter } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
@@ -24,6 +25,7 @@ export class DeviceService extends LocalStorageService<Device> {
 
   findAllByFlat(flat$: Observable<Flat>): Observable<Device[]> {
     return flat$.pipe(
+      filter(flat => flat != null), 
       map(flat => {
         const items = this.getStorage('devices');
         const filtered = items.filter(device => device.flat.alias == flat.alias)

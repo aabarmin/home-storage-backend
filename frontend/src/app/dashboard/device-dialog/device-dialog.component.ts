@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { map } from 'rxjs';
+import { filter } from 'rxjs';
 import { Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Device } from 'src/app/model/device';
@@ -43,6 +44,7 @@ export class DashboardDeviceDialogComponent implements OnInit {
 
     const deviceChange$ = this.formGroup.get('device')?.valueChanges as Observable<Device>;
     this.features$ = deviceChange$.pipe(
+      filter(device => device != null),
       map(device => this.extractFeatures(device))
     );
   }
