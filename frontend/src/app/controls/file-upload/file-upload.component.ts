@@ -9,6 +9,9 @@ import { Component } from '@angular/core';
 import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { fromEvent } from 'rxjs';
+import { filter } from 'rxjs';
+import { map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { Subject } from 'rxjs';
 import { FileId } from 'src/app/model/file-id';
@@ -37,8 +40,9 @@ interface FileSelectionEvent {
     useExisting: forwardRef(() => FileUploadComponent)
   }]
 })
-export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFieldControl<FileId>, ControlValueAccessor {
-  file$: BehaviorSubject<FileId | null> = new BehaviorSubject<FileId | null>(null);
+export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFieldControl<string>, ControlValueAccessor {
+  file$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+  fileInfo$: Observable<FileId>;
 
   stateChanges = new Subject<void>();
   static nextId = 0;
@@ -65,7 +69,7 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
   @Input('aria-describedby')
   userAriaDescribedBy?: string | undefined;
 
-  private _value: FileId | null = null;
+  private _value: string | null = null;
   private _placeholder: string = "";
   private _focused: boolean = false;
   private _empty: boolean = true;
@@ -76,11 +80,15 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
   constructor(
     private fileService: FileService
   ) {
-    
+    const availableFile$ = this.file$.pipe(
+      filter(file => file != null),
+      map(file => file as string)
+    );
+    this.fileInfo$ = this.fileService.findFileId(availableFile$);
   }
 
   writeValue(obj: any): void {
-    const value = obj as FileId | null;
+    const value = obj as string | null;
     this.value = value;
   }
   
@@ -113,7 +121,7 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
       }
       const file = files.item(0) as File;
       this.fileService.upload(file).subscribe((fileId: FileId) => {
-        this.value = fileId;
+        this.value = fileId.fileId;
       })
     })
   }
@@ -123,11 +131,11 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
   }
 
   @Input()
-  get value(): FileId | null {
+  get value(): string | null {
     return this._value;
   }
 
-  set value(value: FileId | null) {
+  set value(value: string | null) {
     this._value = value;
     this.file$.next(value);
     this.stateChanges.next();

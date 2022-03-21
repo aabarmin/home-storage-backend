@@ -36,7 +36,7 @@ export class DataService extends LocalStorageService<DataRecord> {
     return combineLatest([this.records$, flat$])
       .pipe(
         map(([records, flat]) => {
-          const filtered = records.filter(record => record.flat.alias == flat.alias)
+          const filtered = records.filter(record => record.flat == flat.alias)
           return filtered;
         })
       );
@@ -50,8 +50,8 @@ export class DataService extends LocalStorageService<DataRecord> {
     return combineLatest([this.records$, flat$, year$]).pipe(
       map(([records, flat, year]) => {
         const filtered = records
-          .filter(item => {
-            return item.flat.alias = flat.alias
+          .filter((item: DataRecord) => {
+            return item.flat = flat.alias;
           })
           .filter(item => {
             let date = item.date;

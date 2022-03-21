@@ -1,12 +1,10 @@
 import { Input } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { DeviceDialogComponent } from 'src/app/devices/dialog/dialog.component';
 import { DataRecord } from 'src/app/model/data-record';
 import { DeviceDialogData } from '../device-dialog/device-dialog-data';
 import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.component';
 import { DashboardDocumentDialogComponent } from '../document-dialog/document-dialog.component';
-import { DashboardReadingDialogComponent } from '../reading-dialog/reading-dialog.component';
 
 @Component({
   selector: 'app-dashboard-month-data',
@@ -41,11 +39,11 @@ export class MonthDataComponent implements OnInit {
     });
   }
 
-  public shouldDisplayReadings(record: DataRecord): boolean {
-    return record.device.needReadings;
-  }
+  // public shouldDisplayReadings(record: DataRecord): boolean {
+  //   return record.device.needReadings;
+  // }
 
-  public readingsProvided(record: DataRecord): boolean {
-    return !!record.reading;
-  }
+  // public readingsProvided(record: DataRecord): boolean {
+  //   return !!record.reading;
+  // }
 }

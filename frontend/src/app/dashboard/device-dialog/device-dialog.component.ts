@@ -39,12 +39,11 @@ export class DashboardDeviceDialogComponent implements OnInit {
     private dialog: MatDialogRef<DashboardDeviceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: DeviceDialogData
   ) {     
-    const flatChange$ = this.formGroup.get('flat')?.valueChanges as Observable<Flat>;
+    const flatChange$ = this.formGroup.get('flat')?.valueChanges as Observable<string>;
     this.devices$ = this.deviceService.findAllByFlat(flatChange$);
 
-    const deviceChange$ = this.formGroup.get('device')?.valueChanges as Observable<Device>;
-    this.features$ = deviceChange$.pipe(
-      filter(device => device != null),
+    const deviceChange$ = this.formGroup.get('device')?.valueChanges as Observable<string>;
+    this.features$ = this.deviceService.findByAlias(deviceChange$).pipe(
       map(device => this.extractFeatures(device))
     );
   }
@@ -52,10 +51,7 @@ export class DashboardDeviceDialogComponent implements OnInit {
   ngOnInit(): void {
     if (this.dialogData?.record) {
       const record = this.dialogData.record;
-      this.formGroup.patchValue({
-        date: record.date,
-        flat: record.flat
-      })
+      this.formGroup.setValue(record);
     }
   }
 

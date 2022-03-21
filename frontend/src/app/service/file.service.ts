@@ -30,4 +30,19 @@ export class FileService extends LocalStorageService<FileId> {
 
     return of(fileInfo);
   }
+
+  /**
+   * Get information about a file by its id. 
+   * 
+   * @param file$ 
+   */
+  public findFileId(file$: Observable<string>): Observable<FileId> {
+    return file$.pipe(
+      map(id => {
+        const items = this.getStorage('files');
+        const filtered = items.filter(file => file.fileId == id);
+        return filtered[0];
+      })
+    );
+  }
 }

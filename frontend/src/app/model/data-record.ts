@@ -1,12 +1,8 @@
-import { Device } from "./device";
-import { FileId } from "./file-id";
-import { Flat } from "./flat";
-
 export interface DataRecord {
     date: Date
-    flat: Flat
-    device: Device
+    flat: string
+    device: string
     reading: number
-    invoiceFile?: FileId | null
-    receiptFile?: FileId | null
+    invoiceFile?: string | null
+    receiptFile?: string | null
 }

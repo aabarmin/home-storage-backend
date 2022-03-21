@@ -5,6 +5,9 @@ import { of } from "rxjs";
 import { Subject } from 'rxjs';
 import { LocalStorageService } from './local-storage.service';
 import { BehaviorSubject } from 'rxjs';
+import { combineLatest } from 'rxjs';
+import { mapTo } from 'rxjs';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +28,16 @@ export class FlatService extends LocalStorageService<Flat> {
     }
     const items = this.getStorage('flats');
     this.flats.next(items);
+  }
+
+  public findByAlias(alias$: Observable<string>): Observable<Flat | null> {
+    return combineLatest([this.flats$, alias$]).pipe(
+      map(([flats, alias]) => {
+        const filtered = flats.filter(flat => flat.alias == alias);
+        if (filtered.length == 0) return null;
+        return filtered[0];
+      })
+    );
   }
 
   public save(flat: Flat): Observable<Flat> {

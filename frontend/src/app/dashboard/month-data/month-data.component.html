@@ -7,22 +7,14 @@
         <th>Receipt</th>
     </tr>
     <tr *ngFor="let record of records">
-        <td>{{record.device.title}}</td>
+        <td>{{record.device}}</td>
         <td>
             <button mat-icon-button (click)="onAddReadingClick(record)">
                 <mat-icon>edit</mat-icon>
             </button>
         </td>
         <td>
-            <ng-container *ngIf="!shouldDisplayReadings(record)">
-                Not supported
-            </ng-container>
-            <ng-container *ngIf="shouldDisplayReadings(record) && !readingsProvided(record)">
-                Not provided
-            </ng-container>
-            <ng-container *ngIf="shouldDisplayReadings(record) && readingsProvided(record)">
-                {{record.reading}}
-            </ng-container>
+            {{record | json}}
         </td>
         <td>
             
