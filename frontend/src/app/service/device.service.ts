@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
 import { map } from 'rxjs/internal/operators/map';
 import { Device } from '../model/device';
-import { Flat } from '../model/flat';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({

@@ -46,6 +46,11 @@ export class DashboardDeviceDialogComponent implements OnInit {
     this.features$ = this.deviceService.findByAlias(deviceChange$).pipe(
       map(device => this.extractFeatures(device))
     );
+    
+    if (this.dialogData.record) {
+      const record = this.dialogData.record;
+      this.formGroup.setValue(record);
+    }
   }
 
   ngOnInit(): void {
