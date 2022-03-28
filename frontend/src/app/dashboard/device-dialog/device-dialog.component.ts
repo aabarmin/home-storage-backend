@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { map, mergeMap, Observable } from 'rxjs';
+import { filter, map, mergeMap, Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Device } from 'src/app/model/device';
 import { DataService } from 'src/app/service/data.service';
@@ -43,6 +43,7 @@ export class DashboardDeviceDialogComponent {
       ?.valueChanges as Observable<string>;
 
     this.features$ = deviceChange$.pipe(
+      filter((alias) => !!alias),
       mergeMap((deviceAlias) => this.deviceService.findByAlias(deviceAlias)),
       map((device) => this.extractFeatures(device))
     );
