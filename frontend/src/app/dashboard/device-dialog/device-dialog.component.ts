@@ -12,19 +12,20 @@ import { DeviceDialogData } from './device-dialog-data';
 @Component({
   selector: 'app-dashboard-device-dialog',
   templateUrl: './device-dialog.component.html',
-  styleUrls: ['./device-dialog.component.css']
+  styleUrls: ['./device-dialog.component.css'],
 })
 export class DashboardDeviceDialogComponent {
   devices$: Observable<Device[]>;
   features$: Observable<string[]> = new Observable<string[]>();
 
   formGroup = new FormGroup({
+    id: new FormControl(),
     date: new FormControl(new Date(), [Validators.required]),
     flat: new FormControl(null, [Validators.required]),
     device: new FormControl(null, [Validators.required]),
     reading: new FormControl('', [Validators.pattern('\\d+')]),
     invoiceFile: new FormControl(null),
-    receiptFile: new FormControl(null)
+    receiptFile: new FormControl(null),
   });
 
   constructor(
@@ -34,18 +35,20 @@ export class DashboardDeviceDialogComponent {
     private dialog: MatDialogRef<DashboardDeviceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: DeviceDialogData
   ) {
-    const flatChange$ = this.formGroup.get('flat')?.valueChanges as Observable<string>;
+    const flatChange$ = this.formGroup.get('flat')
+      ?.valueChanges as Observable<string>;
     this.devices$ = this.deviceService.findAllByFlat(flatChange$);
 
-    const deviceChange$ = this.formGroup.get('device')?.valueChanges as Observable<string>;
-    this.features$ = this.deviceService.findByAlias(deviceChange$).pipe(
-      map(device => this.extractFeatures(device))
-    );
+    const deviceChange$ = this.formGroup.get('device')
+      ?.valueChanges as Observable<string>;
+    this.features$ = this.deviceService
+      .findByAlias(deviceChange$)
+      .pipe(map((device) => this.extractFeatures(device)));
 
-    if (this.dialogData.record) {
+    if (this.dialogData?.record) {
       const record = this.dialogData.record;
       setTimeout(() => {
-        this.formGroup.setValue(record)
+        this.formGroup.setValue(record);
       }, 1);
     }
   }
@@ -70,8 +73,8 @@ export class DashboardDeviceDialogComponent {
 
   onSubmit(form: FormGroup) {
     const dataRecord: DataRecord = form.value as DataRecord;
-    this.dataService.save(dataRecord).subscribe(saved => {
+    this.dataService.save(dataRecord).subscribe((saved) => {
       this.dialog.close(saved);
-    })
+    });
   }
 }
