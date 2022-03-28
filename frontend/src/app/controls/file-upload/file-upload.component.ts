@@ -1,19 +1,28 @@
-import { Input } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { ElementRef } from '@angular/core';
-import { HostBinding } from '@angular/core';
-import { OnDestroy } from '@angular/core';
-import { AfterViewInit } from '@angular/core';
-import { forwardRef } from '@angular/core';
-import { Component } from '@angular/core';
-import { ControlValueAccessor, NgControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  forwardRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  NgControl,
+  NG_VALUE_ACCESSOR,
+} from '@angular/forms';
 import { MatFormFieldControl } from '@angular/material/form-field';
-import { fromEvent } from 'rxjs';
-import { filter } from 'rxjs';
-import { map } from 'rxjs';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-import { Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  filter,
+  fromEvent,
+  map,
+  mergeMap,
+  Observable,
+  Subject,
+} from 'rxjs';
 import { FileId } from 'src/app/model/file-id';
 import { FileService } from 'src/app/service/file.service';
 
@@ -31,74 +40,81 @@ interface FileSelectionEvent {
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css'],
-  providers: [{
-    provide: MatFormFieldControl, 
-    useExisting: FileUploadComponent
-  }, {
-    provide: NG_VALUE_ACCESSOR,
-    multi: true, 
-    useExisting: forwardRef(() => FileUploadComponent)
-  }]
+  providers: [
+    {
+      provide: MatFormFieldControl,
+      useExisting: FileUploadComponent,
+    },
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: forwardRef(() => FileUploadComponent),
+    },
+  ],
 })
-export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFieldControl<string>, ControlValueAccessor {
-  file$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+export class FileUploadComponent
+  implements
+    OnDestroy,
+    AfterViewInit,
+    MatFormFieldControl<string>,
+    ControlValueAccessor
+{
+  file$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(
+    null
+  );
   fileInfo$: Observable<FileId>;
 
   stateChanges = new Subject<void>();
   static nextId = 0;
 
   /**
-   * Element which is used to upload files. 
+   * Element which is used to upload files.
    */
-  @ViewChild("fileControl")
+  @ViewChild('fileControl')
   fileControl?: ElementRef;
 
   /**
-   * The function from ControlValueAccessor which is callend when the value is changed. 
+   * The function from ControlValueAccessor which is callend when the value is changed.
    */
   private _onChange?: any;
-  
+
   @HostBinding()
   id: string = `home-is-file-upload-input-${FileUploadComponent.nextId++}`;
-  
+
   ngControl: NgControl | null = null;
-  
-  controlType = "home-is-file-upload";
+
+  controlType = 'home-is-file-upload';
   autofilled?: boolean | undefined;
-  
+
   @Input('aria-describedby')
   userAriaDescribedBy?: string | undefined;
 
   private _value: string | null = null;
-  private _placeholder: string = "";
+  private _placeholder: string = '';
   private _focused: boolean = false;
   private _empty: boolean = true;
   private _required: boolean = false;
   private _disabled: boolean = false;
   private _errorState: boolean = false;
 
-  constructor(
-    private fileService: FileService
-  ) {
-    const availableFile$ = this.file$.pipe(
-      filter(file => file != null),
-      map(file => file as string)
+  constructor(private fileService: FileService) {
+    this.fileInfo$ = this.file$.pipe(
+      filter((file) => file != null),
+      map((file) => file as string),
+      mergeMap((fileId) => this.fileService.findFileId(fileId))
     );
-    this.fileInfo$ = this.fileService.findFileId(availableFile$);
   }
 
   writeValue(obj: any): void {
     const value = obj as string | null;
     this.value = value;
   }
-  
+
   registerOnChange(fn: any): void {
-    this._onChange = fn; 
+    this._onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
-    
-  }
+  registerOnTouched(fn: any): void {}
 
   onFileSelect(): void {
     this.fileControl?.nativeElement.click();
@@ -109,21 +125,23 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
   }
 
   onFileRemoveMenuOpen(): void {
-    throw new Error("Not implemented yet");
+    throw new Error('Not implemented yet');
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.fileControl?.nativeElement, "change").subscribe((nativeEvent) => {
-      const event = nativeEvent as FileSelectionEvent;
-      const files = event.currentTarget.files;
-      if (files.length == 0) {
-        return;
+    fromEvent(this.fileControl?.nativeElement, 'change').subscribe(
+      (nativeEvent) => {
+        const event = nativeEvent as FileSelectionEvent;
+        const files = event.currentTarget.files;
+        if (files.length == 0) {
+          return;
+        }
+        const file = files.item(0) as File;
+        this.fileService.upload(file).subscribe((fileId: FileId) => {
+          this.value = fileId.fileId;
+        });
       }
-      const file = files.item(0) as File;
-      this.fileService.upload(file).subscribe((fileId: FileId) => {
-        this.value = fileId.fileId;
-      })
-    })
+    );
   }
 
   ngOnDestroy(): void {
@@ -195,7 +213,7 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
   get errorState(): boolean {
     return this._errorState;
   }
-  
+
   setDescribedByIds(ids: string[]): void {
     // throw new Error('Method not implemented.');
   }
@@ -206,5 +224,4 @@ export class FileUploadComponent implements OnDestroy, AfterViewInit, MatFormFie
       this.onFileSelect();
     }
   }
-
 }

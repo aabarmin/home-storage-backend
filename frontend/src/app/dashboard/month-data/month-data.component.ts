@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Device } from 'src/app/model/device';
+import { FileId } from 'src/app/model/file-id';
 import { DeviceService } from 'src/app/service/device.service';
+import { FileService } from 'src/app/service/file.service';
 import { DeviceDialogData } from '../device-dialog/device-dialog-data';
 import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.component';
 
@@ -16,10 +18,21 @@ export class MonthDataComponent {
   @Input()
   records: DataRecord[] = [];
 
-  constructor(private dialog: MatDialog, public deviceService: DeviceService) {}
+  constructor(
+    private dialog: MatDialog,
+    private deviceService: DeviceService,
+    private fileService: FileService
+  ) {}
 
   public getDevice(record: DataRecord): Observable<Device> {
     return this.deviceService.findByAlias(record.device);
+  }
+
+  public getFileInfo(
+    fileId: string | null | undefined
+  ): Observable<FileId | null> {
+    if (!fileId) return of(null);
+    return this.fileService.findFileId(fileId);
   }
 
   public getDeviceReading(record: DataRecord): Observable<String> {

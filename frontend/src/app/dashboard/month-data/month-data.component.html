@@ -18,7 +18,7 @@
     <td>
       {{ this.getDeviceReading(record) | async }}
     </td>
-    <td></td>
-    <td></td>
+    <td>{{ (this.getFileInfo(record.invoiceFile) | async)?.fileName }}</td>
+    <td>{{ (this.getFileInfo(record.receiptFile) | async)?.fileName }}</td>
   </tr>
 </table>
