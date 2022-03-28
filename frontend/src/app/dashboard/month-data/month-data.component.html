@@ -18,7 +18,21 @@
     <td>
       {{ this.getDeviceReading(record) | async }}
     </td>
-    <td>{{ (this.getFileInfo(record.invoiceFile) | async)?.fileName }}</td>
-    <td>{{ (this.getFileInfo(record.receiptFile) | async)?.fileName }}</td>
+    <td>
+      <ng-container [ngSwitch]="this.getFileInfo(record.invoiceFile) | async">
+        <ng-container *ngSwitchCase="null">No file</ng-container>
+        <ng-container *ngSwitchDefault>
+          {{ (this.getFileInfo(record.invoiceFile) | async)?.fileName }}
+        </ng-container>
+      </ng-container>
+    </td>
+    <td>
+      <ng-container [ngSwitch]="this.getFileInfo(record.receiptFile) | async">
+        <ng-container *ngSwitchCase="null">No file</ng-container>
+        <ng-container *ngSwitchDefault>
+          {{ (this.getFileInfo(record.receiptFile) | async)?.fileName }}
+        </ng-container>
+      </ng-container>
+    </td>
   </tr>
 </table>
