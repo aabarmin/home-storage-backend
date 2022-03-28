@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { filter } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-import { Subject } from 'rxjs';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
 import { map } from 'rxjs/internal/operators/map';
 import { Device } from '../model/device';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DeviceService extends LocalStorageService<Device> {
   private devices: Subject<Device[]> = new BehaviorSubject<Device[]>([]);
@@ -23,26 +20,22 @@ export class DeviceService extends LocalStorageService<Device> {
   }
 
   /**
-   * Return a device with the given alias. 
-   * 
+   * Return a device with the given alias.
+   *
    * @param alias$ to look for
    */
-  findByAlias(alias$: Observable<string>): Observable<Device> {
-    return alias$.pipe(
-      map(alias => {
-        const items = this.getStorage('devices');
-        const filtered = items.filter(device => device.alias == alias);
-        return filtered[0];
-      })
-    );
+  findByAlias(alias: String): Observable<Device> {
+    const items = this.getStorage('devices');
+    const filtered = items.filter((device) => device.alias == alias);
+    return of(filtered[0]);
   }
 
   findAllByFlat(flat$: Observable<string>): Observable<Device[]> {
     return flat$.pipe(
-      filter(flat => flat != null), 
-      map(flat => {
+      filter((flat) => flat != null),
+      map((flat) => {
         const items = this.getStorage('devices');
-        const filtered = items.filter(device => device.flat.alias == flat)
+        const filtered = items.filter((device) => device.flat.alias == flat);
         return filtered;
       })
     );

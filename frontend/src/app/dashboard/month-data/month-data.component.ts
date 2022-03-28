@@ -1,49 +1,46 @@
-import { Input } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { map, Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
+import { Device } from 'src/app/model/device';
+import { DeviceService } from 'src/app/service/device.service';
 import { DeviceDialogData } from '../device-dialog/device-dialog-data';
 import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.component';
-import { DashboardDocumentDialogComponent } from '../document-dialog/document-dialog.component';
 
 @Component({
   selector: 'app-dashboard-month-data',
   templateUrl: './month-data.component.html',
-  styleUrls: ['./month-data.component.css']
+  styleUrls: ['./month-data.component.css'],
 })
-export class MonthDataComponent implements OnInit {
+export class MonthDataComponent {
   @Input()
   records: DataRecord[] = [];
 
-  constructor(
-    private dialog: MatDialog
-  ) { }
+  constructor(private dialog: MatDialog, public deviceService: DeviceService) {}
 
-  ngOnInit(): void {
+  public getDevice(record: DataRecord): Observable<Device> {
+    return this.deviceService.findByAlias(record.device);
   }
 
-  onAddReadingClick(record: DataRecord): void {
+  public getDeviceReading(record: DataRecord): Observable<String> {
+    return this.getDevice(record).pipe(
+      map((device) => {
+        if (!device.needReadings) return 'Not required';
+        if (!record.reading) return 'Not provided';
+        return String(record.reading);
+      })
+    );
+  }
+
+  onEditDataRecord(record: DataRecord): void {
     const dialogData: DeviceDialogData = {
-      record
+      record,
     };
-    this.dialog.open(DashboardDeviceDialogComponent, {
-      data: dialogData
-    }).afterClosed().subscribe(() => {
-
-    })
+    this.dialog
+      .open(DashboardDeviceDialogComponent, {
+        data: dialogData,
+      })
+      .afterClosed()
+      .subscribe(() => {});
   }
-
-  onAddDocumentClick(documentType: string): void {
-    this.dialog.open(DashboardDocumentDialogComponent).afterClosed().subscribe(() => {
-      
-    });
-  }
-
-  // public shouldDisplayReadings(record: DataRecord): boolean {
-  //   return record.device.needReadings;
-  // }
-
-  // public readingsProvided(record: DataRecord): boolean {
-  //   return !!record.reading;
-  // }
 }
