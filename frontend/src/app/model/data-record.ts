@@ -1,6 +1,6 @@
 export interface DataRecord {
     date: Date
-    flat: string
+    flat: String
     device: string
     reading: number
     invoiceFile?: string | null

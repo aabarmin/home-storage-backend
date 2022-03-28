@@ -1,14 +1,9 @@
-import { OnInit } from '@angular/core';
-import { Inject } from '@angular/core';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { map } from 'rxjs';
-import { filter } from 'rxjs';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Device } from 'src/app/model/device';
-import { Flat } from 'src/app/model/flat';
 import { DataService } from 'src/app/service/data.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FlatService } from 'src/app/service/flat.service';
@@ -19,7 +14,7 @@ import { DeviceDialogData } from './device-dialog-data';
   templateUrl: './device-dialog.component.html',
   styleUrls: ['./device-dialog.component.css']
 })
-export class DashboardDeviceDialogComponent implements OnInit {
+export class DashboardDeviceDialogComponent {
   devices$: Observable<Device[]>;
   features$: Observable<string[]> = new Observable<string[]>();
 
@@ -35,10 +30,10 @@ export class DashboardDeviceDialogComponent implements OnInit {
   constructor(
     public flatService: FlatService,
     private deviceService: DeviceService,
-    private dataService: DataService, 
+    private dataService: DataService,
     private dialog: MatDialogRef<DashboardDeviceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: DeviceDialogData
-  ) {     
+  ) {
     const flatChange$ = this.formGroup.get('flat')?.valueChanges as Observable<string>;
     this.devices$ = this.deviceService.findAllByFlat(flatChange$);
 
@@ -46,17 +41,12 @@ export class DashboardDeviceDialogComponent implements OnInit {
     this.features$ = this.deviceService.findByAlias(deviceChange$).pipe(
       map(device => this.extractFeatures(device))
     );
-    
+
     if (this.dialogData.record) {
       const record = this.dialogData.record;
-      this.formGroup.setValue(record);
-    }
-  }
-
-  ngOnInit(): void {
-    if (this.dialogData?.record) {
-      const record = this.dialogData.record;
-      this.formGroup.setValue(record);
+      setTimeout(() => {
+        this.formGroup.setValue(record)
+      }, 1);
     }
   }
 

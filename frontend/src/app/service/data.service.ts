@@ -1,12 +1,7 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-import { combineLatest } from 'rxjs';
-import { Subject } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, of, Subject, tap } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
 import { DataRecord } from '../model/data-record';
-import { Flat } from '../model/flat';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -32,30 +27,31 @@ export class DataService extends LocalStorageService<DataRecord> {
     return of(record);
   }
 
-  public findRecordsForFlat(flat$: Observable<Flat>): Observable<DataRecord[]> {
-    return combineLatest([this.records$, flat$])
+  public findRecordsForFlat(flatAlias$: Observable<String>): Observable<DataRecord[]> {
+    return combineLatest([this.records$, flatAlias$])
       .pipe(
-        map(([records, flat]) => {
-          const filtered = records.filter(record => record.flat == flat.alias)
+        tap(([records, alias]) => console.log(`Records: ${records.length}, alias: ${alias}`)),
+        map(([records, flatAlias]) => {
+          const filtered = records.filter(record => record.flat == flatAlias)
           return filtered;
         })
       );
   }
 
   public findRecordsForFlatAndYear(
-    flat$: Observable<Flat>, 
+    flatAlias$: Observable<String>,
     year$: Observable<Number>
-    ): Observable<DataRecord[]> {
+  ): Observable<DataRecord[]> {
 
-    return combineLatest([this.records$, flat$, year$]).pipe(
-      map(([records, flat, year]) => {
+    return combineLatest([this.records$, flatAlias$, year$]).pipe(
+      map(([records, flatAlias, year]) => {
         const filtered = records
           .filter((item: DataRecord) => {
-            return item.flat = flat.alias;
+            return item.flat == flatAlias;
           })
           .filter(item => {
             let date = item.date;
-            if (typeof(date) == 'string') {
+            if (typeof (date) == 'string') {
               date = new Date(String(date))
             }
             const itemYear = date.getFullYear();

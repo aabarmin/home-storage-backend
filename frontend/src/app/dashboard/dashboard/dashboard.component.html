@@ -8,18 +8,16 @@
     <form [formGroup]="formGroup">
         <mat-form-field>
             <mat-select formControlName="flat">
-                <mat-option *ngFor="let flat of flats$ | async"
-                    [value]="flat">
+                <mat-option *ngFor="let flat of flats$ | async" [value]="flat.alias">
                     {{flat.title}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-    
+
         <mat-form-field>
             <mat-select formControlName="year">
-                <mat-option *ngFor="let year of years$ | async" 
-                            [value]="year">
-                            {{year}}
+                <mat-option *ngFor="let year of years$ | async" [value]="year">
+                    {{year}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -27,8 +25,7 @@
 </div>
 
 <mat-accordion [multi]="true">
-    <mat-expansion-panel *ngFor="let record of dashboard$ | async" 
-                         [expanded]="true">
+    <mat-expansion-panel *ngFor="let record of dashboard$ | async" [expanded]="true">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 {{record.month}}
