@@ -32,10 +32,11 @@ files.get("/:fileId", async (req, res) => {
 files.post("/", upload.single("file"), async (req, res, next) => {
   const file = req.file as Express.Multer.File;
   // move file to the proper location
-  if (!existsSync("./uploads")) {
-    mkdirSync("./uploads");
+  const uploadDir = process.env.UPLOAD_DIRECTORY as string;
+  if (!existsSync(uploadDir)) {
+    mkdirSync(uploadDir);
   }
-  const targetPath = getTargetPath(file, "./uploads");
+  const targetPath = getTargetPath(file, uploadDir);
   copyFileSync(file?.path, targetPath);
   rmSync(file.path);
   // creating db record

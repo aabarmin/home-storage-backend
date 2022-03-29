@@ -8,13 +8,15 @@ import {
 } from "mongodb";
 
 async function getMongoClient(): Promise<MongoClient> {
-  const client: MongoClient = new MongoClient("mongodb://localhost:27017");
+  const client: MongoClient = new MongoClient(
+    process.env.MONGO_CONNECTION_STRING as string
+  );
   return await client.connect();
 }
 
 async function getMongoDb(): Promise<Db> {
   const client = await getMongoClient();
-  return client.db("home-storage");
+  return client.db(process.env.MONGO_DATABASE);
 }
 
 export async function getCollection(collection: string): Promise<Collection> {
