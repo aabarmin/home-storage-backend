@@ -29,7 +29,7 @@ export class DataService extends LocalStorageService<DataRecord> {
   public save(record: DataRecord): Observable<DataRecord> {
     let items = this.getStorage('records');
     if (!record.id) {
-      record.id = items.length + 1;
+      record.id = String(items.length + 1);
     } else {
       items = items.filter((item) => item.id != record.id);
     }

@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { FindOptions } from "mongodb";
-import { getCollection, getRecord, getRecords, insertOne } from "./db";
+import { getRecord, getRecords, insertOne } from "./db";
 import { Flat } from "./flats";
 
 export const devices: Router = Router();
 
-interface Device {
+export interface Device {
   title: String;
   alias: String;
   flat: String;

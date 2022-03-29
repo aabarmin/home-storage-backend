@@ -1,0 +1,12 @@
+GET http://localhost:8080/records
+
+###
+
+POST http://localhost:8080/records
+Content-Type: application/json
+
+{
+  "date": "2022-03-28T13:53:36.682Z", 
+  "flat": "123",
+  "device": "firstdevice"
+}

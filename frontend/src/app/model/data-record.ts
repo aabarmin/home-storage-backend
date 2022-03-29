@@ -1,5 +1,5 @@
 export interface DataRecord {
-  id: number;
+  id: string;
   date: Date;
   flat: String;
   device: string;
