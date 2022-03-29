@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "module": "system",
+      "noImplicitAny": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "outFile": "dist/index.js"
+    },
+    "include": [
+        "src/**/*"
+    ]
+  }
