@@ -10,3 +10,12 @@ Content-Type: application/json
   "flat": "123",
   "device": "firstdevice"
 }
+
+###
+
+PUT http://localhost:8080/records/624300877046e5dda6cc13c2
+Content-Type: application/json
+
+{
+  "reading": 1234
+}

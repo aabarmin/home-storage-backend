@@ -1,19 +1,20 @@
 import { Router } from "express";
-import { getRecord, getRecords, insertOne } from "./db";
+import { ObjectId } from "mongodb";
+import { getRecord, getRecords, insertOne, updateOne } from "./db";
 import { Device } from "./devices";
 import { Flat } from "./flats";
 
 export const records = Router();
 
 export interface Record {
-  id: string;
+  id?: string;
   flat: string;
   year: number;
   date: Date;
   device: string;
-  reading: number;
-  invoiceFile: string;
-  receiptFile: string;
+  reading?: number;
+  invoiceFile?: string;
+  receiptFile?: string;
 }
 
 export interface Query {
@@ -33,7 +34,14 @@ records.get("/", async (req, res) => {
     query.year = year;
   }
 
-  const records = await getRecords("home_records", query);
+  const records = await (
+    await getRecords("home_records", query)
+  ).map((record) => {
+    const target = record;
+    target.id = target._id;
+    delete target._id;
+    return target;
+  });
   res.json(records);
 });
 
@@ -66,4 +74,20 @@ records.post("/", async (req, res) => {
   // saving a record
   const inserted = await insertOne("home_records", record);
   res.status(201).location(`/records/${inserted.insertedId}`);
+});
+
+records.put("/:id", async (req, res) => {
+  const id = req.params.id as string;
+  // checking if the record exists
+  const query = { _id: new ObjectId(id) };
+  const existingRecord = await getRecord("home_records", query);
+  if (existingRecord == null) {
+    res.status(500).send(`No record with id ${id}`);
+    return;
+  }
+  const record = req.body as Record;
+  delete record.id;
+  // updating the record
+  const updated = await updateOne("home_records", query, record);
+  res.json(record);
 });

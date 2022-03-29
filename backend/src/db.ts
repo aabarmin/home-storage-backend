@@ -1,10 +1,10 @@
 import {
   Collection,
   Db,
-  Filter,
   FindOptions,
   InsertOneResult,
   MongoClient,
+  UpdateResult,
 } from "mongodb";
 
 async function getMongoClient(): Promise<MongoClient> {
@@ -58,4 +58,19 @@ export async function insertOne(
   }
   const inserted = await collection.insertOne(record);
   return inserted;
+}
+
+export async function updateOne(
+  collectionName: string,
+  query: any,
+  record: any
+): Promise<UpdateResult> {
+  const collection = await getCollection(collectionName);
+  if (collection == null) {
+    throw new Error(`Can't get collection with name ${collectionName}`);
+  }
+  const updated = await collection.updateOne(query, {
+    $set: record,
+  });
+  return updated;
 }
