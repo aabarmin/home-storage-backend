@@ -21,6 +21,10 @@ export class FlatsListComponent implements OnInit {
   constructor(public flatService: FlatService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
+    this.onRefresh();
+  }
+
+  onRefresh(): void {
     this.flatService.findAll().subscribe((flats) => {
       this.records = flats;
     });

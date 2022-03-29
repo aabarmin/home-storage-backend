@@ -27,7 +27,12 @@ export class DeviceListComponent implements OnInit {
     private flatService: FlatService,
     private dialog: MatDialog
   ) {}
+
   ngOnInit(): void {
+    this.onRefresh();
+  }
+
+  onRefresh(): void {
     this.deviceService.findAll().subscribe((devices) => {
       const flats = [...new Set(devices.map((device) => device.flat))];
       const observables = flats.map((alias) =>

@@ -33,10 +33,7 @@
       <mat-form-field appearance="fill">
         <mat-label>Device</mat-label>
         <mat-select formControlName="device">
-          <mat-option
-            *ngFor="let device of devices$ | async"
-            [value]="device.alias"
-          >
+          <mat-option *ngFor="let device of devices" [value]="device.alias">
             {{ device.title }}
           </mat-option>
         </mat-select>
@@ -47,7 +44,7 @@
       </mat-form-field>
     </p>
 
-    <p *ngIf="(features$ | async)?.includes('readings')">
+    <p *ngIf="features.includes('readings')">
       <mat-form-field appearance="fill">
         <mat-label>Device reading</mat-label>
         <input type="number" matInput formControlName="reading" />
@@ -58,14 +55,14 @@
       </mat-form-field>
     </p>
 
-    <p *ngIf="(features$ | async)?.includes('invoices')">
+    <p *ngIf="features.includes('invoices')">
       <mat-form-field appearance="fill">
         <mat-label>Invoice</mat-label>
         <app-file-upload formControlName="invoiceFile"></app-file-upload>
       </mat-form-field>
     </p>
 
-    <p *ngIf="(features$ | async)?.includes('receipts')">
+    <p *ngIf="features.includes('receipts')">
       <mat-form-field appearance="fill">
         <mat-label>Receipt</mat-label>
         <app-file-upload formControlName="receiptFile"></app-file-upload>

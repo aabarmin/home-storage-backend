@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { mergeMap, Observable } from 'rxjs';
-import { map } from 'rxjs/internal/operators/map';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Device } from '../model/device';
+import { Flat } from '../model/flat';
 
 @Injectable({
   providedIn: 'root',
@@ -34,11 +34,9 @@ export class DeviceService {
     return this.http.get<Device>(url);
   }
 
-  findAllByFlat(flat$: Observable<string>): Observable<Device[]> {
-    return flat$.pipe(
-      map((flat) => `${this.backendUrl}?flat=flat`),
-      mergeMap((url) => this.http.get<Device[]>(url))
-    );
+  findAllByFlat(flat: Flat): Observable<Device[]> {
+    const url = `${this.backendUrl}?flat=${flat.alias}`;
+    return this.http.get<Device[]>(url);
   }
 
   save(device: Device): Observable<Device> {
