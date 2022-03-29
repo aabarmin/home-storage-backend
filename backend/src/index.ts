@@ -1,4 +1,5 @@
 import bodyParser from "body-parser";
+import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
 import { devices } from "./devices";
@@ -11,6 +12,7 @@ dotenv.config();
 const app: Express = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use("/health", health);
 app.use("/flats", flats);
