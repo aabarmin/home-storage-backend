@@ -1,45 +1,42 @@
-import { ViewChild } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTable } from '@angular/material/table';
 import { Flat } from 'src/app/model/flat';
-import { BackendDataSource } from 'src/app/service/backend-data-source';
 import { FlatService } from 'src/app/service/flat.service';
 import { FlatDialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-flats-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css']
+  styleUrls: ['./list.component.css'],
 })
 export class FlatsListComponent implements OnInit {
-  @ViewChild(MatTable) 
+  @ViewChild(MatTable)
   flatsTable!: MatTable<Flat>;
 
-  displayedColumns: String[] = [
-    "title",
-    "alias",
-    "actions"
-  ];
+  displayedColumns: String[] = ['title', 'alias', 'actions'];
 
-  constructor(
-    public flatService: FlatService, 
-    private dialog: MatDialog
-  ) { }
+  records: Flat[] = [];
+
+  constructor(public flatService: FlatService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
-    
-  }  
-
-  public onNewFlat(): void {
-    this.dialog.open(FlatDialogComponent).afterClosed().subscribe((result: Flat) => {
-      if (!result) {
-        return;
-      }
-      this.flatService.save(result).subscribe(() => {
-        this.flatsTable.renderRows();
-      });
-    })
+    this.flatService.findAll().subscribe((flats) => {
+      this.records = flats;
+    });
   }
 
+  public onNewFlat(): void {
+    this.dialog
+      .open(FlatDialogComponent)
+      .afterClosed()
+      .subscribe((result: Flat) => {
+        if (!result) {
+          return;
+        }
+        this.flatService.save(result).subscribe(() => {
+          this.flatsTable.renderRows();
+        });
+      });
+  }
 }

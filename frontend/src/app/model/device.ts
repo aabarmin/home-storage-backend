@@ -1,11 +1,9 @@
-import { Flat } from "./flat";
-
 export interface Device {
-    title: String;
-    alias: String;
-    flat: Flat;
+  title: String;
+  alias: String;
+  flat: string;
 
-    needInvoices: boolean;
-    needReceipts: boolean;
-    needReadings: boolean;
+  needInvoices: boolean;
+  needReceipts: boolean;
+  needReadings: boolean;
 }

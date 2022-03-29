@@ -1,22 +1,27 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, filter, Observable, Subject } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import { mergeMap, Observable } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
+import { environment } from 'src/environments/environment';
 import { Device } from '../model/device';
-import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DeviceService extends LocalStorageService<Device> {
-  private devices: Subject<Device[]> = new BehaviorSubject<Device[]>([]);
-  public readonly devices$: Observable<Device[]> = this.devices.asObservable();
+export class DeviceService {
+  private readonly backendUrl: string;
 
-  constructor() {
-    super();
+  constructor(private http: HttpClient) {
+    this.backendUrl = `${environment.backendBase}/devices`;
+  }
 
-    const items = this.getStorage('devices');
-    this.devices.next(items);
+  /**
+   * Find all devices.
+   *
+   * @returns all devices
+   */
+  findAll(): Observable<Device[]> {
+    return this.http.get<Device[]>(this.backendUrl);
   }
 
   /**
@@ -25,29 +30,18 @@ export class DeviceService extends LocalStorageService<Device> {
    * @param alias$ to look for
    */
   findByAlias(alias: String): Observable<Device> {
-    const items = this.getStorage('devices');
-    const filtered = items.filter((device) => device.alias == alias);
-    return of(filtered[0]);
+    const url = `${this.backendUrl}/${alias}`;
+    return this.http.get<Device>(url);
   }
 
   findAllByFlat(flat$: Observable<string>): Observable<Device[]> {
     return flat$.pipe(
-      filter((flat) => flat != null),
-      map((flat) => {
-        const items = this.getStorage('devices');
-        const filtered = items.filter((device) => device.flat.alias == flat);
-        return filtered;
-      })
+      map((flat) => `${this.backendUrl}?flat=flat`),
+      mergeMap((url) => this.http.get<Device[]>(url))
     );
   }
 
   save(device: Device): Observable<Device> {
-    const items = this.getStorage('devices');
-    items.push(device);
-    this.setStorage('devices', items);
-
-    this.devices.next(items);
-
-    return of(device);
+    return this.http.post<Device>(this.backendUrl, device);
   }
 }

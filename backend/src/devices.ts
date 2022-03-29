@@ -11,16 +11,27 @@ export interface Device {
   flat: String;
 }
 
+const options: FindOptions = {
+  projection: {
+    _id: 0,
+    title: 1,
+    alias: 1,
+    flat: 1,
+    needInvoices: 1,
+    needReceipts: 1,
+    needReadings: 1,
+  },
+};
+
 devices.get("/", async (req, res) => {
-  const options: FindOptions = {
-    projection: {
-      _id: 0,
-      title: 1,
-      alias: 1,
-      flat: 1,
-    },
-  };
   const devices = await getRecords("home_devices", {}, options);
+  res.json(devices);
+});
+
+devices.get("/:alias", async (req, res) => {
+  const alias = req.params.alias;
+  const query = { alias: alias };
+  const devices = await getRecords("home_devices", query, options);
   res.json(devices);
 });
 

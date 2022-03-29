@@ -1,52 +1,29 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { Flat } from '../model/flat';
-import { of } from "rxjs";
-import { Subject } from 'rxjs';
-import { LocalStorageService } from './local-storage.service';
-import { BehaviorSubject } from 'rxjs';
-import { combineLatest } from 'rxjs';
-import { mapTo } from 'rxjs';
-import { map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class FlatService extends LocalStorageService<Flat> {  
+export class FlatService {
+  private readonly backendUrl: string;
 
-  private flats: Subject<Flat[]> = new BehaviorSubject<Flat[]>([]);
-  public readonly flats$ = this.flats.asObservable();
-
-  constructor() {
-    super();
-    if (!this.getStorage('flats')) {
-      const items = [{
-        title: "Ufa",
-        alias: "ufa"
-      }];
-      this.setStorage('flats', items);
-    }
-    const items = this.getStorage('flats');
-    this.flats.next(items);
+  constructor(private http: HttpClient) {
+    this.backendUrl = `${environment.backendBase}/flats`;
   }
 
-  public findByAlias(alias$: Observable<string>): Observable<Flat | null> {
-    return combineLatest([this.flats$, alias$]).pipe(
-      map(([flats, alias]) => {
-        const filtered = flats.filter(flat => flat.alias == alias);
-        if (filtered.length == 0) return null;
-        return filtered[0];
-      })
-    );
+  public findAll(): Observable<Flat[]> {
+    return this.http.get<Flat[]>(this.backendUrl);
+  }
+
+  public findByAlias(alias: string): Observable<Flat> {
+    const url = `${this.backendUrl}/${alias}`;
+    return this.http.get<Flat>(url);
   }
 
   public save(flat: Flat): Observable<Flat> {
-    const items = this.getStorage('flats');
-    items.push(flat);
-    this.setStorage('flats', items);
-
-    this.flats.next(items);
-
-    return of(flat);
+    return this.http.post<Flat>(this.backendUrl, flat);
   }
 }

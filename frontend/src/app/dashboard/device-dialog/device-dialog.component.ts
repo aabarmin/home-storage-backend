@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { filter, map, mergeMap, Observable } from 'rxjs';
 import { DataRecord } from 'src/app/model/data-record';
 import { Device } from 'src/app/model/device';
+import { Flat } from 'src/app/model/flat';
 import { DataService } from 'src/app/service/data.service';
 import { DeviceService } from 'src/app/service/device.service';
 import { FlatService } from 'src/app/service/flat.service';
@@ -14,7 +15,7 @@ import { DeviceDialogData } from './device-dialog-data';
   templateUrl: './device-dialog.component.html',
   styleUrls: ['./device-dialog.component.css'],
 })
-export class DashboardDeviceDialogComponent {
+export class DashboardDeviceDialogComponent implements OnInit {
   devices$: Observable<Device[]>;
   features$: Observable<string[]> = new Observable<string[]>();
 
@@ -28,8 +29,10 @@ export class DashboardDeviceDialogComponent {
     receiptFile: new FormControl(null),
   });
 
+  flats: Flat[] = [];
+
   constructor(
-    public flatService: FlatService,
+    private flatService: FlatService,
     private deviceService: DeviceService,
     private dataService: DataService,
     private dialog: MatDialogRef<DashboardDeviceDialogComponent>,
@@ -54,6 +57,12 @@ export class DashboardDeviceDialogComponent {
         this.formGroup.setValue(record);
       }, 1);
     }
+  }
+
+  ngOnInit(): void {
+    this.flatService.findAll().subscribe((flats) => {
+      this.flats = flats;
+    });
   }
 
   private extractFeatures(device: Device): string[] {

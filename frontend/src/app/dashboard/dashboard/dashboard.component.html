@@ -1,36 +1,41 @@
 <h2 mat-subheader>Dashboard</h2>
 
 <div class="dashboard-toolbar">
-    <button mat-raised-button (click)="onAddDeviceDataClick()">Add record</button>
+  <button mat-raised-button (click)="onAddDeviceDataClick()">Add record</button>
 </div>
 
 <div class="dashboard-toolbar">
-    <form [formGroup]="formGroup">
-        <mat-form-field>
-            <mat-select formControlName="flat">
-                <mat-option *ngFor="let flat of flats$ | async" [value]="flat.alias">
-                    {{flat.title}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-select formControlName="flat">
+        <mat-option *ngFor="let flat of flats" [value]="flat.alias">
+          {{ flat.title }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-        <mat-form-field>
-            <mat-select formControlName="year">
-                <mat-option *ngFor="let year of years$ | async" [value]="year">
-                    {{year}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </form>
+    <mat-form-field>
+      <mat-select formControlName="year">
+        <mat-option *ngFor="let year of years$ | async" [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
 </div>
 
 <mat-accordion [multi]="true">
-    <mat-expansion-panel *ngFor="let record of dashboard$ | async" [expanded]="true">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                {{record.month}}
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-dashboard-month-data [records]="record.records"></app-dashboard-month-data>
-    </mat-expansion-panel>
+  <mat-expansion-panel
+    *ngFor="let record of dashboard$ | async"
+    [expanded]="true"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ record.month }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-dashboard-month-data
+      [records]="record.records"
+    ></app-dashboard-month-data>
+  </mat-expansion-panel>
 </mat-accordion>
