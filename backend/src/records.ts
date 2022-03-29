@@ -73,7 +73,7 @@ records.post("/", async (req, res) => {
   }
   // saving a record
   const inserted = await insertOne("home_records", record);
-  res.status(201).location(`/records/${inserted.insertedId}`);
+  res.status(201).location(`/records/${inserted.insertedId}`).send();
 });
 
 records.put("/:id", async (req, res) => {

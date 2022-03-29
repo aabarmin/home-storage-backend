@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { FindOptions } from "mongodb";
-import { getCollection, getRecord, getRecords, insertOne } from "./db";
+import { getRecord, getRecords, insertOne } from "./db";
 
 export const flats: Router = Router();
 
@@ -33,5 +33,5 @@ flats.post("/", async (req, res) => {
   }
 
   const inserted = await insertOne("home_flats", flat);
-  res.location(`/flats/${inserted.insertedId}`);
+  res.location(`/flats/${inserted.insertedId}`).send();
 });

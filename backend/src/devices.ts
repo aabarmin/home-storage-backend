@@ -49,5 +49,5 @@ devices.post("/", async (req, res) => {
   }
   // inserting
   const inserted = await insertOne("home_devices", device);
-  res.location(`/devices/${inserted.insertedId}`);
+  res.location(`/devices/${inserted.insertedId}`).send();
 });
