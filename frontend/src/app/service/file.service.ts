@@ -1,12 +1,19 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 import { FileId } from '../model/file-id';
-import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FileService extends LocalStorageService<FileId> {
+export class FileService {
+  private readonly backendUrl: string;
+
+  constructor(private http: HttpClient) {
+    this.backendUrl = `${environment.backendBase}/files`;
+  }
+
   /**
    * Upload the file to the server.
    * @TODO: shouldn't it be rewritten to use Observable<File>?
@@ -15,16 +22,10 @@ export class FileService extends LocalStorageService<FileId> {
    * @returns
    */
   public upload(file: File): Observable<FileId> {
-    const items = this.getStorage('files');
-    const fileInfo: FileId = {
-      fileId: String(items.length),
-      fileName: file.name,
-      fileType: file.type,
-    };
-    items.push(fileInfo);
-    this.setStorage('files', items);
+    const form = new FormData();
+    form.append('file', file);
 
-    return of(fileInfo);
+    return this.http.post<FileId>(this.backendUrl, form);
   }
 
   /**
@@ -33,8 +34,7 @@ export class FileService extends LocalStorageService<FileId> {
    * @param file$
    */
   public findFileId(fileId: string): Observable<FileId> {
-    const items = this.getStorage('files');
-    const filtered = items.filter((file) => file.fileId == fileId);
-    return of(filtered[0]);
+    const url = `${this.backendUrl}/${fileId}`;
+    return this.http.get<FileId>(url);
   }
 }

@@ -46,7 +46,8 @@ files.post("/", upload.single("file"), async (req, res, next) => {
     fileType: file.mimetype,
   };
   const inserted = await insertOne("home_files", record);
-  res.status(201).location(`/files/${inserted.insertedId}`).send();
+  record.fileId = inserted.insertedId.toString();
+  res.json(record);
 });
 
 function getTargetPath(file: Express.Multer.File, uploadDir: string): string {
