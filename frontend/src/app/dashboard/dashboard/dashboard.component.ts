@@ -122,8 +122,8 @@ export class DashboardComponent implements OnInit {
       of(record),
       this.flatService.findById(record.flatId),
       this.deviceService.findById(record.deviceId),
-      this.getFileInfo(record.invoiceFile),
-      this.getFileInfo(record.receiptFile),
+      this.getFileInfo(record.invoiceFileId),
+      this.getFileInfo(record.receiptFileId),
     ]).pipe(
       map(([record, flat, device, invoiceFile, receiptFile]) => {
         return new DashboardDataRecord(

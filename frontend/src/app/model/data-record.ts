@@ -4,6 +4,6 @@ export interface DataRecord {
   flatId: number;
   deviceId: number;
   reading: number;
-  invoiceFile?: number | null;
-  receiptFile?: number | null;
+  invoiceFileId?: number | null;
+  receiptFileId?: number | null;
 }

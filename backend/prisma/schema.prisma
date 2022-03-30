@@ -31,8 +31,8 @@ model Device {
   @@map("devices")
 }
 
-model File {
-  id       Int    @id @default(autoincrement())
+model FileInfo {
+  fileId   Int    @id @default(autoincrement()) @map("id")
   fileName String @map("file_name")
   fileType String @map("file_type")
   filePath String @map("file_path")

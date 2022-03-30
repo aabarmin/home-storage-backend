@@ -1,25 +1,16 @@
 import { Router } from "express";
 import { copyFileSync, existsSync, mkdirSync, rmSync } from "fs";
-import { ObjectId } from "mongodb";
 import multer from "multer";
-import { getRecord, insertOne } from "./db";
+import { prisma } from "./db";
 
 export const files = Router();
 const upload = multer({
   dest: "/tmp",
 });
 
-export interface FileInfo {
-  fileId?: string;
-  fileName: string;
-  fileType: string;
-  filePath: string;
-}
-
 files.get("/:fileId/download", async (req, res) => {
-  const id = req.params.fileId;
-  const query = { _id: new ObjectId(id) };
-  const fileInfo = await getRecord("home_files", query);
+  const id = Number(req.params.fileId);
+  const fileInfo = await prisma.fileInfo.findUnique({ where: { fileId: id } });
   if (fileInfo == null) {
     res.status(500).send(`No file with id ${id}`);
     return;
@@ -28,16 +19,9 @@ files.get("/:fileId/download", async (req, res) => {
 });
 
 files.get("/:fileId", async (req, res) => {
-  const id = req.params.fileId;
-  const query = { _id: new ObjectId(id) };
-  const fileInfo = await getRecord("home_files", query);
-  if (fileInfo == null) {
-    res.status(500).send(`No file with id ${id}`);
-    return;
-  }
-  fileInfo.fileId = fileInfo._id;
-  delete fileInfo._id;
-  res.json(fileInfo);
+  const id = Number(req.params.fileId);
+  const record = await prisma.fileInfo.findUnique({ where: { fileId: id } });
+  res.json(record);
 });
 
 files.post("/", upload.single("file"), async (req, res, next) => {
@@ -51,13 +35,13 @@ files.post("/", upload.single("file"), async (req, res, next) => {
   copyFileSync(file?.path, targetPath);
   rmSync(file.path);
   // creating db record
-  const record: FileInfo = {
-    fileName: file.originalname,
-    filePath: targetPath,
-    fileType: file.mimetype,
-  };
-  const inserted = await insertOne("home_files", record);
-  record.fileId = inserted.insertedId.toString();
+  const record = await prisma.fileInfo.create({
+    data: {
+      fileName: file.originalname,
+      filePath: targetPath,
+      fileType: file.mimetype,
+    },
+  });
   res.json(record);
 });
 
