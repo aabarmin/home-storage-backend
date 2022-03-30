@@ -19,13 +19,13 @@ export class DashboardDeviceDialogComponent implements OnInit {
   features: string[] = [];
 
   formGroup = new FormGroup({
-    id: new FormControl(),
+    id: new FormControl(undefined),
     date: new FormControl(new Date(), [Validators.required]),
-    flat: new FormControl(null, [Validators.required]),
-    device: new FormControl(null, [Validators.required]),
+    flatId: new FormControl(null, [Validators.required]),
+    deviceId: new FormControl(null, [Validators.required]),
     reading: new FormControl('', [Validators.pattern('\\d+')]),
-    invoiceFile: new FormControl(null),
-    receiptFile: new FormControl(null),
+    invoiceFileId: new FormControl(null),
+    receiptFileId: new FormControl(null),
   });
 
   flats: Flat[] = [];
@@ -39,16 +39,16 @@ export class DashboardDeviceDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.formGroup.get('flat')?.valueChanges.subscribe((flatAlias) => {
-      this.flatService.findByAlias(flatAlias).subscribe((flat) => {
+    this.formGroup.get('flatId')?.valueChanges.subscribe((flatAlias) => {
+      this.flatService.findById(flatAlias).subscribe((flat) => {
         this.deviceService.findAllByFlat(flat).subscribe((devices) => {
           this.devices = devices;
         });
       });
     });
 
-    this.formGroup.get('device')?.valueChanges.subscribe((deviceAlias) => {
-      this.deviceService.findByAlias(deviceAlias).subscribe((device) => {
+    this.formGroup.get('deviceId')?.valueChanges.subscribe((deviceAlias) => {
+      this.deviceService.findById(deviceAlias).subscribe((device) => {
         this.features = this.extractFeatures(device);
       });
     });

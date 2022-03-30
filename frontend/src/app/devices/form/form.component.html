@@ -25,8 +25,8 @@
   <p>
     <mat-form-field appearance="fill">
       <mat-label>Flat</mat-label>
-      <mat-select formControlName="flat">
-        <mat-option *ngFor="let flat of flats" [value]="flat.alias">
+      <mat-select formControlName="flatId">
+        <mat-option *ngFor="let flat of flats" [value]="flat.id">
           {{ flat.title }}
         </mat-option>
       </mat-select>

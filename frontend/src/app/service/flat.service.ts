@@ -18,8 +18,8 @@ export class FlatService {
     return this.http.get<Flat[]>(this.backendUrl);
   }
 
-  public findByAlias(alias: string): Observable<Flat> {
-    const url = `${this.backendUrl}/${alias}`;
+  public findById(id: number): Observable<Flat> {
+    const url = `${this.backendUrl}/${id}`;
     return this.http.get<Flat>(url);
   }
 

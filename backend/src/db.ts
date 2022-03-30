@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import {
   Collection,
   Db,
@@ -6,6 +7,8 @@ import {
   MongoClient,
   UpdateResult,
 } from "mongodb";
+
+export const prisma = new PrismaClient();
 
 async function getMongoClient(): Promise<MongoClient> {
   const client: MongoClient = new MongoClient(

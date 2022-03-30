@@ -17,7 +17,7 @@ export class DeviceFormComponent implements OnInit {
 
   formGroup: FormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
-    flat: new FormControl('', [Validators.required]),
+    flatId: new FormControl('', [Validators.required]),
     alias: new FormControl('', [
       Validators.required,
       Validators.pattern('[a-z]+'),

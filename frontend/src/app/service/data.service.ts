@@ -20,11 +20,12 @@ export class DataService {
       const url = `${this.backendUrl}/${record.id}`;
       return this.http.put<DataRecord>(url, record);
     }
+    delete record.id;
     return this.http.post<DataRecord>(this.backendUrl, record);
   }
 
   public findRecordsForFlat(flat: Flat): Observable<DataRecord[]> {
-    const url = `${this.backendUrl}?flat=${flat.alias}`;
+    const url = `${this.backendUrl}?flatId=${flat.id}`;
     return this.http.get<DataRecord[]>(url);
   }
 
@@ -32,7 +33,7 @@ export class DataService {
     flat: Flat,
     year: number
   ): Observable<DataRecord[]> {
-    const url = `${this.backendUrl}?flat=${flat.alias}&year=${year}`;
+    const url = `${this.backendUrl}?flatId=${flat.id}&year=${year}`;
     return this.http.get<DataRecord[]>(url);
   }
 }

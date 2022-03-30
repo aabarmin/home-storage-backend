@@ -1,4 +1,5 @@
 export interface Flat {
-    title: string;
-    alias: string;
+  id: number;
+  title: string;
+  alias: string;
 }

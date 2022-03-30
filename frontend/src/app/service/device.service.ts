@@ -25,17 +25,17 @@ export class DeviceService {
   }
 
   /**
-   * Return a device with the given alias.
+   * Return a device with the given id.
    *
-   * @param alias$ to look for
+   * @param id to look for
    */
-  findByAlias(alias: String): Observable<Device> {
-    const url = `${this.backendUrl}/${alias}`;
+  findById(id: number): Observable<Device> {
+    const url = `${this.backendUrl}/${id}`;
     return this.http.get<Device>(url);
   }
 
   findAllByFlat(flat: Flat): Observable<Device[]> {
-    const url = `${this.backendUrl}?flat=${flat.alias}`;
+    const url = `${this.backendUrl}?flatId=${flat.id}`;
     return this.http.get<Device[]>(url);
   }
 

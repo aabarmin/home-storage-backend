@@ -1,72 +1,54 @@
+import { Device } from ".prisma/client";
 import { Router } from "express";
-import { FindOptions } from "mongodb";
-import { getRecord, getRecords, insertOne } from "./db";
-import { Flat } from "./flats";
+import { prisma } from "./db";
 
 export const devices: Router = Router();
 
-export interface Device {
-  title: String;
-  alias: String;
-  flat: String;
-}
-
-const options: FindOptions = {
-  projection: {
-    _id: 0,
-    title: 1,
-    alias: 1,
-    flat: 1,
-    needInvoices: 1,
-    needReceipts: 1,
-    needReadings: 1,
-  },
-};
-
-interface Query {
-  flat?: string;
-}
-
 devices.get("/", async (req, res) => {
-  const query: Query = {};
-  if ("flat" in req.query) {
-    query.flat = req.query.flat as string;
+  if ("flatId" in req.query) {
+    const records = await prisma.device.findMany({
+      where: {
+        flatId: Number(req.query.flatId),
+      },
+    });
+    res.json(records);
+    return;
   }
-  const devices = await getRecords("home_devices", query, options);
-  res.json(devices);
+  const records = await prisma.device.findMany();
+  res.json(records);
 });
 
-devices.get("/:alias", async (req, res) => {
-  const alias = req.params.alias;
-  const query = { alias: alias };
-  const device = await getRecord("home_devices", query, options);
+devices.get("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const device = await prisma.device.findUnique({
+    where: {
+      id: id,
+    },
+  });
   res.json(device);
 });
 
 devices.post("/", async (req, res) => {
   const device = req.body as Device;
   // checking if the flat exists
-  const flatQuery = {
-    alias: device.flat,
-  };
-  const flat = (await getRecord("home_flats", flatQuery)) as Flat;
-  if (flat == null) {
-    res.status(500).send(`No flat with alias ${device.flat}`);
+  const existingFlat = await prisma.flat.findUnique({
+    where: {
+      id: device.flatId,
+    },
+  });
+  if (existingFlat == null) {
+    res.status(500).send(`No flat with id ${device.flatId}`);
     return;
   }
   // checking if a device with the given alias already exists
-  const deviceQuery = {
-    alias: device.alias,
-  };
-  const existingDevice = (await getRecord(
-    "home_devices",
-    deviceQuery
-  )) as Device;
+  const existingDevice = await prisma.device.findUnique({
+    where: { alias: device.alias },
+  });
   if (existingDevice != null) {
     res.status(500).send(`Device with alias ${device.alias} already exists`);
     return;
   }
   // inserting
-  const inserted = await insertOne("home_devices", device);
-  res.location(`/devices/${inserted.insertedId}`).send();
+  const inserted = await prisma.device.create({ data: device });
+  res.location(`/devices/${inserted.id}`).send();
 });

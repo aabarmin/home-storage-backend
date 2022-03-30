@@ -35,9 +35,9 @@ export class FileService {
   /**
    * Get information about a file by its id.
    *
-   * @param file$
+   * @param file
    */
-  public findFileId(fileId: string): Observable<FileId> {
+  public findFileId(fileId: number): Observable<FileId> {
     const url = `${this.backendUrl}/${fileId}`;
     return this.http.get<FileId>(url);
   }

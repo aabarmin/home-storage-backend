@@ -17,8 +17,8 @@
     <p>
       <mat-form-field appearance="fill">
         <mat-label>Flat</mat-label>
-        <mat-select formControlName="flat">
-          <mat-option *ngFor="let flat of flats" [value]="flat.alias">
+        <mat-select formControlName="flatId">
+          <mat-option *ngFor="let flat of flats" [value]="flat.id">
             {{ flat.title }}
           </mat-option>
         </mat-select>
@@ -32,8 +32,8 @@
     <p>
       <mat-form-field appearance="fill">
         <mat-label>Device</mat-label>
-        <mat-select formControlName="device">
-          <mat-option *ngFor="let device of devices" [value]="device.alias">
+        <mat-select formControlName="deviceId">
+          <mat-option *ngFor="let device of devices" [value]="device.id">
             {{ device.title }}
           </mat-option>
         </mat-select>
@@ -58,14 +58,14 @@
     <p *ngIf="features.includes('invoices')">
       <mat-form-field appearance="fill">
         <mat-label>Invoice</mat-label>
-        <app-file-upload formControlName="invoiceFile"></app-file-upload>
+        <app-file-upload formControlName="invoiceFileId"></app-file-upload>
       </mat-form-field>
     </p>
 
     <p *ngIf="features.includes('receipts')">
       <mat-form-field appearance="fill">
         <mat-label>Receipt</mat-label>
-        <app-file-upload formControlName="receiptFile"></app-file-upload>
+        <app-file-upload formControlName="receiptFileId"></app-file-upload>
       </mat-form-field>
     </p>
   </div>

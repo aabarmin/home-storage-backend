@@ -13,7 +13,7 @@ import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.c
 import { DashboardDataRecord, DashboardRecord } from './dashboard-record';
 
 interface FormValue {
-  flat?: string;
+  flat?: number;
   year?: number;
 }
 
@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   dashboard: DashboardRecord[] = [];
 
   formGroup = this.fb.group({
-    flat: this.fb.control(null),
+    flatId: this.fb.control(null),
     year: this.fb.control(null),
   });
 
@@ -46,12 +46,12 @@ export class DashboardComponent implements OnInit {
       this.flats = flats;
       if (flats.length == 0) return;
       this.formGroup.patchValue({
-        flat: flats[0].alias,
+        flatId: flats[0].id,
       });
     });
 
-    this.formGroup.get('flat')?.valueChanges.subscribe((flatAlias) => {
-      this.flatService.findByAlias(flatAlias).subscribe((flat) => {
+    this.formGroup.get('flatId')?.valueChanges.subscribe((flatId) => {
+      this.flatService.findById(flatId).subscribe((flat) => {
         this.dataService.findRecordsForFlat(flat).subscribe((records) => {
           const values = records.map((r) => this.getRecordYear(r));
           const years = [...new Set(values)];
@@ -68,15 +68,15 @@ export class DashboardComponent implements OnInit {
 
     // when flat and year are selected, get records
     combineLatest([
-      this.formGroup.get('flat')?.valueChanges as Observable<string>,
+      this.formGroup.get('flatId')?.valueChanges as Observable<number>,
       this.formGroup.get('year')?.valueChanges as Observable<number>,
-    ]).subscribe(([flatAlias, year]) => {
-      this.refresh(flatAlias, year);
+    ]).subscribe(([flatId, year]) => {
+      this.refresh(flatId, year);
     });
   }
 
-  private refresh(flatAlias: string, year: number): void {
-    this.flatService.findByAlias(flatAlias).subscribe((flat) => {
+  private refresh(flatId: number, year: number): void {
+    this.flatService.findById(flatId).subscribe((flat) => {
       this.dashboard = [];
       this.dataService
         .findRecordsForFlatAndYear(flat, year)
@@ -120,8 +120,8 @@ export class DashboardComponent implements OnInit {
   ): Observable<DashboardDataRecord> {
     return forkJoin([
       of(record),
-      this.flatService.findByAlias(record.flat),
-      this.deviceService.findByAlias(record.device),
+      this.flatService.findById(record.flatId),
+      this.deviceService.findById(record.deviceId),
       this.getFileInfo(record.invoiceFile),
       this.getFileInfo(record.receiptFile),
     ]).pipe(
@@ -138,7 +138,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private getFileInfo(
-    fileId: string | null | undefined
+    fileId: number | null | undefined
   ): Observable<FileId | null> {
     if (!fileId) return of(null);
     return this.fileService.findFileId(fileId);

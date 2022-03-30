@@ -8,8 +8,8 @@
 <div class="dashboard-toolbar">
   <form [formGroup]="formGroup">
     <mat-form-field>
-      <mat-select formControlName="flat">
-        <mat-option *ngFor="let flat of flats" [value]="flat.alias">
+      <mat-select formControlName="flatId">
+        <mat-option *ngFor="let flat of flats" [value]="flat.id">
           {{ flat.title }}
         </mat-option>
       </mat-select>

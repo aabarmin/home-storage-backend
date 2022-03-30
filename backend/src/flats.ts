@@ -1,38 +1,28 @@
+import { Flat } from ".prisma/client";
 import { Router } from "express";
-import { FindOptions } from "mongodb";
-import { getRecord, getRecords, insertOne } from "./db";
+import { prisma } from "./db";
 
 export const flats: Router = Router();
-
-export interface Flat {
-  title: String;
-  alias: String;
-}
-
-const options: FindOptions = {
-  projection: {
-    _id: 0,
-    title: 1,
-    alias: 1,
-  },
-};
 
 /**
  * Find all records.
  */
 flats.get("/", async (req, res) => {
-  const records = await getRecords("home_flats", {}, options);
+  const records = await prisma.flat.findMany();
   res.json(records);
 });
 
 /**
- * Find by alias
+ * Find by id
  */
-flats.get("/:alias", async (req, res) => {
-  const alias = req.params.alias as string;
-  const query = { alias: alias };
-  const record = await getRecord("home_flats", query, options);
-  res.json(record);
+flats.get("/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  const flat = await prisma.flat.findUnique({
+    where: {
+      id: id,
+    },
+  });
+  res.json(flat);
 });
 
 /**
@@ -40,15 +30,22 @@ flats.get("/:alias", async (req, res) => {
  */
 flats.post("/", async (req, res) => {
   const flat = req.body as Flat;
-  const query = {
-    alias: flat.alias,
-  };
-  const existingFlat = (await getRecord("home_flats", query)) as Flat;
+
+  const existingFlat = await prisma.flat.findFirst({
+    where: {
+      alias: flat.alias,
+    },
+  });
   if (existingFlat != null) {
     res.status(500).send(`Flat with alias ${flat.alias} already exists`);
     return;
   }
+  const created = await prisma.flat.create({
+    data: {
+      title: flat.title,
+      alias: flat.alias,
+    },
+  });
 
-  const inserted = await insertOne("home_flats", flat);
-  res.location(`/flats/${inserted.insertedId}`).send();
+  res.location(`/flats/${created.id}`).send();
 });

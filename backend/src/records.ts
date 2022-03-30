@@ -1,46 +1,21 @@
+import { DataRecord, Prisma } from "@prisma/client";
 import { Router } from "express";
-import { ObjectId } from "mongodb";
-import { getRecord, getRecords, insertOne, updateOne } from "./db";
-import { Device } from "./devices";
-import { Flat } from "./flats";
+import { prisma } from "./db";
 
 export const records = Router();
 
-export interface Record {
-  id?: string;
-  flat: string;
-  year: number;
-  date: Date;
-  device: string;
-  reading?: number;
-  invoiceFile?: string;
-  receiptFile?: string;
-}
-
-export interface Query {
-  flat?: string;
-  year?: number;
-}
-
 records.get("/", async (req, res) => {
-  const query: Query = {};
-  if ("flat" in req.query) {
-    const flat = req.query.flat as string;
-    query.flat = flat;
+  const query: Prisma.DataRecordWhereInput = {};
+  if ("flatId" in req.query) {
+    const flatId = Number(req.query.flatId);
+    query.flatId = flatId;
   }
   if ("year" in req.query) {
-    const yearString = req.query.year as string;
-    const year: number = parseInt(yearString);
+    const year = Number(req.query.year);
     query.year = year;
   }
-
-  const records = await (
-    await getRecords("home_records", query)
-  ).map((record) => {
-    const target = record;
-    target.id = target._id;
-    delete target._id;
-    return target;
+  const records = await prisma.dataRecord.findMany({
+    where: query,
   });
   res.json(records);
 });
@@ -49,45 +24,46 @@ records.get("/", async (req, res) => {
  * Create a new record
  */
 records.post("/", async (req, res) => {
-  const record = req.body as Record;
+  const record = req.body as DataRecord;
   // fixing year
   if (!record.year || record.year == 0) {
     const date = new Date(record.date);
     record.year = date.getFullYear();
   }
   // checking if the flat exist
-  const existingFlat = (await getRecord("home_flats", {
-    alias: record.flat,
-  })) as Flat;
+  const existingFlat = await prisma.flat.findUnique({
+    where: { id: record.flatId },
+  });
   if (existingFlat == null) {
-    res.status(500).send(`No flat with alias ${record.flat}`);
+    res.status(500).send(`No flat with id ${record.flatId}`);
     return;
   }
   // checking if the device exist
-  const existingDevice = (await getRecord("home_devices", {
-    alias: record.device,
-  })) as Device;
+  const existingDevice = await prisma.device.findUnique({
+    where: { id: record.deviceId },
+  });
   if (existingDevice == null) {
-    res.status(500).send(`No device with alias ${record.device}`);
+    res.status(500).send(`No device with id ${record.deviceId}`);
     return;
   }
   // saving a record
-  const inserted = await insertOne("home_records", record);
-  res.status(201).location(`/records/${inserted.insertedId}`).send();
+  const inserted = await prisma.dataRecord.create({ data: record });
+  res.status(201).location(`/records/${inserted.id}`).send();
 });
 
 records.put("/:id", async (req, res) => {
-  const id = req.params.id as string;
-  // checking if the record exists
-  const query = { _id: new ObjectId(id) };
-  const existingRecord = await getRecord("home_records", query);
+  const id = Number(req.params.id);
+  const existingRecord = await prisma.dataRecord.findUnique({
+    where: { id: id },
+  });
   if (existingRecord == null) {
     res.status(500).send(`No record with id ${id}`);
     return;
   }
-  const record = req.body as Record;
-  delete record.id;
-  // updating the record
-  const updated = await updateOne("home_records", query, record);
+  const record = req.body as DataRecord;
+  await prisma.dataRecord.update({
+    data: record,
+    where: { id: id },
+  });
   res.json(record);
 });

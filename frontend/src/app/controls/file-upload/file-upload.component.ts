@@ -56,10 +56,10 @@ export class FileUploadComponent
   implements
     OnDestroy,
     AfterViewInit,
-    MatFormFieldControl<string>,
+    MatFormFieldControl<number>,
     ControlValueAccessor
 {
-  file$: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(
+  file$: BehaviorSubject<number | null> = new BehaviorSubject<number | null>(
     null
   );
   fileInfo$: Observable<FileId>;
@@ -89,7 +89,7 @@ export class FileUploadComponent
   @Input('aria-describedby')
   userAriaDescribedBy?: string | undefined;
 
-  private _value: string | null = null;
+  private _value: number | null = null;
   private _placeholder: string = '';
   private _focused: boolean = false;
   private _empty: boolean = true;
@@ -100,13 +100,13 @@ export class FileUploadComponent
   constructor(private fileService: FileService) {
     this.fileInfo$ = this.file$.pipe(
       filter((file) => file != null),
-      map((file) => file as string),
+      map((file) => file as number),
       mergeMap((fileId) => this.fileService.findFileId(fileId))
     );
   }
 
   writeValue(obj: any): void {
-    const value = obj as string | null;
+    const value = obj as number | null;
     this.value = value;
   }
 
@@ -149,11 +149,11 @@ export class FileUploadComponent
   }
 
   @Input()
-  get value(): string | null {
+  get value(): number | null {
     return this._value;
   }
 
-  set value(value: string | null) {
+  set value(value: number | null) {
     this._value = value;
     this.file$.next(value);
     this.stateChanges.next();

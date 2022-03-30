@@ -1,9 +1,9 @@
 export interface DataRecord {
-  id: string;
+  id?: string;
   date: Date;
-  flat: string;
-  device: string;
+  flatId: number;
+  deviceId: number;
   reading: number;
-  invoiceFile?: string | null;
-  receiptFile?: string | null;
+  invoiceFile?: number | null;
+  receiptFile?: number | null;
 }

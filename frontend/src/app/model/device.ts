@@ -1,7 +1,8 @@
 export interface Device {
-  title: String;
-  alias: String;
-  flat: string;
+  id: number;
+  title: string;
+  alias: string;
+  flatId: number;
 
   needInvoices: boolean;
   needReceipts: boolean;

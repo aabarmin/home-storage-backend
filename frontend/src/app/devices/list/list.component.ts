@@ -18,7 +18,7 @@ class Row {
 })
 export class DeviceListComponent implements OnInit {
   displayedColumns: string[] = ['title', 'flat', 'features', 'alias'];
-  private cache: { [key: string]: Flat } = {};
+  private cache: { [key: number]: Flat } = {};
 
   records: Row[] = [];
 
@@ -34,28 +34,28 @@ export class DeviceListComponent implements OnInit {
 
   onRefresh(): void {
     this.deviceService.findAll().subscribe((devices) => {
-      const flats = [...new Set(devices.map((device) => device.flat))];
-      const observables = flats.map((alias) =>
-        this.flatService.findByAlias(alias)
+      const flatIds = [...new Set(devices.map((device) => device.flatId))];
+      const observables = flatIds.map((flatId) =>
+        this.flatService.findById(flatId)
       );
       forkJoin(observables).subscribe((flats) => {
-        const cache: { [key: string]: Flat } = {};
-        flats.forEach((flat) => (cache[flat.alias] = flat));
+        const cache: { [key: number]: Flat } = {};
+        flats.forEach((flat) => (cache[flat.id] = flat));
 
         this.records = devices.map((device) => {
-          return new Row(device, cache[device.flat]);
+          return new Row(device, cache[device.flatId]);
         });
       });
     });
   }
 
   public getFlatName(device: Device): Observable<string> {
-    if (device.flat in this.cache) {
-      const flat = this.cache[device.flat];
+    if (device.flatId in this.cache) {
+      const flat = this.cache[device.flatId];
       return of(flat.title);
     }
-    return this.flatService.findByAlias(device.flat).pipe(
-      tap((flat) => (this.cache[flat.alias] = flat)),
+    return this.flatService.findById(device.flatId).pipe(
+      tap((flat) => (this.cache[flat.id] = flat)),
       map((flat) => flat.title)
     );
   }
