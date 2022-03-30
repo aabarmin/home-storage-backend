@@ -22,7 +22,9 @@
       <ng-container [ngSwitch]="record.invoiceFile">
         <ng-container *ngSwitchCase="null">No file</ng-container>
         <ng-container *ngSwitchDefault>
-          {{ record.invoiceFile?.fileName }}
+          <button mat-button (click)="onFileDownload(record.invoiceFile)">
+            {{ record.invoiceFile?.fileName }}
+          </button>
         </ng-container>
       </ng-container>
     </td>
@@ -30,7 +32,9 @@
       <ng-container [ngSwitch]="record.receiptFile">
         <ng-container *ngSwitchCase="null">No file</ng-container>
         <ng-container *ngSwitchDefault>
-          {{ record.receiptFile?.fileName }}
+          <button mat-button (click)="onFileDownload(record.receiptFile)">
+            {{ record.receiptFile?.fileName }}
+          </button>
         </ng-container>
       </ng-container>
     </td>

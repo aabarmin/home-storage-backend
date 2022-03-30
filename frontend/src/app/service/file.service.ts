@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { FileId } from '../model/file-id';
 
@@ -12,6 +12,10 @@ export class FileService {
 
   constructor(private http: HttpClient) {
     this.backendUrl = `${environment.backendBase}/files`;
+  }
+
+  public getDownloadUrl(file: FileId): Observable<string> {
+    return of(`${this.backendUrl}/${file.fileId}/download`);
   }
 
   /**
