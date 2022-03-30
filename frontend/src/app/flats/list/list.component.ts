@@ -39,7 +39,7 @@ export class FlatsListComponent implements OnInit {
           return;
         }
         this.flatService.save(result).subscribe(() => {
-          this.flatsTable.renderRows();
+          this.onRefresh();
         });
       });
   }

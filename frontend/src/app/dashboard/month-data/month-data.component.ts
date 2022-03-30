@@ -1,11 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { map, Observable, of } from 'rxjs';
-import { DataRecord } from 'src/app/model/data-record';
-import { Device } from 'src/app/model/device';
-import { FileId } from 'src/app/model/file-id';
-import { DeviceService } from 'src/app/service/device.service';
-import { FileService } from 'src/app/service/file.service';
+import { DashboardDataRecord } from '../dashboard/dashboard-record';
 import { DeviceDialogData } from '../device-dialog/device-dialog-data';
 import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.component';
 
@@ -16,44 +11,31 @@ import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.c
 })
 export class MonthDataComponent {
   @Input()
-  records: DataRecord[] = [];
+  records: DashboardDataRecord[] = [];
 
-  constructor(
-    private dialog: MatDialog,
-    private deviceService: DeviceService,
-    private fileService: FileService
-  ) {}
+  @Output()
+  onRecordUpdated: EventEmitter<any> = new EventEmitter<any>();
 
-  public getDevice(record: DataRecord): Observable<Device> {
-    return this.deviceService.findByAlias(record.device);
+  constructor(private dialog: MatDialog) {}
+
+  public getDeviceReading(record: DashboardDataRecord): string {
+    const device = record.device;
+    if (!device.needReadings) return 'Not required';
+    if (!record.record.reading) return 'Not provided';
+    return String(record.record.reading);
   }
 
-  public getFileInfo(
-    fileId: string | null | undefined
-  ): Observable<FileId | null> {
-    if (!fileId) return of(null);
-    return this.fileService.findFileId(fileId);
-  }
-
-  public getDeviceReading(record: DataRecord): Observable<String> {
-    return this.getDevice(record).pipe(
-      map((device) => {
-        if (!device.needReadings) return 'Not required';
-        if (!record.reading) return 'Not provided';
-        return String(record.reading);
-      })
-    );
-  }
-
-  onEditDataRecord(record: DataRecord): void {
+  onEditDataRecord(record: DashboardDataRecord): void {
     const dialogData: DeviceDialogData = {
-      record,
+      record: record.record,
     };
     this.dialog
       .open(DashboardDeviceDialogComponent, {
         data: dialogData,
       })
       .afterClosed()
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.onRecordUpdated.emit();
+      });
   }
 }

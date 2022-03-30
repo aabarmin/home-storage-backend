@@ -1,7 +1,7 @@
 export interface DataRecord {
   id: string;
   date: Date;
-  flat: String;
+  flat: string;
   device: string;
   reading: number;
   invoiceFile?: string | null;

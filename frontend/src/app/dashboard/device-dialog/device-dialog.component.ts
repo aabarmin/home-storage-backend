@@ -36,14 +36,7 @@ export class DashboardDeviceDialogComponent implements OnInit {
     private dataService: DataService,
     private dialog: MatDialogRef<DashboardDeviceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dialogData: DeviceDialogData
-  ) {
-    if (this.dialogData?.record) {
-      const record = this.dialogData.record;
-      setTimeout(() => {
-        this.formGroup.setValue(record);
-      }, 1);
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
     this.formGroup.get('flat')?.valueChanges.subscribe((flatAlias) => {
@@ -63,6 +56,11 @@ export class DashboardDeviceDialogComponent implements OnInit {
     this.flatService.findAll().subscribe((flats) => {
       this.flats = flats;
     });
+
+    if (this.dialogData?.record) {
+      const record = this.dialogData.record;
+      this.formGroup.patchValue(record);
+    }
   }
 
   private extractFeatures(device: Device): string[] {

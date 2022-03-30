@@ -68,7 +68,9 @@ export class DeviceListComponent implements OnInit {
         if (!result) {
           return;
         }
-        this.deviceService.save(result).subscribe(() => {});
+        this.deviceService.save(result).subscribe(() => {
+          this.onRefresh();
+        });
       });
   }
 }

@@ -2,6 +2,7 @@
 
 <div class="dashboard-toolbar">
   <button mat-raised-button (click)="onAddDeviceDataClick()">Add record</button>
+  <button mat-raised-button (click)="onRefresh()">Refresh</button>
 </div>
 
 <div class="dashboard-toolbar">
@@ -16,7 +17,7 @@
 
     <mat-form-field>
       <mat-select formControlName="year">
-        <mat-option *ngFor="let year of years$ | async" [value]="year">
+        <mat-option *ngFor="let year of years" [value]="year">
           {{ year }}
         </mat-option>
       </mat-select>
@@ -25,10 +26,7 @@
 </div>
 
 <mat-accordion [multi]="true">
-  <mat-expansion-panel
-    *ngFor="let record of dashboard$ | async"
-    [expanded]="true"
-  >
+  <mat-expansion-panel *ngFor="let record of dashboard" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{ record.month }}
@@ -36,6 +34,7 @@
     </mat-expansion-panel-header>
     <app-dashboard-month-data
       [records]="record.records"
+      (onRecordUpdated)="onRefresh()"
     ></app-dashboard-month-data>
   </mat-expansion-panel>
 </mat-accordion>

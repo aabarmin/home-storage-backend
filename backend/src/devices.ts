@@ -31,8 +31,8 @@ devices.get("/", async (req, res) => {
 devices.get("/:alias", async (req, res) => {
   const alias = req.params.alias;
   const query = { alias: alias };
-  const devices = await getRecords("home_devices", query, options);
-  res.json(devices);
+  const device = await getRecord("home_devices", query, options);
+  res.json(device);
 });
 
 devices.post("/", async (req, res) => {

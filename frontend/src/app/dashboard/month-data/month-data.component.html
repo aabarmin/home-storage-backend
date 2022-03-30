@@ -8,7 +8,7 @@
   </tr>
   <tr *ngFor="let record of records">
     <td>
-      {{ (this.getDevice(record) | async)?.title }}
+      {{ record.device.title }}
     </td>
     <td>
       <button mat-icon-button (click)="onEditDataRecord(record)">
@@ -16,21 +16,21 @@
       </button>
     </td>
     <td>
-      {{ this.getDeviceReading(record) | async }}
+      {{ this.getDeviceReading(record) }}
     </td>
     <td>
-      <ng-container [ngSwitch]="this.getFileInfo(record.invoiceFile) | async">
+      <ng-container [ngSwitch]="record.invoiceFile">
         <ng-container *ngSwitchCase="null">No file</ng-container>
         <ng-container *ngSwitchDefault>
-          {{ (this.getFileInfo(record.invoiceFile) | async)?.fileName }}
+          {{ record.invoiceFile?.fileName }}
         </ng-container>
       </ng-container>
     </td>
     <td>
-      <ng-container [ngSwitch]="this.getFileInfo(record.receiptFile) | async">
+      <ng-container [ngSwitch]="record.receiptFile">
         <ng-container *ngSwitchCase="null">No file</ng-container>
         <ng-container *ngSwitchDefault>
-          {{ (this.getFileInfo(record.receiptFile) | async)?.fileName }}
+          {{ record.receiptFile?.fileName }}
         </ng-container>
       </ng-container>
     </td>
