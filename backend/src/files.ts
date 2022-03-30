@@ -16,6 +16,17 @@ export interface FileInfo {
   filePath: string;
 }
 
+files.get("/:fileId/download", async (req, res) => {
+  const id = req.params.fileId;
+  const query = { _id: new ObjectId(id) };
+  const fileInfo = await getRecord("home_files", query);
+  if (fileInfo == null) {
+    res.status(500).send(`No file with id ${id}`);
+    return;
+  }
+  res.download(fileInfo.filePath);
+});
+
 files.get("/:fileId", async (req, res) => {
   const id = req.params.fileId;
   const query = { _id: new ObjectId(id) };
