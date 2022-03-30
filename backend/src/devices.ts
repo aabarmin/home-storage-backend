@@ -23,8 +23,16 @@ const options: FindOptions = {
   },
 };
 
+interface Query {
+  flat?: string;
+}
+
 devices.get("/", async (req, res) => {
-  const devices = await getRecords("home_devices", {}, options);
+  const query: Query = {};
+  if ("flat" in req.query) {
+    query.flat = req.query.flat as string;
+  }
+  const devices = await getRecords("home_devices", query, options);
   res.json(devices);
 });
 
