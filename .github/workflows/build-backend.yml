@@ -10,8 +10,6 @@ on:
     outputs:
       artifact_name: 
         description: Name of the artifact
-        type: string
-        required: true
 
 env:
   ARTIFACT_NAME: backend-${{ inputs.source_branch }}
