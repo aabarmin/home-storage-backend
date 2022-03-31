@@ -15,14 +15,20 @@ jobs:
         with: 
           node-version: 17.x
           
+      - name: Restore cache
+        uses: actions/cache@v3.0.1
+        with: 
+          path: ./frontent/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./frontend/package-lock.json') }}
+          
       - name: Install dependencies
         run: |
-          cd frontend
+          cd ./frontend
           npm install
           
       - name: Build
         run: |
-          cd frontend
+          cd ./frontend
           npm run build
 
   build-backend:
@@ -35,13 +41,19 @@ jobs:
         uses: actions/setup-node@v3.0.0
         with: 
           node-version: 17.x
+
+      - name: Restore cache
+        uses: actions/cache@v3.0.1
+        with: 
+          path: ./backend/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./backend/package-lock.json') }}          
           
       - name: Install dependencies
         run: |
-          cd backend
+          cd ./backend
           npm install
           
       - name: Build
         run: |
-          cd backend
+          cd ./backend
           npm run build
