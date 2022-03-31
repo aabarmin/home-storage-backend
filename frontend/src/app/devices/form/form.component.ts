@@ -20,7 +20,7 @@ export class DeviceFormComponent implements OnInit {
     flatId: new FormControl('', [Validators.required]),
     alias: new FormControl('', [
       Validators.required,
-      Validators.pattern('[a-z]+'),
+      Validators.pattern('[a-z-]+'),
     ]),
     needInvoices: new FormControl(true),
     needReceipts: new FormControl(true),
@@ -31,7 +31,6 @@ export class DeviceFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.formGroup.valueChanges.subscribe(() => {
-      console.log(this.formGroup.value);
       this.onValidityChange.next(this.formGroup.valid);
     });
 
