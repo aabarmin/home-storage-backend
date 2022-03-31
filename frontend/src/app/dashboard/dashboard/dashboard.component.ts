@@ -13,7 +13,7 @@ import { DashboardDeviceDialogComponent } from '../device-dialog/device-dialog.c
 import { DashboardDataRecord, DashboardRecord } from './dashboard-record';
 
 interface FormValue {
-  flat?: number;
+  flatId?: number;
   year?: number;
 }
 
@@ -90,8 +90,8 @@ export class DashboardComponent implements OnInit {
 
   public onRefresh(): void {
     const formValue = this.formGroup.value as FormValue;
-    if (formValue.flat && formValue.year) {
-      this.refresh(formValue.flat, formValue.year);
+    if (formValue.flatId && formValue.year) {
+      this.refresh(formValue.flatId, formValue.year);
     }
   }
 
