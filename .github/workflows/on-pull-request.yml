@@ -8,6 +8,7 @@ jobs:
     uses: ./.github/workflows/build-frontend.yml
     with: 
       source_branch: ${{ github.ref }}
+      artifact_name: frontend-${{ github.sha }}
 
   build-backend:
     uses: ./.github/workflows/build-backend.yml

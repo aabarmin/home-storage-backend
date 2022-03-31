@@ -7,6 +7,10 @@ on:
         description: Branch to build
         type: string
         required: true
+      artifact_name: 
+        description: Name of the artifact
+        type: string
+        required: true        
 
 jobs:
   build:
@@ -38,3 +42,9 @@ jobs:
         run: |
           cd ./frontend
           npm run build  
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ./frontend/          
