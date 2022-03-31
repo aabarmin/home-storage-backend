@@ -8,6 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
       - name: Build frontend
         uses: ./github/workflows/build-frontend.yml
         with: 
@@ -17,6 +20,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
       - name: Build backend
         uses: ./github/workflows/build-backend.yml
         with: 
