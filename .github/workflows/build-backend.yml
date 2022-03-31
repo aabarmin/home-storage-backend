@@ -10,10 +10,10 @@ on:
     outputs:
       artifact_name: 
         description: Name of the artifact
-        value: backend-${{ GITHUB_RUN_ID }}
+        value: backend-${{ github.run.id }}
 
 env:
-  ARTIFACT_NAME: backend-${{ GITHUB_RUN_ID }}
+  ARTIFACT_NAME: backend-${{ github.run.id }}
 
 jobs:
   build:
