@@ -16,7 +16,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v3
         with: 
-          ref: ${{ github.event.inputs.source_branch }}
+          ref: ${{ inputs.source_branch }}
       
       - name: Install NodeJS
         uses: actions/setup-node@v3.0.0
@@ -27,7 +27,7 @@ jobs:
         uses: actions/cache@v3.0.1
         with: 
           path: ./frontend/node_modules
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./frontend/package-lock.json') }}
+          key: frontend-${{ hashFiles('./frontend/package-lock.json') }}
           
       - name: Install dependencies
         run: |

@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build frontend
-        uses: ./.github/workflows/build-frontend
+        uses: ./.github/workflows/build-frontend.yml
         with: 
           source_branch: ${{ env.GITHUB_REF }}
 
@@ -24,6 +24,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build backend
-        uses: ./.github/workflows/build-backend
+        uses: ./.github/workflows/build-backend.yml
         with: 
           source_branch: ${{ env.GITHUB_REF }}
