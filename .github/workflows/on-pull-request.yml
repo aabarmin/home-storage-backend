@@ -13,3 +13,4 @@ jobs:
     uses: ./.github/workflows/build-backend.yml
     with: 
       source_branch: ${{ github.ref }}
+      artifact_name: backend-${{ github.sha }}
