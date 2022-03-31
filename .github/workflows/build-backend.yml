@@ -10,6 +10,7 @@ on:
     outputs:
       artifact_name: 
         description: Name of the artifact
+        value: backend-${{ inputs.source_branch }}
 
 env:
   ARTIFACT_NAME: backend-${{ inputs.source_branch }}
