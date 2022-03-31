@@ -10,10 +10,10 @@ on:
     outputs:
       artifact_name: 
         description: Name of the artifact
-        value: backend-${{ inputs.source_branch }}
+        value: backend-${{ GITHUB_RUN_ID }}
 
 env:
-  ARTIFACT_NAME: backend-${{ inputs.source_branch }}
+  ARTIFACT_NAME: backend-${{ GITHUB_RUN_ID }}
 
 jobs:
   build:
