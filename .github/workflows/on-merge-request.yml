@@ -18,7 +18,7 @@ jobs:
       - name: Restore cache
         uses: actions/cache@v3.0.1
         with: 
-          path: ./frontent/node_modules
+          path: ./frontend/node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./frontend/package-lock.json') }}
           
       - name: Install dependencies
