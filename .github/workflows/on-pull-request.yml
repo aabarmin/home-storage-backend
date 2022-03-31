@@ -1,0 +1,23 @@
+name: Build pull request
+
+on:
+  pull_request:
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build frontend
+        uses: ./build-frontend.yml
+        with: 
+          source_branch: ${{ env.GITHUB_REF }}
+
+  build-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build backend
+        uses: ./build-backend.yml
+        with: 
+          source_branch: ${{ env.GITHUB_REF }}

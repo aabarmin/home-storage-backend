@@ -1,0 +1,40 @@
+name: Build Backend
+
+on:
+  workflow_call:
+    inputs:
+      source_branch:
+        description: Branch to build
+        type: string
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with: 
+          ref: ${{ github.event.inputs.source_branch }}
+      
+      - name: Install NodeJS
+        uses: actions/setup-node@v3.0.0
+        with: 
+          node-version: 17.x
+          
+      - name: Restore cache
+        uses: actions/cache@v3.0.1
+        with: 
+          path: ./backend/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./backend/package-lock.json') }}
+          
+      - name: Install dependencies
+        run: |
+          cd ./backend
+          npm install
+          
+      - name: Build
+        run: |
+          cd ./backend
+          npm run build  
