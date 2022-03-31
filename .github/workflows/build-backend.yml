@@ -50,4 +50,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifact_name }}
-          path: ./backend/
+          retention-days: 1
+          path: |
+            ./backend/
+            !./backend/node_modules/

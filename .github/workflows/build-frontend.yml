@@ -47,4 +47,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifact_name }}
-          path: ./frontend/          
+          retention-days: 1
+          path: |
+            ./frontend/
+            !./frontend/node_modules/
