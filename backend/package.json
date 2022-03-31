@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "clean": "rimraf dist",
-    "build": "npm run clean && tsc",
+    "version": "echo '{\"version\": \"'$npm_package_version'\", \"build\": \"'$(date +%F)'\"}' > ./dist/version.json",
+    "build": "npm run clean && tsc && npm run version",
     "start": "node ./dist/index.js",
     "dev:start": "node --inspect ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
