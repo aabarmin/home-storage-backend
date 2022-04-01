@@ -10,7 +10,11 @@ on:
       artifact_name: 
         description: Name of the artifact
         type: string
-        required: true        
+        required: true       
+      artifact_upload:
+        description: Should upload artifacts 
+        type: boolean
+        required: true         
 
 jobs:
   build:
@@ -44,6 +48,7 @@ jobs:
           npm run build  
 
       - name: Upload artifacts
+        if: ${{ inputs.artifact_upload == true }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifact_name }}

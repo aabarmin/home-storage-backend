@@ -7,6 +7,8 @@
     "clean": "rimraf dist",
     "version": "echo '{\"version\": \"'$npm_package_version'\", \"build\": \"'$(date +%F)'\"}' > ./dist/version.json",
     "build": "npm run clean && tsc && npm run version",
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma db push",
     "start": "node ./dist/index.js",
     "dev:start": "node --inspect ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",

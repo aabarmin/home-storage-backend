@@ -11,6 +11,10 @@ on:
         description: Name of the artifact
         type: string
         required: true
+      artifact_upload:
+        description: Should upload artifacts 
+        type: boolean
+        required: true
 
 env:
   ARTIFACT_NAME: backend-${{ github.run.id }}
@@ -47,6 +51,7 @@ jobs:
           npm run build  
 
       - name: Upload artifacts
+        if: ${{ inputs.artifact_upload == true }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifact_name }}

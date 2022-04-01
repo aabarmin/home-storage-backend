@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Apply DB migrations
-npx prisma db push
+npm run db:migrate
 
 # Run the app
 npm start

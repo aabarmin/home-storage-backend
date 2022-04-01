@@ -9,9 +9,11 @@ jobs:
     with: 
       source_branch: ${{ github.ref }}
       artifact_name: frontend-${{ github.sha }}
+      artifact_upload: false
 
   build-backend:
     uses: ./.github/workflows/build-backend.yml
     with: 
       source_branch: ${{ github.ref }}
       artifact_name: backend-${{ github.sha }}
+      artifact_upload: false

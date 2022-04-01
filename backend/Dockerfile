@@ -4,7 +4,9 @@ ADD . /opt
 WORKDIR /opt
 
 RUN npm install
-RUN npx prisma generate
+RUN npm run db:generate
 RUN npm run build
+
+VOLUME [ "/opt/db", "/opt/uploads" ]
 
 ENTRYPOINT ./docker-entrypoint.sh
