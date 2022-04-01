@@ -30,11 +30,32 @@ jobs:
       artifact_upload: false
 
   build-image-backend:
-    uses: ./.github/workflows/build-image-backend.yml
-    needs: build-backend
-    with: 
-      source_branch: ${{ github.ref }}
-      docker_registry: ghcr.io
-      docker_username: ${{ github.actor }}
-      docker_password: ${{ secrets.GITHUB_TOKEN }}
-      image_tag: backend-${{ github.sha }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with: 
+          ref: ${{ inputs.source_branch }}
+
+      - name: Extract version from package.json
+        uses: sergeysova/jq-action@v2
+        id: version
+        with:
+          cmd: 'jq .version ./backend/package.json -r'          
+          
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with: 
+          context: ./backend
+          push: true
+          tags: |
+            backend-${{ github.sha }}
+            backend-${{ steps.version.outputs.value }}
