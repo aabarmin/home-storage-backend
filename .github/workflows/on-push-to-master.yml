@@ -36,5 +36,5 @@ jobs:
       source_branch: ${{ github.ref }}
       docker_registry: ghcr.io
       docker_username: ${{ github.actor }}
-      docker_password: ${{ github.token }}
+      docker_password: ${{ secrets.GITHUB_TOKEN }}
       image_tag: backend-${{ github.sha }}
