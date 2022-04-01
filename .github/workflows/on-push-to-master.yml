@@ -46,17 +46,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}          
+      - name: Build Docker image
+        run: |
+          cd ./backend
+          IMAGE_ID_BASE=ghcr.io/${{ github.repository_owner }}/backend
+          IMAGE_VERSION_SHA=${IMAGE_ID_BASE}:${{ github.ref }}
+          IMAGE_VERSION_APP=${IMAGE_ID_BASE}:${{ steps.version.outputs.value }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with: 
-          context: ./backend
-          push: true
-          tags: |
-            backend-${{ github.sha }}
-            backend-${{ steps.version.outputs.value }}
+          docker build -t ${IMAGE_VERSION_SHA} -t ${IMAGE_VERSION_APP} .
+          docker push ${IMAGE_VERSION_SHA}
