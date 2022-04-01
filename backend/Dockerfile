@@ -7,6 +7,10 @@ RUN npm install
 RUN npm run db:generate
 RUN npm run build
 
+ENV ENVIRONMENT=prod
+ENV UPLOAD_DIRECTORY=./uploads
+ENV SERVER_PORT=8080
+
 VOLUME [ "/opt/db", "/opt/uploads" ]
 
 ENTRYPOINT ./docker-entrypoint.sh
