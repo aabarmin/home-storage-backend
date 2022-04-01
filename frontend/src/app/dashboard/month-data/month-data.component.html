@@ -1,0 +1,42 @@
+<table>
+  <tr>
+    <th>Device</th>
+    <th>&nbsp;</th>
+    <th>Readings</th>
+    <th>Invoice</th>
+    <th>Receipt</th>
+  </tr>
+  <tr *ngFor="let record of records">
+    <td>
+      {{ record.device.title }}
+    </td>
+    <td>
+      <button mat-icon-button (click)="onEditDataRecord(record)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </td>
+    <td>
+      {{ this.getDeviceReading(record) }}
+    </td>
+    <td>
+      <ng-container [ngSwitch]="record.invoiceFile">
+        <ng-container *ngSwitchCase="null">No file</ng-container>
+        <ng-container *ngSwitchDefault>
+          <button mat-button (click)="onFileDownload(record.invoiceFile)">
+            {{ record.invoiceFile?.fileName }}
+          </button>
+        </ng-container>
+      </ng-container>
+    </td>
+    <td>
+      <ng-container [ngSwitch]="record.receiptFile">
+        <ng-container *ngSwitchCase="null">No file</ng-container>
+        <ng-container *ngSwitchDefault>
+          <button mat-button (click)="onFileDownload(record.receiptFile)">
+            {{ record.receiptFile?.fileName }}
+          </button>
+        </ng-container>
+      </ng-container>
+    </td>
+  </tr>
+</table>

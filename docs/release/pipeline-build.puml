@@ -1,0 +1,21 @@
+@startuml
+
+start
+:Checkout code; 
+:Build code;
+    if (Build failed) then (Yes)
+        end
+    endif
+
+:Run tests;
+    if (Errors in tests) then (Yes)
+        end
+    endif
+
+if (Should upload artifacts) then (Yes)
+    :Upload artifacts;
+endif
+
+end
+
+@enduml

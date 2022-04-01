@@ -1,0 +1,26 @@
+<h2 mat-subheader>Flats</h2>
+
+<div class="list-toolbar">
+  <button mat-raised-button (click)="onNewFlat()">Add flat</button>
+  <button mat-raised-button (click)="onRefresh()">Refresh</button>
+</div>
+
+<table mat-table [dataSource]="records">
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Title</th>
+    <td mat-cell *matCellDef="let item">{{ item.title }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="alias">
+    <th mat-header-cell *matHeaderCellDef>Alias</th>
+    <td mat-cell *matCellDef="let item">{{ item.alias }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let item">something here</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

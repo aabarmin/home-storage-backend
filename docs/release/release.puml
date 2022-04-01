@@ -1,0 +1,77 @@
+@startuml
+
+|Local branch|
+start
+:Write code locally;
+:Commit to the feature branch;
+:Push changes to GitHub;
+
+|Feature branch|
+:When code is pushed, run GitHub Actions - 
+1) Build
+2) Test;
+:When all tests are passed, create a merge request 
+to the dev branch;
+:Merge request should be built (pre-merge to perform)
+1) Build
+2) Test;
+
+|Dev Branch|
+:When code is pushed, run GitHub Actions -
+1) Build
+2) Test
+3) Build Docker images for backend and frontend
+4) Perform deployment to Dev environment;
+    note left
+        1) This step is needed in case if there are
+        many developers who're working on features. 
+        In case if there is only one single dev
+        on the project, every merge to the dev
+        branch is a potential release. 
+        
+        2) Nevertheless, I'll leave this flow
+        uncahnged, what if more developers join
+        this project or I need to scale this
+        approach to the team? 
+    end note
+
+:On Dev environment -
+1) Deploy to the environment
+2) Run e2e tests
+3) Get some report from e2e;
+    note left
+        1) Deployment is performed via docker-compose
+        file so that the file should be kept up to date
+        with the latest built version. 
+
+        2) It makes sense to automate this process. 
+    end note
+
+:Create merge request to the UAT branch, run GitHub Action -
+1) Build
+2) Test;
+
+|UAT Branch|
+:When code is pushed, run GitHub Actions -
+1) Build
+2) Test
+3) Build Docker images for backend and frontend
+4) Perform deployment to the UAT enviroment;
+    note left
+        1) If UAT passed, images should not be built
+        again - the same images are used for prod
+        deployment as well. 
+    end note
+
+:On UAT environment -
+1) Deploy to the environment
+2) Run e2e tests
+3) Get some report from e2e;
+    note left
+        In case if the e2e passed, images should
+        be marked as ready for prod deployment. 
+    end note
+
+end
+
+@enduml

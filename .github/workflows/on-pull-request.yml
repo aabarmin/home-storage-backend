@@ -1,0 +1,19 @@
+name: Build pull request
+
+on:
+  pull_request:
+
+jobs:
+  build-frontend:
+    uses: ./.github/workflows/build-frontend.yml
+    with: 
+      source_branch: ${{ github.ref }}
+      artifact_name: frontend-${{ github.sha }}
+      artifact_upload: false
+
+  build-backend:
+    uses: ./.github/workflows/build-backend.yml
+    with: 
+      source_branch: ${{ github.ref }}
+      artifact_name: backend-${{ github.sha }}
+      artifact_upload: false

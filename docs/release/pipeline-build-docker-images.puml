@@ -1,0 +1,20 @@
+@startuml
+
+start
+:Checkout code; 
+:Build code;
+    if (Build failed) then (Yes)
+        end
+    endif
+
+:Run tests;
+    if (Errors in tests) then (Yes)
+        end
+    endif
+
+:Build Docker image;
+:Upload Docker image;
+
+end
+
+@enduml

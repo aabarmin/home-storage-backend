@@ -1,0 +1,40 @@
+<h2 mat-subheader>Dashboard</h2>
+
+<div class="dashboard-toolbar">
+  <button mat-raised-button (click)="onAddDeviceDataClick()">Add record</button>
+  <button mat-raised-button (click)="onRefresh()">Refresh</button>
+</div>
+
+<div class="dashboard-toolbar">
+  <form [formGroup]="formGroup">
+    <mat-form-field>
+      <mat-select formControlName="flatId">
+        <mat-option *ngFor="let flat of flats" [value]="flat.id">
+          {{ flat.title }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-select formControlName="year">
+        <mat-option *ngFor="let year of years" [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+
+<mat-accordion [multi]="true">
+  <mat-expansion-panel *ngFor="let record of dashboard" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{ record.month }}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <app-dashboard-month-data
+      [records]="record.records"
+      (onRecordUpdated)="onRefresh()"
+    ></app-dashboard-month-data>
+  </mat-expansion-panel>
+</mat-accordion>

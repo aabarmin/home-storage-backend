@@ -1,0 +1,19 @@
+version: '3.8'
+
+services: 
+  frontend: 
+    build: ./frontend
+    ports:
+      - 80:80
+
+  backend:
+    build: ./backend
+    ports:
+      - 8080:8080
+    volumes:
+      - "backend_db:/opt/db"
+      - "backend_uploads:/opt/uploads"
+      
+volumes:
+  backend_db:
+  backend_uploads:

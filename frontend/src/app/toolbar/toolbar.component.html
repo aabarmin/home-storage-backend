@@ -1,0 +1,11 @@
+<mat-toolbar>
+    <button mat-icon-button (click)="sidebarToggleClick()">
+        <mat-icon>menu</mat-icon>
+    </button>
+
+    <span>Home IS</span>
+
+    <span class="spacer"></span>
+
+    {{ versionInfo.name }} - {{ versionInfo.version }} ({{versionInfo.build}})
+</mat-toolbar>

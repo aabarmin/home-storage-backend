@@ -1,0 +1,76 @@
+<h1 mat-dialog-title>Add device data</h1>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup)">
+  <div mat-dialog-content>
+    <p>
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+
+        <mat-error *ngIf="formGroup.get('date')?.hasError('required')">
+          Date is required
+        </mat-error>
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="fill">
+        <mat-label>Flat</mat-label>
+        <mat-select formControlName="flatId">
+          <mat-option *ngFor="let flat of flats" [value]="flat.id">
+            {{ flat.title }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="formGroup.get('flat')?.hasError('required')">
+          Flat is required
+        </mat-error>
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="fill">
+        <mat-label>Device</mat-label>
+        <mat-select formControlName="deviceId">
+          <mat-option *ngFor="let device of devices" [value]="device.id">
+            {{ device.title }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="formGroup.get('device')?.hasError('required')">
+          Device is required
+        </mat-error>
+      </mat-form-field>
+    </p>
+
+    <p *ngIf="features.includes('readings')">
+      <mat-form-field appearance="fill">
+        <mat-label>Device reading</mat-label>
+        <input type="number" matInput formControlName="reading" />
+
+        <mat-error *ngIf="formGroup.get('reading')?.hasError('pattern')">
+          Device reading should contain numbers only
+        </mat-error>
+      </mat-form-field>
+    </p>
+
+    <p *ngIf="features.includes('invoices')">
+      <mat-form-field appearance="fill">
+        <mat-label>Invoice</mat-label>
+        <app-file-upload formControlName="invoiceFileId"></app-file-upload>
+      </mat-form-field>
+    </p>
+
+    <p *ngIf="features.includes('receipts')">
+      <mat-form-field appearance="fill">
+        <mat-label>Receipt</mat-label>
+        <app-file-upload formControlName="receiptFileId"></app-file-upload>
+      </mat-form-field>
+    </p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onCancel()" type="reset">Cancel</button>
+    <button mat-button [disabled]="!formGroup.valid" type="submit">Save</button>
+  </div>
+</form>
