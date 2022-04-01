@@ -4,14 +4,6 @@ on:
   push:
     branches:
       - master
-
-  workflow_dispatch:
-    inputs:
-      source_branch:
-        description: Branch to build
-        required: true
-        type: string
-        default: 'master'
     
 
 jobs:
@@ -31,12 +23,13 @@ jobs:
 
   build-image-backend:
     runs-on: ubuntu-latest
+    needs: build-backend
 
     steps:
       - name: Checkout the code
         uses: actions/checkout@v3
         with: 
-          ref: ${{ inputs.source_branch }}
+          ref: ${{ github.ref }}
 
       - name: Extract version from package.json
         uses: sergeysova/jq-action@v2
@@ -57,5 +50,5 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            backend-${{ github.sha }}
-            backend-${{ steps.version.outputs.value }}
+            aabarmin/home-storage:backend-${{ github.sha }}
+            aabarmin/home-storage:backend-${{ steps.version.outputs.value }}
