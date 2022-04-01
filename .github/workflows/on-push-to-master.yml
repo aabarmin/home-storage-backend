@@ -49,7 +49,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd ./backend
-          IMAGE_ID_BASE=ghcr.io/${{ github.repository_owner }}/backend
+          IMAGE_ID_BASE=ghcr.io/${{ github.repository_owner }}/homeis-backend
           IMAGE_VERSION_SHA=${IMAGE_ID_BASE}:${{ github.sha }}
           IMAGE_VERSION_APP=${IMAGE_ID_BASE}:${{ steps.version.outputs.value }}
 
