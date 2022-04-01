@@ -50,7 +50,7 @@ jobs:
         run: |
           cd ./backend
           IMAGE_ID_BASE=ghcr.io/${{ github.repository_owner }}/backend
-          IMAGE_VERSION_SHA=${IMAGE_ID_BASE}:${{ github.ref }}
+          IMAGE_VERSION_SHA=${IMAGE_ID_BASE}:${{ github.sha }}
           IMAGE_VERSION_APP=${IMAGE_ID_BASE}:${{ steps.version.outputs.value }}
 
           docker build -t ${IMAGE_VERSION_SHA} -t ${IMAGE_VERSION_APP} .
