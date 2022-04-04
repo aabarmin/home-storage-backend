@@ -7,7 +7,7 @@ RUN npm install
 RUN npm run db:generate
 RUN npm run build
 
-ENV ENVIRONMENT=prod
+ENV ENVIRONMENT=local
 ENV UPLOAD_DIRECTORY=./uploads
 ENV SERVER_PORT=8080
 
