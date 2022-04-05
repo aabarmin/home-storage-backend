@@ -1,11 +1,4 @@
-FROM node:17-alpine as BUILD
+FROM nginx:1.21
 
-ADD . /opt
-WORKDIR /opt
-
-RUN npm install
-RUN npm run build
-
-FROM nginx:1.21 as RUN
-
-COPY --from=BUILD /opt/dist/frontend /usr/share/nginx/html
+COPY ./api_proxy.conf /etc/nginx/conf.d/default.conf
+COPY ./dist/frontend /usr/share/nginx/html

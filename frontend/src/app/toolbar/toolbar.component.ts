@@ -13,9 +13,13 @@ export class ToolbarComponent implements OnInit {
   onSidebarToggle: EventEmitter<any> = new EventEmitter<any>();
 
   versionInfo: VersionInfo = {
-    version: 'not set',
-    build: 'not set',
-    name: 'not set',
+    build: {
+      artifact: 'not set',
+      group: 'not set',
+      name: 'not set',
+      time: 'not set',
+      version: 'not set',
+    },
   };
 
   constructor(private versionService: VersionService) {}

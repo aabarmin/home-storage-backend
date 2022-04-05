@@ -1,0 +1,21 @@
+version: '3.8'
+
+services: 
+  frontend: 
+    build: ../../frontend
+    ports:
+      - 80:80
+
+  backend:
+    image: backend:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    volumes:
+      - "backend_db:/workspace/db"
+      - "backend_uploads:/workspace/storage"
+      
+volumes:
+  backend_db:
+    name: home_is_database_prod
+  backend_uploads:
+    name: home_is_uploads_prod

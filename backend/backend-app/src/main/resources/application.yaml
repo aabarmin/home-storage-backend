@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:./db/testdb
+    username: sa
+    password:
+
+storage:
+  base: ./storage
+
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-methods: GET
+        allowed-origins: '*'
+      exposure:
+        include: info,health

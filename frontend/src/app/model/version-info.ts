@@ -1,5 +1,11 @@
-export interface VersionInfo {
+export interface BuildInfo {
+  artifact: string;
   name: string;
+  time: string;
   version: string;
-  build: string;
+  group: string;
+}
+
+export interface VersionInfo {
+  build: BuildInfo;
 }
