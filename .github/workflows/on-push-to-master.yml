@@ -15,16 +15,8 @@ jobs:
       artifact_name: frontend-${{ github.sha }}
       artifact_upload: false
 
-  build-backend:
-    uses: ./.github/workflows/build-backend.yml
-    with: 
-      source_branch: ${{ github.ref }}
-      artifact_name: backend-${{ github.sha }}
-      artifact_upload: false
-
   build-image-backend:
     runs-on: ubuntu-latest
-    needs: build-backend
 
     steps:
       - name: Checkout the code
@@ -32,25 +24,29 @@ jobs:
         with: 
           ref: ${{ github.ref }}
 
-      - name: Extract version from package.json
-        uses: sergeysova/jq-action@v2
-        id: version
-        with:
-          cmd: 'jq .version ./backend/package.json -r'          
+      - name: Install Java 
+        uses: actions/setup-java@v2
+        with: 
+          distribution: 'liberica'
+          java-version: '17'
           
+      - name: Build Spring Boot app and Docker Image
+        run: |
+          cd ./backend
+          chmod +x ./mvnw
+          ./mvnw clean package -P with-docker-image
+
       - name: Log in to the Container registry
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ github.token }}          
 
-      - name: Build Docker image
+      - name: Push existing Docker Image to GitHub Packages
         run: |
-          cd ./backend
           IMAGE_ID_BASE=ghcr.io/${{ github.repository_owner }}/homeis-backend
           IMAGE_VERSION_SHA=${IMAGE_ID_BASE}:${{ github.sha }}
-          IMAGE_VERSION_APP=${IMAGE_ID_BASE}:${{ steps.version.outputs.value }}
 
-          docker build -t ${IMAGE_VERSION_SHA} -t ${IMAGE_VERSION_APP} .
+          docker tag backend:latest ${IMAGE_VERSION_SHA}
           docker push ${IMAGE_VERSION_SHA}

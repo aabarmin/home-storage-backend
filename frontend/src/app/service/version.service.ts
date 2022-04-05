@@ -11,7 +11,7 @@ export class VersionService {
   private readonly backendUrl;
 
   constructor(private http: HttpClient) {
-    this.backendUrl = `${environment.backendBase}/health/env`;
+    this.backendUrl = `${environment.backendBase}/actuator/info`;
   }
 
   public getEnvironmentInfo(): Observable<VersionInfo> {
