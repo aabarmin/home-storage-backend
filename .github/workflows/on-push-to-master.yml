@@ -36,6 +36,13 @@ jobs:
           chmod +x ./mvnw
           ./mvnw clean package -P with-docker-image
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}          
+
       - name: Push existing Docker Image to GitHub Packages
         run: |
           IMAGE_ID_BASE=ghcr.io/${{ github.repository_owner }}/homeis-backend
