@@ -1,14 +1,21 @@
 version: '3.8'
 
 services: 
-  portainer: 
-    image: portainer/portainer-ce:2.11.1
-    ports: 
-      - 9443:9443
-      - 9000:9000
-    volumes: 
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data 
+  frontend: 
+    build: ../../frontend
+    ports:
+      - 80:80
+
+  backend:
+    image: backend:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    volumes:
+      - "backend_db:/workspace/db"
+      - "backend_uploads:/workspace/storage"
       
 volumes:
-  portainer_data: 
+  backend_db:
+    name: home_is_database_prod
+  backend_uploads:
+    name: home_is_uploads_prod
