@@ -1,4 +1,4 @@
-package dev.abarmin.home.is.backend;
+package dev.abarmin.home.is.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

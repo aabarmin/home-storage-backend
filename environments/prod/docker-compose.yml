@@ -1,19 +1,6 @@
 version: '3.8'
 
 services: 
-  frontend: 
-    build: ../../frontend
-    ports:
-      - 80:80
-
-  backend:
-    build: ../../backend
-    environment:
-      - ENVIRONMENT=prod
-    volumes:
-      - "backend_db:/opt/db"
-      - "backend_uploads:/opt/uploads"
-
   portainer: 
     image: portainer/portainer-ce:2.11.1
     ports: 
@@ -24,8 +11,4 @@ services:
       - portainer_data:/data 
       
 volumes:
-  backend_db:
-    name: home_is_database_prod
-  backend_uploads:
-    name: home_is_uploads_prod
   portainer_data: 

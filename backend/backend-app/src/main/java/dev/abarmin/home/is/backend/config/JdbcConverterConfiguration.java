@@ -1,4 +1,4 @@
-package dev.abarmin.home.is.backend;
+package dev.abarmin.home.is.backend.config;
 
 import dev.abarmin.home.is.backend.converter.BooleanToByteConverter;
 import java.util.List;

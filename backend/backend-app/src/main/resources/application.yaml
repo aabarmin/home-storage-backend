@@ -6,3 +6,12 @@ spring:
 
 storage:
   base: ./storage
+
+management:
+  endpoints:
+    web:
+      cors:
+        allowed-methods: GET
+        allowed-origins: '*'
+      exposure:
+        include: info,health
