@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
  * @author Aleksandr Barmin
  */
 @Mapper(componentModel = "spring")
-public interface FileInfoTransformer {
+public interface FileInfoEntityTransformer {
   FileInfo toDomain(FileInfoEntity entity);
 
   FileInfoEntity toEntity(FileInfo domain);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FileInfoRepositoryImpl implements FileInfoRepository {
   private final FileInfoJdbcRepository jdbcRepository;
-  private final FileInfoTransformer transformer;
+  private final FileInfoEntityTransformer transformer;
 
   @Override
   public Optional<FileInfo> findById(int id) {
