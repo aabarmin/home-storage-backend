@@ -1,8 +1,8 @@
 package dev.abarmin.home.is.backend.readings.rest.transformer;
 
+import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
 import dev.abarmin.home.is.backend.readings.domain.Device;
 import dev.abarmin.home.is.backend.readings.domain.DeviceReading;
-import dev.abarmin.home.is.backend.readings.domain.FileInfo;
 import dev.abarmin.home.is.backend.readings.domain.Flat;
 import dev.abarmin.home.is.backend.readings.rest.model.DeviceReadingModel;
 import java.time.LocalDate;

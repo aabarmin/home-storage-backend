@@ -1,10 +1,12 @@
 package dev.abarmin.home.is.backend.readings.rest;
 
-import dev.abarmin.home.is.backend.readings.domain.FileInfo;
+import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
+import dev.abarmin.home.is.backend.binary.storage.service.BinaryService;
+import dev.abarmin.home.is.backend.binary.storage.service.BinaryServiceHelper;
+import dev.abarmin.home.is.backend.binary.storage.service.FileInfoService;
 import dev.abarmin.home.is.backend.readings.rest.transformer.FileInfoTransformerImpl;
-import dev.abarmin.home.is.backend.readings.service.BinaryService;
-import dev.abarmin.home.is.backend.readings.service.FileInfoService;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -23,7 +24,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
  */
 @ContextConfiguration(classes = {
     FileInfoController.class,
-    FileInfoTransformerImpl.class
+    FileInfoTransformerImpl.class,
+    BinaryServiceHelper.class
 })
 @WebMvcTest(FileInfoController.class)
 class FileInfoControllerTest {
@@ -38,7 +40,7 @@ class FileInfoControllerTest {
 
   @Test
   void upload_callsBothUploadServiceAndTransformer() throws Exception {
-    when(binaryService.upload(any(MultipartFile.class))).thenReturn(new FileInfo(
+    when(binaryService.upload(any(Path.class))).thenReturn(new FileInfo(
         42,
         "file_name.txt",
         "text/plain",

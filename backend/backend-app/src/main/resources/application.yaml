@@ -5,7 +5,9 @@ spring:
     password:
 
 storage:
-  base: ./storage
+  region: eu-west-2
+  valid-seconds: 30
+  bucket: abarmin-home-storage-dev-2022
 
 management:
   endpoints:

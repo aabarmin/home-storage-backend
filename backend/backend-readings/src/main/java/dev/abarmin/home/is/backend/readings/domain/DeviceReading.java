@@ -1,5 +1,6 @@
 package dev.abarmin.home.is.backend.readings.domain;
 
+import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
 import java.time.LocalDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
