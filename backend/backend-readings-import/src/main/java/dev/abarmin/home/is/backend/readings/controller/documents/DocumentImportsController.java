@@ -2,11 +2,13 @@ package dev.abarmin.home.is.backend.readings.controller.documents;
 
 import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
 import dev.abarmin.home.is.backend.binary.storage.service.BinaryService;
+import dev.abarmin.home.is.backend.binary.storage.service.BinaryServiceHelper;
 import dev.abarmin.home.is.backend.binary.storage.service.FileInfoService;
 import dev.abarmin.home.is.backend.readings.controller.documents.checker.PreImportChecker;
 import dev.abarmin.home.is.backend.readings.controller.documents.importer.DocumentImporter;
 import dev.abarmin.home.is.backend.readings.controller.documents.reader.ConfigFileReader;
 import dev.abarmin.home.is.backend.readings.model.ImportConfiguration;
+import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,7 @@ public class DocumentImportsController {
   private final PreImportChecker configChecker;
   private final DocumentImporter documentImporter;
   private final BinaryService binaryService;
+  private final BinaryServiceHelper binaryServiceHelper;
   private final FileInfoService fileInfoService;
 
   @GetMapping
@@ -39,8 +42,8 @@ public class DocumentImportsController {
   public ModelAndView uploadAndCheck(final ModelAndView modelAndView,
                                      final @RequestParam("config") MultipartFile configFile) {
 
-    // TODO: fixit
-    final FileInfo uploadedFile = null; //binaryService.upload(configFile);
+    final Path temporaryFile = binaryServiceHelper.uploadToTemporaryFolder(configFile);
+    final FileInfo uploadedFile = binaryService.upload(temporaryFile);
     final ImportConfiguration configuration = configReader.read(uploadedFile);
     modelAndView.addObject(
         "validation",
