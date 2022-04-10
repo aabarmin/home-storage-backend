@@ -26,6 +26,8 @@
 		<module>backend-readings</module>
 		<module>backend-readings-import</module>
         <module>backend-app</module>
+		<module>backend-binary-storage</module>
+        <module>backend-binary-storage-persistence</module>
     </modules>
 
 	<dependencyManagement>
@@ -39,6 +41,16 @@
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-readings-import</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>dev.abarmin.home.is</groupId>
+				<artifactId>backend-binary-storage</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.11.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

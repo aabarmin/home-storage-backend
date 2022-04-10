@@ -1,10 +1,11 @@
 package dev.abarmin.home.is.backend.readings.controller.documents.importer;
 
+import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
+import dev.abarmin.home.is.backend.binary.storage.service.BinaryService;
 import dev.abarmin.home.is.backend.readings.controller.documents.file.ImportFile;
 import dev.abarmin.home.is.backend.readings.controller.documents.file.ImportFileFinder;
 import dev.abarmin.home.is.backend.readings.domain.Device;
 import dev.abarmin.home.is.backend.readings.domain.DeviceReading;
-import dev.abarmin.home.is.backend.readings.domain.FileInfo;
 import dev.abarmin.home.is.backend.readings.domain.Flat;
 import dev.abarmin.home.is.backend.readings.model.ImportConfiguration;
 import dev.abarmin.home.is.backend.readings.model.ImportSource;
@@ -12,14 +13,12 @@ import dev.abarmin.home.is.backend.readings.model.device.ImportDevice;
 import dev.abarmin.home.is.backend.readings.model.device.ImportDeviceFeature;
 import dev.abarmin.home.is.backend.readings.model.document.ImportDocument;
 import dev.abarmin.home.is.backend.readings.model.flat.ImportFlat;
-import dev.abarmin.home.is.backend.readings.service.BinaryService;
 import dev.abarmin.home.is.backend.readings.service.DeviceReadingService;
 import dev.abarmin.home.is.backend.readings.service.DeviceService;
 import dev.abarmin.home.is.backend.readings.service.FlatService;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Component;

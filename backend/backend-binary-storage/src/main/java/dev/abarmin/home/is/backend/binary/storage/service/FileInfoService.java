@@ -1,7 +1,6 @@
-package dev.abarmin.home.is.backend.readings.service;
-
-import dev.abarmin.home.is.backend.readings.domain.FileInfo;
-import dev.abarmin.home.is.backend.readings.repository.FileInfoRepository;
+package dev.abarmin.home.is.backend.binary.storage.service;
+import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
+import dev.abarmin.home.is.backend.binary.storage.repository.FileInfoRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
