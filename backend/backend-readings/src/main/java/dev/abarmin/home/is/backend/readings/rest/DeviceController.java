@@ -3,11 +3,10 @@ package dev.abarmin.home.is.backend.readings.rest;
 import dev.abarmin.home.is.backend.readings.domain.Device;
 import dev.abarmin.home.is.backend.readings.domain.Flat;
 import dev.abarmin.home.is.backend.readings.rest.model.DeviceModel;
-import dev.abarmin.home.is.backend.readings.rest.transformer.DeviceTransformer;
+import dev.abarmin.home.is.backend.readings.rest.transformer.DeviceModelTransformer;
 import dev.abarmin.home.is.backend.readings.service.DeviceService;
 import dev.abarmin.home.is.backend.readings.service.FlatService;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DeviceController {
   private final DeviceService deviceService;
   private final FlatService flatService;
-  private final DeviceTransformer deviceTransformer;
+  private final DeviceModelTransformer deviceTransformer;
 
   @GetMapping
   public Collection<DeviceModel> findAll() {

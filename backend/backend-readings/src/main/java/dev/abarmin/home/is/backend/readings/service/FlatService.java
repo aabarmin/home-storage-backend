@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class FlatService {
   private final FlatRepository flatRepository;
 
+  @Deprecated
   public Iterable<Flat> findAll() {
     return flatRepository.findAll();
   }
