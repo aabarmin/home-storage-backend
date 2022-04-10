@@ -20,7 +20,6 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jdbc.core.mapping.AggregateReference;
 import org.springframework.stereotype.Component;
 
 /**
@@ -63,11 +62,11 @@ public class DocumentImporter {
       // attach to the proper field
       if (document.getType() == ImportDeviceFeature.INVOICES) {
         readingService.save(deviceReading.withInvoiceFile(
-            AggregateReference.to(uploadedFile.id())
+            uploadedFile
         ));
       } else if (document.getType() == ImportDeviceFeature.RECEIPTS) {
         readingService.save(deviceReading.withReceiptFile(
-            AggregateReference.to(uploadedFile.id())
+            uploadedFile
         ));
       }
     }
@@ -76,8 +75,8 @@ public class DocumentImporter {
   private DeviceReading findReading(Flat flat, Device device, LocalDate date) {
     return readingService.findDeviceReadingByFlatAndDeviceAndDate(flat, device, date)
         .orElseGet(() -> readingService.save(new DeviceReading(
-            AggregateReference.to(device.id()),
-            AggregateReference.to(flat.id()),
+            device,
+            flat,
             date
         )));
   }
@@ -88,7 +87,7 @@ public class DocumentImporter {
           .orElseGet(() -> deviceService.save(new Device(
               device.getName(),
               device.getAlias(),
-              AggregateReference.to(flat.id()),
+              flat,
               hasFeature(device, ImportDeviceFeature.READINGS),
               hasFeature(device, ImportDeviceFeature.INVOICES),
               hasFeature(device, ImportDeviceFeature.RECEIPTS)

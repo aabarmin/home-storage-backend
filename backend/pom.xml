@@ -29,6 +29,7 @@
 		<module>backend-binary-storage</module>
         <module>backend-binary-storage-persistence</module>
         <module>backend-binary-storage-s3</module>
+        <module>backend-readings-persistence</module>
     </modules>
 
 	<dependencyManagement>
@@ -56,6 +57,11 @@
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-binary-storage-s3</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>dev.abarmin.home.is</groupId>
+				<artifactId>backend-readings-persistence</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 

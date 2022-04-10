@@ -15,12 +15,13 @@ import org.springframework.stereotype.Service;
 public class DeviceService {
   private final DeviceRepository deviceRepository;
 
+  @Deprecated
   public Iterable<Device> findAll() {
     return deviceRepository.findAll();
   }
 
   public Iterable<Device> findAllByFlat(final Flat flat) {
-    return deviceRepository.findDevicesByFlat(flat.id());
+    return deviceRepository.findDevicesByFlat(flat);
   }
 
   public Optional<Device> findByAlias(final String alias) {

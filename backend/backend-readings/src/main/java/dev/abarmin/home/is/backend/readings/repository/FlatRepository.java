@@ -1,12 +1,19 @@
 package dev.abarmin.home.is.backend.readings.repository;
 
 import dev.abarmin.home.is.backend.readings.domain.Flat;
+import java.util.Collection;
 import java.util.Optional;
-import org.springframework.data.repository.CrudRepository;
 
 /**
  * @author Aleksandr Barmin
  */
-public interface FlatRepository extends CrudRepository<Flat, Integer> {
+public interface FlatRepository {
+  Flat save(Flat flat);
+
+  Optional<Flat> findById(int id);
+
+  @Deprecated
+  Collection<Flat> findAll();
+
   Optional<Flat> findFirstByAlias(String alias);
 }

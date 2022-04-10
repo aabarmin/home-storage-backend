@@ -1,13 +1,19 @@
 package dev.abarmin.home.is.backend.readings.rest;
 
+import dev.abarmin.home.is.backend.binary.storage.domain.FileInfo;
 import dev.abarmin.home.is.backend.binary.storage.service.BinaryService;
 import dev.abarmin.home.is.backend.binary.storage.service.BinaryServiceHelper;
 import dev.abarmin.home.is.backend.binary.storage.service.FileInfoService;
 import dev.abarmin.home.is.backend.readings.rest.model.FileInfoModel;
 import dev.abarmin.home.is.backend.readings.rest.transformer.FileInfoTransformer;
+import java.net.URL;
+import java.net.http.HttpHeaders;
 import java.nio.file.Path;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,18 +49,14 @@ public class FileInfoController {
         .orElseThrow();
   }
 
-//  @GetMapping("/{id}/download")
-//  public ResponseEntity<Resource> download(final @PathVariable("id") int id) {
-//    final FileInfo fileInfo = fileInfoService.findById(id)
-//        .orElseThrow();
-//
-//    final HttpHeaders headers = new HttpHeaders();
-//    headers.add(HttpHeaders.CONTENT_TYPE, fileInfo.fileType());
-//
-//    return new ResponseEntity<>(
-//        binaryService.download(fileInfo),
-//        headers,
-//        HttpStatus.OK
-//    );
-//  }
+  @GetMapping("/{id}/download")
+  public ResponseEntity<?> download(final @PathVariable("id") int id) {
+    final FileInfo fileInfo = fileInfoService.findById(id)
+        .orElseThrow();
+
+    final URL downloadUrl = binaryService.download(fileInfo);
+    return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+        .header("Location", downloadUrl.toString())
+        .build();
+  }
 }
