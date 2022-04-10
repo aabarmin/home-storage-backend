@@ -35,4 +35,4 @@ build/
 ### App ignores ###
 storage/
 db/
-import-config-real.json
+backend-readings-import/src/test/resources/import-config-real.json
