@@ -1,6 +1,7 @@
 package dev.abarmin.home.is.backend.readings.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -13,4 +14,12 @@ public record Flat(
     @Column("FLAT_TITLE") String title,
     @Column("FLAT_ALIAS") String alias
 ) {
+  @PersistenceConstructor
+  public Flat {}
+
+  public Flat(String title,
+              String alias) {
+
+    this(null, title, alias);
+  }
 }

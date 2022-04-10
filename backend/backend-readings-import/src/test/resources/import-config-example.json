@@ -1,0 +1,38 @@
+{
+  "sources": [
+    {
+      "flat": {
+        "name": "London",
+        "alias": "london"
+      },
+      "devices": [
+        {
+          "name": "Electricity",
+          "alias": "electricity",
+          "features": [
+            "READINGS",
+            "INVOICES",
+            "RECEIPTS"
+          ]
+        },
+        {
+          "name": "Gas",
+          "alias": "gas",
+          "features": [
+            "READINGS",
+            "INVOICES",
+            "RECEIPTS"
+          ]
+        }
+      ],
+      "documents": [
+        {
+          "device": "electricity",
+          "path": "/Users/abarmin/Google Drive/002. Квартира/001. Flat at SPb/007. Payments/001. Facility Service/",
+          "type": "INVOICES",
+          "name-pattern": "(?<year>\\d{4})(?<month>\\d{2})(?<day>\\d{2}) Payment.pdf"
+        }
+      ]
+    }
+  ]
+}
