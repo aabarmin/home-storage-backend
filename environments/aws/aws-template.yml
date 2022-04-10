@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Resources for the Home Storage application
+Resources: 
+  ################################################################################################
+  ### S3 buckets
+  ################################################################################################
+  StorageS3Production:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties: 
+      BucketName: abarmin-home-storage-production-2022
+
+  StorageS3Development: 
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties: 
+      BucketName: abarmin-home-storage-dev-2022
