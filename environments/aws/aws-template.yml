@@ -15,3 +15,50 @@ Resources:
     DeletionPolicy: Retain
     Properties: 
       BucketName: abarmin-home-storage-dev-2022
+
+  ################################################################################################
+  ### Amazon Cognito User pool
+  ################################################################################################
+  HomeInformationSystemUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties: 
+      AccountRecoverySetting: 
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 2
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: False
+        UnusedAccountValidityDays: 7
+      AutoVerifiedAttributes:
+        - email
+      MfaConfiguration: "OFF"
+      UsernameAttributes: 
+        - email
+      UsernameConfiguration: 
+        CaseSensitive: False
+      UserPoolName: abarmin-home-storage-user-pool
+      EmailConfiguration: 
+        EmailSendingAccount: COGNITO_DEFAULT
+
+  HomeInformationSystemUserPoolLoginPage: 
+    Type: AWS::Cognito::UserPoolDomain
+    Properties: 
+      UserPoolId: !Ref HomeInformationSystemUserPool
+      Domain: abarmin-home-storage-auth
+
+  HomeInformationSystemUserPoolClient: 
+    Type: AWS::Cognito::UserPoolClient
+    Properties: 
+      UserPoolId: !Ref HomeInformationSystemUserPool
+      GenerateSecret: True
+      ClientName: HomeInformationSystem
+      AllowedOAuthFlows: 
+        - code
+        - implicit
+      CallbackURLs: 
+        - "http://localhost:8080"
+      SupportedIdentityProviders: 
+        - COGNITO
+      AllowedOAuthScopes: 
+        - email
+        - openid
