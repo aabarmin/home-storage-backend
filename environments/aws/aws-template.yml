@@ -63,3 +63,10 @@ Resources:
       AllowedOAuthScopes: 
         - email
         - openid
+
+  HomeInformationSystemUserPoolGroup: 
+    Type: AWS::Cognito::UserPoolGroup
+    Properties: 
+      Description: Users who have access to the application
+      GroupName: abarmin-home-storage-users
+      UserPoolId: !Ref HomeInformationSystemUserPool
