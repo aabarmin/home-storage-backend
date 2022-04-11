@@ -1,7 +1,6 @@
-package dev.abarmin.home.is.backend.binary.storage.service;
+package dev.abarmin.home.is.backend.security;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -11,14 +10,17 @@ import org.springframework.validation.annotation.Validated;
  */
 @Data
 @Validated
-@ConfigurationProperties(prefix = "storage.s3")
-public class S3ConfigurationProperties {
+@ConfigurationProperties(prefix = "security.cognito")
+public class CognitoUserPoolProperties {
   @NotEmpty
   private String region;
 
   @NotEmpty
-  private String bucket;
+  private String userPoolId;
 
-  @Positive
-  private int validSeconds;
+  @NotEmpty
+  private String clientId;
+
+  @NotEmpty
+  private String clientSecret;
 }

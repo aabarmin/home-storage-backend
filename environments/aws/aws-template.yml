@@ -52,11 +52,12 @@ Resources:
       UserPoolId: !Ref HomeInformationSystemUserPool
       GenerateSecret: True
       ClientName: HomeInformationSystem
+      AllowedOAuthFlowsUserPoolClient: True
       AllowedOAuthFlows: 
         - code
         - implicit
       CallbackURLs: 
-        - "http://localhost:8080"
+        - "http://localhost:8080/login/oauth2/code/cognito"
       SupportedIdentityProviders: 
         - COGNITO
       AllowedOAuthScopes: 

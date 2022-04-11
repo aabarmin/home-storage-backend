@@ -3,11 +3,24 @@ spring:
     url: jdbc:h2:mem:./db/testdb
     username: sa
     password:
+  security:
+    oauth2:
+      client:
+        provider:
+          cognito:
+            issuer-uri: https://cognito-idp.${security.cognito.region}.amazonaws.com/${security.cognito.user-pool-id}
+            user-name-attribute: email
+        registration:
+          cognito:
+            provider: cognito
+            client-id: ${security.cognito.client-id}
+            client-secret: ${security.cognito.client-secret}
 
 storage:
-  region: eu-west-2
-  valid-seconds: 30
-  bucket: abarmin-home-storage-dev-2022
+  s3:
+    region: eu-west-2
+    valid-seconds: 30
+    bucket: abarmin-home-storage-dev-2022
 
 management:
   endpoints:

@@ -28,9 +28,9 @@ import static org.mockito.Mockito.verify;
  */
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(properties = {
-    "storage.valid-seconds=60",
-    "storage.bucket=test-bucket",
-    "storage.region=eu-west-2"
+    "storage.s3.valid-seconds=60",
+    "storage.s3.bucket=test-bucket",
+    "storage.s3.region=eu-west-2"
 })
 @ContextConfiguration(classes = {
     BinaryServiceS3Impl.class
