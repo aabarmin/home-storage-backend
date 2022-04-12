@@ -5,6 +5,9 @@ spring:
     password:
   security:
     oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://cognito-idp.${security.cognito.region}.amazonaws.com/${security.cognito.user-pool-id}
       client:
         provider:
           cognito:
@@ -15,6 +18,7 @@ spring:
             provider: cognito
             client-id: ${security.cognito.client-id}
             client-secret: ${security.cognito.client-secret}
+            scope: openid
 
 storage:
   s3:

@@ -23,4 +23,7 @@ public class CognitoUserPoolProperties {
 
   @NotEmpty
   private String clientSecret;
+
+  @NotEmpty
+  private String targetUserGroup;
 }
