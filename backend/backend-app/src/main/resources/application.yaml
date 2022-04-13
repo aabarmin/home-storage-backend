@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:./db/testdb
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/pguser
+    username: pguser
+    password: pgpassword
   security:
     oauth2:
       resourceserver:
