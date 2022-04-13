@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+    <changeSet id="01" author="Aleksandr Barmin">
+        <createTable tableName="FLATS">
+            <column name="FLAT_ID" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="FLATS_PK" />
+            </column>
+            <column name="FLAT_TITLE" type="VARCHAR(255)">
+                <constraints nullable="false" notNullConstraintName="FLATS_TITLE_NOT_NULL" />
+            </column>
+            <column name="FLAT_ALIAS" type="VARCHAR(255)">
+                <constraints unique="true" uniqueConstraintName="FLATS_ALIAS_UNIQUE"
+                             nullable="false" notNullConstraintName="FLATS_ALIAS_NOT_NULL"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

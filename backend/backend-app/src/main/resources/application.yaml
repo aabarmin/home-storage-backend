@@ -19,6 +19,8 @@ spring:
             client-id: ${security.cognito.client-id}
             client-secret: ${security.cognito.client-secret}
             scope: openid
+  liquibase:
+    change-log: classpath:/db/db.changelog-master.xml
 
 storage:
   s3:

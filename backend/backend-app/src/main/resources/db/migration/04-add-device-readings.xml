@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+    <changeSet id="04" author="Aleksandr Barmin">
+        <createTable tableName="DEVICE_READINGS">
+            <column name="READING_ID" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="DEVICE_READINGS_PK" />
+            </column>
+            <column name="READING_DEVICE_ID" type="INTEGER">
+                <constraints nullable="false" notNullConstraintName="READING_DEVICE_ID_NOT_NULL" />
+            </column>
+            <column name="READING_FLAT_ID" type="INTEGER">
+                <constraints nullable="false" notNullConstraintName="READING_FLAT_ID_NOT_NULL" />
+            </column>
+            <column name="READING_YEAR" type="INTEGER">
+                <constraints nullable="false" notNullConstraintName="READING_YEAR_NOT_NULL" />
+            </column>
+            <column name="READING_DATE" type="DATE">
+                <constraints nullable="false" notNullConstraintName="READING_DATE_NOT_NULL" />
+            </column>
+            <column name="READING_VALUE" type="INTEGER">
+                <constraints nullable="true" />
+            </column>
+            <column name="READING_INVOICE_FILE_ID" type="INTEGER">
+                <constraints nullable="true" />
+            </column>
+            <column name="READING_RECEIPT_FILE_ID" type="INTEGER">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="DEVICE_READINGS"
+                                 baseColumnNames="READING_DEVICE_ID"
+                                 constraintName="READING_DEVICE_ID_FK"
+                                 referencedTableName="DEVICES"
+                                 referencedColumnNames="DEVICE_ID"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE" />
+
+        <addForeignKeyConstraint baseTableName="DEVICE_READINGS"
+                                 baseColumnNames="READING_FLAT_ID"
+                                 constraintName="READING_FLAT_ID_FK"
+                                 referencedTableName="FLATS"
+                                 referencedColumnNames="FLAT_ID"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE" />
+
+        <addForeignKeyConstraint baseTableName="DEVICE_READINGS"
+                                 baseColumnNames="READING_INVOICE_FILE_ID"
+                                 constraintName="READING_INVOICE_FILE_ID_FK"
+                                 referencedTableName="FILES"
+                                 referencedColumnNames="FILE_ID"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint baseTableName="DEVICE_READINGS"
+                                 baseColumnNames="READING_RECEIPT_FILE_ID"
+                                 constraintName="READING_RECEIPT_FILE_ID_FK"
+                                 referencedTableName="FILES"
+                                 referencedColumnNames="FILE_ID"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
+    </changeSet>
+</databaseChangeLog>

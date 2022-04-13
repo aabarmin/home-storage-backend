@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd
+      http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.5.xsd">
+
+    <changeSet id="02" author="Aleksandr Barmin">
+        <createTable tableName="DEVICES">
+            <column name="DEVICE_ID" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="DEVICES_PK" />
+            </column>
+            <column name="DEVICE_TITLE" type="VARCHAR(255)">
+                <constraints nullable="false" notNullConstraintName="DEVICES_TITLE_NOT_NULL" />
+            </column>
+            <column name="DEVICE_ALIAS" type="VARCHAR(255)">
+                <constraints nullable="false" notNullConstraintName="DEVICES_ALIAS_NOT_NULL"
+                             unique="true" uniqueConstraintName="DEVICES_ALIAS_UNIQUE" />
+            </column>
+            <column name="DEVICE_FLAT_ID" type="INTEGER">
+                <constraints nullable="false" notNullConstraintName="DEVICE_FLAT_ID_NOT_NULL" />
+            </column>
+            <column name="DEVICE_NEED_READINGS" type="SMALLINT" defaultValue="0">
+                <constraints nullable="false"
+                             notNullConstraintName="DEVICE_NEED_READINGS_NOT_NULL" />
+            </column>
+            <column name="DEVICE_NEED_INVOICES" type="SMALLINT" defaultValue="0">
+                <constraints nullable="false"
+                             notNullConstraintName="DEVICE_NEED_INVOICES_NOT_NULL" />
+            </column>
+            <column name="DEVICE_NEED_RECEIPTS" type="SMALLINT" defaultValue="0">
+                <constraints nullable="false"
+                             notNullConstraintName="DEVICE_NEED_RECEIPTS_NOT_NULL" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="DEVICES"
+                                 baseColumnNames="DEVICE_FLAT_ID"
+                                 constraintName="DEVICES_FLAT_ID_FK"
+                                 referencedTableName="FLATS"
+                                 referencedColumnNames="FLAT_ID"
+                                 onUpdate="CASCADE"
+                                 onDelete="RESTRICT" />
+    </changeSet>
+</databaseChangeLog>
