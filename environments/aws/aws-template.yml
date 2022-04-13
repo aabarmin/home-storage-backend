@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: Resources for the Home Storage application
 Parameters: 
+  ApplicationName: 
+    Type: String
+    Description: Name of the application
+    Default: Home Storage
   StorageS3Prefix: 
     Type: String
     Description: Prefix used to create S3 buckets
@@ -31,12 +35,22 @@ Resources:
     DeletionPolicy: Retain
     Properties: 
       BucketName: !Join ["-", [ !Ref StorageS3Prefix, "production-2022" ]]
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production      
 
   StorageS3Development: 
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
     Properties: 
       BucketName: !Join ["-", [ !Ref StorageS3Prefix, "dev-2022" ]]
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Development
 
   ################################################################################################
   ### Amazon Cognito User pool
@@ -103,6 +117,15 @@ Resources:
       Type: String
       Value: !Join ["-", [ !Ref StorageS3Prefix, "production-2022" ]]
 
+  ParameterStorageS3ProductionRegion: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/s3/region
+      Description: Region of the production S3 bucket
+      Tier: Standard
+      Type: String
+      Value: !Ref "AWS::Region"
+
   ParameterStorageS3Development: 
     Type: AWS::SSM::Parameter
     Properties: 
@@ -110,7 +133,16 @@ Resources:
       Description: Name of the development S3 bucket
       Tier: Standard
       Type: String
-      Value: !Join ["-", [ !Ref StorageS3Prefix, "dev-2022" ]]
+      Value: !Join ["-", [ !Ref StorageS3Prefix, "dev-2022" ]]    
+
+  ParameterStorageS3DevelopmentRegion: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /dev/home-storage/s3/region
+      Description: Region of the development S3 bucket
+      Tier: Standard
+      Type: String
+      Value: !Ref "AWS::Region"
 
   ParameterCognitoRegion:
     Type: AWS::SSM::Parameter
@@ -119,7 +151,7 @@ Resources:
       Description: Region in which Cognito User Pool is deployed
       Tier: Standard
       Type: String
-      Value: !Ref "AWS::Region"
+      Value: !Ref "AWS::Region" 
 
   ParameterCognitoUserPoolId: 
     Type: AWS::SSM::Parameter
@@ -137,7 +169,7 @@ Resources:
       Description: Cognito Client ID
       Tier: Standard
       Type: String
-      Value: !Ref HomeInformationSystemUserPoolClient
+      Value: !Ref HomeInformationSystemUserPoolClient      
 
   ParameterCognitoUserGroup:
     Type: AWS::SSM::Parameter
