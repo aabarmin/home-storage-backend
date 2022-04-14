@@ -25,6 +25,82 @@ Parameters:
     Type: String
     Description: Name of the user group which stores users with access to the application
     Default: abarmin-home-storage-users
+  VpcCidrBlock: 
+    Type: String
+    Description: CIDR block for the VPC
+    Default: 172.16.0.0/16
+  VpcName: 
+    Type: String
+    Description: Name of the VPC
+    Default: abarmin-home-storage-vpc
+  VpcPublicSubnet1Cidr: 
+    Type: String
+    Description: CIDR block for the first public subnet
+    Default: 172.16.1.0/24
+  VpcPublicSubnet2Cidr: 
+    Type: String
+    Description: CIDR block for the second public subnet
+    Default: 172.16.2.0/24    
+  VpcPrivateSubnet1Cidr:
+    Type: String
+    Description: CIDR block for the first private subnet
+    Default: 172.16.10.0/24
+  VpcPrivateSubnet2Cidr: 
+    Type: String
+    Description: CIDR block for the second private subnet
+    Default: 172.16.11.0/24
+  RdsSubnetGroupName: 
+    Type: String
+    Description: Name of the RDS Subnet Group
+    Default: abarmin-home-storage-rds-subnet-group
+  RdsSecurityGroupName: 
+    Type: String
+    Description: Name of the security group which gives access to RDS
+    Default: abarmin-home-storage-rds-access-security-group
+  EC2SecurityGroupName: 
+    Type: String
+    Description: Name of the security group which is used by EC2
+    Default: abarmin-home-storage-ec2-security-group
+  RdsName: 
+    Type: String
+    Description: Name of the database instance to create
+    Default: abarmin-home-storage-rds
+  RdsDbName: 
+    Type: String
+    Description: Name of the RDS database
+    Default: abarmin_home_storage_rds
+  RdsDefaultUsername: 
+    Type: String
+    Description: Name of the default RDS user
+    Default: postgres
+  RdsDefaultPassword:
+    Type: String
+    Description: Default RDS password
+    Default: q1w2e3r4!
+  EC2KeyPairName: 
+    Type: String
+    Description: Name of key pair will be used to access the instance
+    Default: abarmin-key-pair
+  EC2IAMInstanceProfileName: 
+    Type: String
+    Description: Name of the EC2 instance profile
+    Default: abarmin-home-storage-ec2-instance-profile
+  EC2IAMRoleName: 
+    Type: String
+    Description: EC2 IAM Role with access to necessary services
+    Default: abarmin-home-storage-ec2-access-role
+  EC2ImageId: 
+    Type: String
+    Description: AMI used to create EC2 instances
+    Default: ami-034ef92d9dd822b08
+  EC2InstanceType: 
+    Type: String
+    Description: Instance type
+    Default: t2.micro
+  ELBName: 
+    Type: String
+    Description: Name of the load balancer
+    Default: abarmin-home-storage-elb
 
 Resources: 
   ################################################################################################
@@ -51,6 +127,17 @@ Resources:
           Value: !Ref ApplicationName
         - Key: Environment
           Value: Development
+
+  StorageS3Releases:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties: 
+      BucketName: !Join ["-", [ !Ref StorageS3Prefix, "releases-2022" ]]
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production    
 
   ################################################################################################
   ### Amazon Cognito User pool
@@ -189,3 +276,401 @@ Resources:
   #     Tier: Standard
   #     Type: String
   #     Value: !GetAtt HomeInformationSystemUserPoolClient.ClientSecret
+
+  ParameterRdsUsername: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/rds/username
+      Description: Username with access to RDS
+      Tier: Standard
+      Type: String
+      Value: !Ref RdsDefaultUsername
+
+  ParameterRdsPassword: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/rds/password
+      Description: Password with access to RDS
+      Tier: Standard
+      Type: String
+      Value: !Ref RdsDefaultPassword  
+
+  ParameterRdsHost: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/rds/host
+      Description: RDS host
+      Tier: Standard
+      Type: String
+      Value: !GetAtt HomeInformationSystemRdsInstance.Endpoint.Address        
+
+  ParameterRdsPort: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/rds/port
+      Description: RDS host
+      Tier: Standard
+      Type: String
+      Value: !GetAtt HomeInformationSystemRdsInstance.Endpoint.Port
+
+  ParameterEC2InstanceId:
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/ec2/instance-id
+      Description: Instance ID of the running instance
+      Tier: Standard
+      Type: String
+      Value: !Ref HomeInformationSystemEC2Instance
+
+  ################################################################################################
+  ### VPC and Networks
+  ################################################################################################  
+  
+  HomeInformationSystemVPC: 
+    Type: AWS::EC2::VPC
+    Properties: 
+      CidrBlock: !Ref VpcCidrBlock
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: 
+        - Key: Name
+          Value: !Ref VpcName
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+
+  HomeInformationSystemPublicSubnet1: 
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId: !Ref HomeInformationSystemVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref VpcPublicSubnet1Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Public Subnet 1
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+
+  HomeInformationSystemPublicSubnet2: 
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId: !Ref HomeInformationSystemVPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref VpcPublicSubnet2Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Public Subnet 2
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production          
+
+  HomeInformationSystemPrivateSubnet1: 
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId: !Ref HomeInformationSystemVPC
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      CidrBlock: !Ref VpcPrivateSubnet1Cidr
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Private Subnet 1
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production   
+
+  HomeInformationSystemPrivateSubnet2: 
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId: !Ref HomeInformationSystemVPC
+      AvailabilityZone: !Select [ 1, !GetAZs '' ]
+      CidrBlock: !Ref VpcPrivateSubnet2Cidr
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: Private Subnet 2
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production                   
+
+  ################################################################################################
+  ### Internet Gateways
+  ################################################################################################          
+
+  HomeInformationSystemInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Internet Gateway
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+
+  HomeInformationSystemInternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      InternetGatewayId: !Ref HomeInformationSystemInternetGateway
+      VpcId: !Ref HomeInformationSystemVPC       
+      
+  ################################################################################################
+  ### Public Route Table
+  ################################################################################################        
+
+  HomeInformationSystemPublicRoutingTable: 
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref HomeInformationSystemVPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Public Route Table
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+
+  HomeInformationSystemDefaultPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: HomeInformationSystemInternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref HomeInformationSystemPublicRoutingTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref HomeInformationSystemInternetGateway
+
+  HomeInformationSystemPublicSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref HomeInformationSystemPublicRoutingTable
+      SubnetId: !Ref HomeInformationSystemPublicSubnet1  
+
+  HomeInformationSystemPublicSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref HomeInformationSystemPublicRoutingTable
+      SubnetId: !Ref HomeInformationSystemPublicSubnet2
+
+  ################################################################################################
+  ### Private Route Table
+  ################################################################################################              
+
+  HomeInformationSystemPrivateRoutingTable: 
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref HomeInformationSystemVPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${VpcName} Private Route Table
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production    
+
+  HomeInformationSystemPrivateSubnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref HomeInformationSystemPrivateRoutingTable
+      SubnetId: !Ref HomeInformationSystemPrivateSubnet1              
+
+  HomeInformationSystemPrivateSubnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref HomeInformationSystemPrivateRoutingTable
+      SubnetId: !Ref HomeInformationSystemPrivateSubnet2  
+
+  ################################################################################################
+  ### RDS Subnet Group
+  ################################################################################################        
+
+  HomeInformationSystemRdsSubnetGroup: 
+    Type: AWS::RDS::DBSubnetGroup
+    Properties: 
+      DBSubnetGroupName: !Ref RdsSubnetGroupName
+      DBSubnetGroupDescription: RDS Subnet Group
+      SubnetIds: 
+        - !Ref HomeInformationSystemPrivateSubnet1
+        - !Ref HomeInformationSystemPrivateSubnet2
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production      
+
+  ################################################################################################
+  ### Security Groups
+  ################################################################################################                  
+
+  HomeInformationSystemRdsSecurityGroup: 
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupName: !Ref RdsSecurityGroupName
+      GroupDescription: Gives access to RDS
+      VpcId: !Ref HomeInformationSystemVPC
+      SecurityGroupIngress:
+        # As for now, RDS is publicly available 
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !GetAtt HomeInformationSystemEC2SecurityGroup.GroupId
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production      
+
+  HomeInformationSystemEC2SecurityGroup: 
+    Type: AWS::EC2::SecurityGroup
+    Properties: 
+      GroupName: !Ref EC2SecurityGroupName
+      GroupDescription: Gives access to EC2
+      VpcId: !Ref HomeInformationSystemVPC
+      SecurityGroupIngress:
+        # For now, it's possible to get access from everywhere by ssh
+        # Next, it'll be necessary to limit access and add the second
+        # rule to provide access from the target group only.  
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production        
+
+  ################################################################################################
+  ### RDS Instance
+  ################################################################################################          
+
+  HomeInformationSystemRdsInstance: 
+    Type: AWS::RDS::DBInstance
+    Properties: 
+      AllocatedStorage: 20
+      AutoMinorVersionUpgrade: True
+      BackupRetentionPeriod: 0
+      DBInstanceClass: db.t3.micro
+      DBInstanceIdentifier: !Ref RdsName
+      DBName: !Ref RdsDbName
+      DBSubnetGroupName: !Ref HomeInformationSystemRdsSubnetGroup
+      DeletionProtection: False
+      EnablePerformanceInsights: False
+      Engine: postgres
+      EngineVersion: 13.4
+      MasterUsername: !Ref RdsDefaultUsername
+      MasterUserPassword: !Ref RdsDefaultPassword
+      MonitoringInterval: 0
+      MultiAZ: False
+      Port: 5432
+      PubliclyAccessible: False
+      StorageType: gp2
+      VPCSecurityGroups: 
+        - !GetAtt HomeInformationSystemRdsSecurityGroup.GroupId
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production       
+
+  ################################################################################################
+  ### EC2 Instance
+  ################################################################################################
+
+  HomeInformationSystemEC2Instance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      LaunchTemplate: 
+        LaunchTemplateId: !Ref HomeInformationSystemEC2LaunchTemplate
+        Version: !GetAtt HomeInformationSystemEC2LaunchTemplate.LatestVersionNumber
+      SubnetId: !Ref HomeInformationSystemPublicSubnet1
+      Tags: 
+        - Key: Name
+          Value: Home Information system EC2
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+
+  HomeInformationSystemEC2LaunchTemplate: 
+    Type: AWS::EC2::LaunchTemplate
+    Properties: 
+      LaunchTemplateName: abarmin-home-storage-ec2-launch-template
+      LaunchTemplateData:
+        ImageId: !Ref EC2ImageId
+        InstanceType: !Ref EC2InstanceType
+        KeyName: !Ref EC2KeyPairName
+        IamInstanceProfile: 
+          Name: !Ref EC2IAMInstanceProfileName
+        BlockDeviceMappings: 
+          - DeviceName: /dev/xvda
+            Ebs: 
+              DeleteOnTermination: True
+              VolumeSize: 8
+              VolumeType: gp2
+        SecurityGroupIds: 
+          - !GetAtt HomeInformationSystemEC2SecurityGroup.GroupId
+        UserData: 
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            yum update -y
+            yum install -y postgresql.x86_64
+            yum install -y java-11-amazon-corretto
+            yum install -y htop
+            yum install -y mc
+
+  ################################################################################################
+  ### IAM Role and EC2 Instance Profile
+  ################################################################################################
+
+  HomeInformationSystemEC2Role: 
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'          
+      Path: /
+      Policies: 
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: 's3:*'
+                Resource: !GetAtt StorageS3Production.Arn
+              - Effect: Allow
+                Action: 's3:*'
+                Resource: !GetAtt StorageS3Releases.Arn
+      RoleName: !Ref EC2IAMRoleName
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production        
+
+  HomeInformationSystemEC2InstanceProfile: 
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Path: /
+      InstanceProfileName: !Ref EC2IAMInstanceProfileName
+      Roles: 
+        - !Ref HomeInformationSystemEC2Role
+
+  ################################################################################################
+  ### ELB and target group
+  ################################################################################################        
