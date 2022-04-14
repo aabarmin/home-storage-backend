@@ -15,6 +15,7 @@ STACK_NAME="abarmin-home-storage"
 
 aws cloudformation update-stack \
     --stack-name ${STACK_NAME} \
+    --capabilities CAPABILITY_NAMED_IAM \
     --template-body ${TEMPLAET_BODY_PARAM}
 
 echo "Waiting till stack is updated"
