@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 /**
  * @author Aleksandr Barmin
@@ -41,7 +42,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/logout").authenticated()
                 .anyRequest().hasAuthority("ROLE_HOME_USER")
         )
-        .oauth2Login().successHandler(authenticationSuccessHandler());
+        .oauth2Login().successHandler(authenticationSuccessHandler())
+        .and().csrf(csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()));
   }
 
   private AuthenticationSuccessHandler authenticationSuccessHandler() {

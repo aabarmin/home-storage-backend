@@ -44,8 +44,3 @@ management:
         allowed-origins: '*'
       exposure:
         include: info,health
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
