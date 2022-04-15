@@ -7,9 +7,9 @@ import org.springframework.data.convert.ReadingConverter;
  * @author Aleksandr Barmin
  */
 @ReadingConverter
-public class BooleanToByteConverter implements Converter<Byte, Boolean> {
+public class BooleanToIntegerConverter implements Converter<Integer, Boolean> {
   @Override
-  public Boolean convert(Byte source) {
+  public Boolean convert(Integer source) {
     return source.intValue() == 1;
   }
 }
