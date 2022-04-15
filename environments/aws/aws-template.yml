@@ -656,6 +656,9 @@ Resources:
               - Effect: Allow
                 Action: 's3:*'
                 Resource: !GetAtt StorageS3Releases.Arn
+              - Effect: Allow
+                Action: 'ssm:GetParameter*'
+                Resource: '*'
       RoleName: !Ref EC2IAMRoleName
       Tags: 
         - Key: Application
