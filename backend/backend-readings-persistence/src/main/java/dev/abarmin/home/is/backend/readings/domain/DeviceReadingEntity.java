@@ -10,15 +10,15 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * @author Aleksandr Barmin
  */
-@Table("DEVICE_READINGS")
+@Table("device_readings")
 public record DeviceReadingEntity(
-    @Id @Column("READING_ID") Integer id,
-    @Column("READING_DEVICE_ID") AggregateReference<DeviceEntity, Integer> device,
-    @Column("READING_FLAT_ID") AggregateReference<FlatEntity, Integer> flat,
-    @Column("READING_YEAR") int year,
-    @Column("READING_DATE") LocalDate date,
-    @Column("READING_VALUE") Integer reading,
-    @Column("READING_INVOICE_FILE_ID") AggregateReference<FileInfoEntity, Integer> invoiceFile,
-    @Column("READING_RECEIPT_FILE_ID") AggregateReference<FileInfoEntity, Integer> receiptFile
+    @Id @Column("reading_id") Integer id,
+    @Column("reading_device_id") AggregateReference<DeviceEntity, Integer> device,
+    @Column("reading_flat_id") AggregateReference<FlatEntity, Integer> flat,
+    @Column("reading_year") int year,
+    @Column("reading_date") LocalDate date,
+    @Column("reading_value") Integer reading,
+    @Column("reading_invoice_file_id") AggregateReference<FileInfoEntity, Integer> invoiceFile,
+    @Column("reading_receipt_file_id") AggregateReference<FileInfoEntity, Integer> receiptFile
 ) {
 }
