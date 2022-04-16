@@ -21,15 +21,15 @@
             <column name="DEVICE_FLAT_ID" type="INTEGER">
                 <constraints nullable="false" notNullConstraintName="DEVICE_FLAT_ID_NOT_NULL" />
             </column>
-            <column name="DEVICE_NEED_READINGS" type="SMALLINT" defaultValue="0">
+            <column name="DEVICE_NEED_READINGS" type="BOOLEAN" defaultValue="FALSE">
                 <constraints nullable="false"
                              notNullConstraintName="DEVICE_NEED_READINGS_NOT_NULL" />
             </column>
-            <column name="DEVICE_NEED_INVOICES" type="SMALLINT" defaultValue="0">
+            <column name="DEVICE_NEED_INVOICES" type="BOOLEAN" defaultValue="FALSE">
                 <constraints nullable="false"
                              notNullConstraintName="DEVICE_NEED_INVOICES_NOT_NULL" />
             </column>
-            <column name="DEVICE_NEED_RECEIPTS" type="SMALLINT" defaultValue="0">
+            <column name="DEVICE_NEED_RECEIPTS" type="BOOLEAN" defaultValue="FALSE">
                 <constraints nullable="false"
                              notNullConstraintName="DEVICE_NEED_RECEIPTS_NOT_NULL" />
             </column>
