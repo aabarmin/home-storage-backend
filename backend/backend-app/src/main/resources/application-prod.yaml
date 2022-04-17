@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:./db/storage_prod
-    username: sa
-    password:
+    url: jdbc:postgresql://${aws-ssm:/prod/home-storage/rds/host}:${aws-ssm:/prod/home-storage/rds/port}/${aws-ssm:/prod/home-storage/rds/name}
+    username: ${aws-ssm:/prod/home-storage/rds/username}
+    password: ${aws-ssm:/prod/home-storage/rds/password}
 
 storage:
   s3:

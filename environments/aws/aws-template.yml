@@ -17,8 +17,8 @@ Parameters:
     Type: String
     Description: Domain name used to generate Cognito Login UI
     Default: abarmin-home-storage-auth
-  CognitoLoginCallbackUrls: 
-    Type: CommaDelimitedList
+  CognitoLoginLocalhostUrl: 
+    Type: String
     Description: List of URLs allowed for auth redirects
     Default: http://localhost:8080/login/oauth2/code/cognito
   CognitoUserGroupName: 
@@ -178,7 +178,8 @@ Resources:
       AllowedOAuthFlowsUserPoolClient: True
       AllowedOAuthFlows: 
         - code
-      CallbackURLs: !Ref CognitoLoginCallbackUrls
+      CallbackURLs: 
+        - !Ref CognitoLoginLocalhostUrl
       SupportedIdentityProviders: 
         - COGNITO
       AllowedOAuthScopes: 
@@ -195,6 +196,15 @@ Resources:
   ################################################################################################
   ### AWS SSM Parameter Store parameters
   ################################################################################################
+  ParameterStorageS3Releases:
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/releases/name
+      Description: Name of the S3 bucket with releases
+      Tier: Standard
+      Type: String
+      Value: !Join ["-", [ !Ref StorageS3Prefix, "releases-2022" ]]  
+
   ParameterStorageS3Production: 
     Type: AWS::SSM::Parameter
     Properties: 
@@ -312,6 +322,15 @@ Resources:
       Tier: Standard
       Type: String
       Value: !GetAtt HomeInformationSystemRdsInstance.Endpoint.Port
+
+  ParameterRdsDatabaseName: 
+    Type: AWS::SSM::Parameter
+    Properties: 
+      Name: /prod/home-storage/rds/name
+      Description: RDS database name
+      Tier: Standard
+      Type: String
+      Value: !Ref RdsDbName
 
   ParameterEC2InstanceId:
     Type: AWS::SSM::Parameter
@@ -514,11 +533,6 @@ Resources:
       GroupDescription: Gives access to RDS
       VpcId: !Ref HomeInformationSystemVPC
       SecurityGroupIngress:
-        # As for now, RDS is publicly available 
-        - IpProtocol: tcp
-          FromPort: 5432
-          ToPort: 5432
-          CidrIp: 0.0.0.0/0
         - IpProtocol: tcp
           FromPort: 5432
           ToPort: 5432
@@ -543,6 +557,10 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0          
       Tags: 
         - Key: Application
           Value: !Ref ApplicationName
@@ -624,9 +642,16 @@ Resources:
             #!/bin/bash
             yum update -y
             yum install -y postgresql.x86_64
-            yum install -y java-11-amazon-corretto
+            yum install -y java-17-amazon-corretto
             yum install -y htop
             yum install -y mc
+            cd /opt
+            mkdir app
+            chown ec2-user app
+            cd app
+            aws s3 cp s3://abarmin-home-storage-releases-2022/backend-latest.jar backend-latest.jar
+            nohup java -jar ./backend-latest.jar --spring.profiles.active=prod > backend-latest.log 2>&1 &
+            echo $! > app.pid
 
   ################################################################################################
   ### IAM Role and EC2 Instance Profile
@@ -655,7 +680,13 @@ Resources:
                 Resource: !GetAtt StorageS3Production.Arn
               - Effect: Allow
                 Action: 's3:*'
+                Resource: !Join ["", [!GetAtt StorageS3Production.Arn, "/*"]]
+              - Effect: Allow
+                Action: 's3:*'
                 Resource: !GetAtt StorageS3Releases.Arn
+              - Effect: Allow
+                Action: 's3:*'
+                Resource: !Join ["", [!GetAtt StorageS3Releases.Arn, "/*"]]
               - Effect: Allow
                 Action: 'ssm:GetParameter*'
                 Resource: '*'
