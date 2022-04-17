@@ -731,23 +731,23 @@ Resources:
   ### ELB and target group
   ################################################################################################        
 
-  # HomeInformationSystemELB:
-  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-  #   Properties: 
-  #     IpAddressType: ipv4
-  #     Name: !Ref ELBName
-  #     Scheme: internet-facing
-  #     SecurityGroups: 
-  #       - !GetAtt HomeInformationSystemELBSecurityGroup.GroupId
-  #     SubnetMappings:
-  #       - SubnetId: !Ref HomeInformationSystemPublicSubnet1
-  #       - SubnetId: !Ref HomeInformationSystemPublicSubnet2
-  #     Tags: 
-  #       - Key: Application
-  #         Value: !Ref ApplicationName
-  #       - Key: Environment
-  #         Value: Production
-  #     Type: application
+  HomeInformationSystemELB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties: 
+      IpAddressType: ipv4
+      Name: !Ref ELBName
+      Scheme: internet-facing
+      SecurityGroups: 
+        - !GetAtt HomeInformationSystemELBSecurityGroup.GroupId
+      SubnetMappings:
+        - SubnetId: !Ref HomeInformationSystemPublicSubnet1
+        - SubnetId: !Ref HomeInformationSystemPublicSubnet2
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+      Type: application
 
   # HomeInformationSystemELBListener: 
   #  Type: AWS::ElasticLoadBalancingV2::Listener
