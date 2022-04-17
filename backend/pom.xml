@@ -32,6 +32,7 @@
         <module>backend-readings-persistence</module>
         <module>backend-security</module>
         <module>backend-ssm-parameters</module>
+        <module>backend-mrp</module>
     </modules>
 
 	<dependencyManagement>
@@ -74,6 +75,11 @@
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-ssm-parameters</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>dev.abarmin.home.is</groupId>
+				<artifactId>backend-mrp</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 
