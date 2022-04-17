@@ -5,20 +5,12 @@ spring:
     password: pgpassword
   security:
     oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: https://cognito-idp.${security.cognito.region}.amazonaws.com/${security.cognito.user-pool-id}
       client:
-        provider:
-          cognito:
-            issuer-uri: https://cognito-idp.${security.cognito.region}.amazonaws.com/${security.cognito.user-pool-id}
-            user-name-attribute: email
         registration:
-          cognito:
-            provider: cognito
-            client-id: ${security.cognito.client-id}
-            client-secret: ${security.cognito.client-secret}
-            scope: openid
+          google:
+            client-id: ${security.google.client-id}
+            client-secret: ${security.google.client-secret}
+
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
 
@@ -29,12 +21,10 @@ storage:
     bucket: ${aws-ssm:/dev/home-storage/s3/name}
 
 security:
-  cognito:
-    user-pool-id: ${aws-ssm:/prod/home-storage/cognito/pool-id}
-    region: ${aws-ssm:/prod/home-storage/cognito/region}
-    client-id: ${aws-ssm:/prod/home-storage/cognito/client-id}
-    client-secret: ${aws-ssm:/prod/home-storage/cognito/client-secret}
-    target-user-group: ${aws-ssm:/prod/home-storage/cognito/target-group}
+  google:
+    client-id: ${aws-ssm:/prod/home-storage/google/client-id}
+    client-secret: ${aws-ssm:/prod/home-storage/google/client-secret}
+    allowed-users: ${aws-ssm:/prod/home-storage/google/allowed-users}
 
 management:
   endpoints:
