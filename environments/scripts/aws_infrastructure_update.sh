@@ -16,7 +16,11 @@ STACK_NAME="abarmin-home-storage"
 aws cloudformation update-stack \
     --stack-name ${STACK_NAME} \
     --capabilities CAPABILITY_NAMED_IAM \
-    --template-body ${TEMPLAET_BODY_PARAM}
+    --template-body ${TEMPLAET_BODY_PARAM} \
+    --parameters \
+        ParameterKey=GoogleClientId,UsePreviousValue=true \
+        ParameterKey=GoogleClientSecret,UsePreviousValue=true \
+        ParameterKey=GoogleAllowedUsers,UsePreviousValue=true
 
 echo "Waiting till stack is updated"
 
