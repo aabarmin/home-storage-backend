@@ -638,20 +638,24 @@ Resources:
         SecurityGroupIds: 
           - !GetAtt HomeInformationSystemEC2SecurityGroup.GroupId
         UserData: 
-          Fn::Base64: !Sub |
-            #!/bin/bash
-            yum update -y
-            yum install -y postgresql.x86_64
-            yum install -y java-17-amazon-corretto
-            yum install -y htop
-            yum install -y mc
-            cd /opt
-            mkdir app
-            chown ec2-user app
-            cd app
-            aws s3 cp s3://abarmin-home-storage-releases-2022/backend-latest.jar backend-latest.jar
-            nohup java -jar ./backend-latest.jar --spring.profiles.active=prod > backend-latest.log 2>&1 &
-            echo $! > app.pid
+          Fn::Base64: 
+            !Sub 
+              - |
+                #!/bin/bash
+                yum update -y
+                yum install -y postgresql.x86_64
+                yum install -y java-17-amazon-corretto
+                yum install -y htop
+                yum install -y mc
+                yum install -y jq
+                cd /opt
+                mkdir app
+                chown ec2-user app
+                cd app
+                aws s3 cp "s3://${BUCKET_NAME}/backend-latest.jar" backend-latest.jar
+                nohup java -jar ./backend-latest.jar --spring.profiles.active=prod > backend-latest.log 2>&1 &
+                echo $! > app.pid
+              - BUCKET_NAME: !Join ["-", [ !Ref StorageS3Prefix, "releases-2022" ]]
 
   ################################################################################################
   ### IAM Role and EC2 Instance Profile
