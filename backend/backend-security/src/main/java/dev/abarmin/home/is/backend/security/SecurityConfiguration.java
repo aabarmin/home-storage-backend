@@ -1,14 +1,12 @@
 package dev.abarmin.home.is.backend.security;
 
-import com.nimbusds.jose.shaded.json.JSONArray;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -29,10 +27,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
  * @author Aleksandr Barmin
  */
 @Configuration
-@EnableConfigurationProperties(CognitoUserPoolProperties.class)
+@EnableConfigurationProperties(GoogleUserPoolProperties.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Autowired
-  private CognitoUserPoolProperties properties;
+  private GoogleUserPoolProperties properties;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -74,10 +72,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       for (GrantedAuthority authority : authorities) {
         if (OidcUserAuthority.class.isAssignableFrom(authority.getClass())) {
           final OidcUserAuthority userAuthority = OidcUserAuthority.class.cast(authority);
-          if (userAuthority.getAttributes().containsKey("cognito:groups")) {
-            final Object groupsObject = userAuthority.getAttributes().get("cognito:groups");
-            final JSONArray groupsArray = JSONArray.class.cast(groupsObject);
-            if (groupsArray.contains(properties.getTargetUserGroup())) {
+          final Map<String, Object> attributes = userAuthority.getAttributes();
+          if (attributes.containsKey("email")) {
+            final String userEmail = String.class.cast(attributes.get("email"));
+            if (properties.getAllowedUsers().contains(userEmail)) {
               grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_HOME_USER"));
             }
           }
