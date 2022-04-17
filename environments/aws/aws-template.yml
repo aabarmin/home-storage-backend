@@ -9,22 +9,6 @@ Parameters:
     Type: String
     Description: Prefix used to create S3 buckets
     Default: abarmin-home-storage
-  CognitoUserPoolName: 
-    Type: String
-    Description: Name of the user pool
-    Default: abarmin-home-storage-user-pool
-  CognitoLoginPageDomain: 
-    Type: String
-    Description: Domain name used to generate Cognito Login UI
-    Default: abarmin-home-storage-auth
-  CognitoLoginLocalhostUrl: 
-    Type: String
-    Description: List of URLs allowed for auth redirects
-    Default: http://localhost:8080/login/oauth2/code/cognito
-  CognitoUserGroupName: 
-    Type: String
-    Description: Name of the user group which stores users with access to the application
-    Default: abarmin-home-storage-users
   VpcCidrBlock: 
     Type: String
     Description: CIDR block for the VPC
@@ -109,6 +93,15 @@ Parameters:
     Type: String
     Description: Name of the ELB target group
     Default: abarmin-home-storage-elb-tg
+  GoogleClientId: 
+    Type: String
+    Description: Client Id of the Google OAuth
+  GoogleClientSecret: 
+    Type: String
+    Description: Client Secret of the Google OAuth
+  GoogleAllowedUsers: 
+    Type: String
+    Description: Emails of allowed users
 
 Resources: 
   ################################################################################################
@@ -146,61 +139,6 @@ Resources:
           Value: !Ref ApplicationName
         - Key: Environment
           Value: Production    
-
-  ################################################################################################
-  ### Amazon Cognito User pool
-  ################################################################################################
-  HomeInformationSystemUserPool:
-    Type: AWS::Cognito::UserPool
-    Properties: 
-      AccountRecoverySetting: 
-        RecoveryMechanisms:
-          - Name: verified_email
-            Priority: 2
-      AdminCreateUserConfig:
-        AllowAdminCreateUserOnly: False
-        UnusedAccountValidityDays: 7
-      AutoVerifiedAttributes:
-        - email
-      MfaConfiguration: "OFF"
-      UsernameAttributes: 
-        - email
-      UsernameConfiguration: 
-        CaseSensitive: False
-      UserPoolName: !Ref CognitoUserPoolName
-      EmailConfiguration: 
-        EmailSendingAccount: COGNITO_DEFAULT
-
-  HomeInformationSystemUserPoolLoginPage: 
-    Type: AWS::Cognito::UserPoolDomain
-    Properties: 
-      UserPoolId: !Ref HomeInformationSystemUserPool
-      Domain: !Ref CognitoLoginPageDomain
-
-  HomeInformationSystemUserPoolClient: 
-    Type: AWS::Cognito::UserPoolClient
-    Properties: 
-      UserPoolId: !Ref HomeInformationSystemUserPool
-      GenerateSecret: True
-      ClientName: HomeInformationSystem
-      AllowedOAuthFlowsUserPoolClient: True
-      AllowedOAuthFlows: 
-        - code
-      CallbackURLs: 
-        - !Ref CognitoLoginLocalhostUrl
-  #       - !Join ["", ["https://", !GetAtt HomeInformationSystemELB.DNSName, "/login/oauth2/code/cognito"]]
-      SupportedIdentityProviders: 
-        - COGNITO
-      AllowedOAuthScopes: 
-        - email
-        - openid
-
-  HomeInformationSystemUserPoolGroup: 
-    Type: AWS::Cognito::UserPoolGroup
-    Properties: 
-      Description: Users who have access to the application
-      GroupName: !Ref CognitoUserGroupName
-      UserPoolId: !Ref HomeInformationSystemUserPool
 
   ################################################################################################
   ### AWS SSM Parameter Store parameters
@@ -250,51 +188,32 @@ Resources:
       Type: String
       Value: !Ref "AWS::Region"
 
-  ParameterCognitoRegion:
+  ParameterGoogleClientId: 
     Type: AWS::SSM::Parameter
     Properties: 
-      Name: /prod/home-storage/cognito/region
-      Description: Region in which Cognito User Pool is deployed
+      Name: /prod/home-storage/google/client-id
+      Description: Client Id of the Google OAuth
       Tier: Standard
       Type: String
-      Value: !Ref "AWS::Region" 
+      Value: !Ref GoogleClientId
 
-  ParameterCognitoUserPoolId: 
+  ParameterGoogleClientSecret: 
     Type: AWS::SSM::Parameter
     Properties: 
-      Name: /prod/home-storage/cognito/pool-id
-      Description: Cognito User Pool ID
+      Name: /prod/home-storage/google/client-secret
+      Description: Client Secret of the Google OAuth
       Tier: Standard
       Type: String
-      Value: !Ref HomeInformationSystemUserPool
+      Value: !Ref GoogleClientSecret      
 
-  ParameterCognitoInformationSystemClientId: 
+  ParameterGoogleAllowedUsers: 
     Type: AWS::SSM::Parameter
     Properties: 
-      Name: /prod/home-storage/cognito/client-id
-      Description: Cognito Client ID
+      Name: /prod/home-storage/google/allowed-users
+      Description: Users who have access to the app
       Tier: Standard
       Type: String
-      Value: !Ref HomeInformationSystemUserPoolClient      
-
-  ParameterCognitoUserGroup:
-    Type: AWS::SSM::Parameter
-    Properties: 
-      Name: /prod/home-storage/cognito/target-group
-      Description: Name of the group with users who have access to the app
-      Tier: Standard
-      Type: String
-      Value: !Ref CognitoUserGroupName
-
-  # This parameter is created by bash script
-  # ParameterCognitoInformationSystemClientSecret: 
-  #   Type: AWS::SSM::Parameter
-  #   Properties: 
-  #     Name: /prod/home-storage/cognito/client-secret
-  #     Description: Cognito Client Secret
-  #     Tier: Standard
-  #     Type: String
-  #     Value: !GetAtt HomeInformationSystemUserPoolClient.ClientSecret
+      Value: !Ref GoogleAllowedUsers      
 
   ParameterRdsUsername: 
     Type: AWS::SSM::Parameter

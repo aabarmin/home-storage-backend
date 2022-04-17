@@ -29,11 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @WebMvcTest(TestSecurityController.class)
 @TestPropertySource(properties = {
-    "security.cognito.region=eu-west-2",
-    "security.cognito.user-pool-id=dummy",
-    "security.cognito.client-id=dummy",
-    "security.cognito.client-secret=dummy",
-    "security.cognito.target-user-group=user-group"
+    "security.google.client-id=dummy",
+    "security.google.client-secret=dummy",
+    "security.google.allowed-users=super@user.com"
 })
 class SecurityConfigurationTest {
   @Autowired

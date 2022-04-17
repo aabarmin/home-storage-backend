@@ -1,5 +1,6 @@
 package dev.abarmin.home.is.backend.security;
 
+import java.util.Collection;
 import javax.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,15 +11,8 @@ import org.springframework.validation.annotation.Validated;
  */
 @Data
 @Validated
-@Deprecated
-//@ConfigurationProperties(prefix = "security.cognito")
-public class CognitoUserPoolProperties {
-  @NotEmpty
-  private String region;
-
-  @NotEmpty
-  private String userPoolId;
-
+@ConfigurationProperties(prefix = "security.google")
+public class GoogleUserPoolProperties {
   @NotEmpty
   private String clientId;
 
@@ -26,5 +20,5 @@ public class CognitoUserPoolProperties {
   private String clientSecret;
 
   @NotEmpty
-  private String targetUserGroup;
+  private Collection<String> allowedUsers;
 }
