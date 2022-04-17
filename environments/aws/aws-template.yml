@@ -592,6 +592,8 @@ Resources:
                 aws s3 cp "s3://${BUCKET_NAME}/backend-latest.jar" backend-latest.jar
                 nohup java -jar ./backend-latest.jar --spring.profiles.active=prod > backend-latest.log 2>&1 &
                 echo $! > app.pid
+                chown ec2-user backend-latest.jar
+                chown ec2-user backend-latest.log
               - BUCKET_NAME: !Join ["-", [ !Ref StorageS3Prefix, "releases-2022" ]]
 
   ################################################################################################
@@ -668,50 +670,36 @@ Resources:
           Value: Production
       Type: application
 
-  # HomeInformationSystemELBListener: 
-  #  Type: AWS::ElasticLoadBalancingV2::Listener
-  #  Properties: 
-  #    DefaultActions: 
-  #       - Type: forward
-  #         ForwardConfig: 
-  #           TargetGroups: 
-  #             - TargetGroupArn: !Ref HomeInformationSystemELBTargetGroup
-  #               Weight: 1
-  #         Order: 1
-  #     LoadBalancerArn: !Ref HomeInformationSystemELB
-  #     Port: 80
-  #     Protocol: HTTP
+  HomeInformationSystemELBListener: 
+   Type: AWS::ElasticLoadBalancingV2::Listener
+   Properties: 
+      LoadBalancerArn: !Ref HomeInformationSystemELB
+      Port: 80
+      Protocol: HTTP
+      DefaultActions: 
+        - Type: forward
+          ForwardConfig: 
+            TargetGroups: 
+              - TargetGroupArn: !Ref HomeInformationSystemELBTargetGroup
+                Weight: 1
+          Order: 1
 
-  # HomeInformationSystemELBHttpsListener: 
-  #   Type: AWS::ElasticLoadBalancingV2::Listener
-  #   Properties: 
-  #     DefaultActions: 
-  #       - Type: forward
-  #         ForwardConfig: 
-  #           TargetGroups: 
-  #             - TargetGroupArn: !Ref HomeInformationSystemELBTargetGroup
-  #               Weight: 1
-  #         Order: 1
-  #     LoadBalancerArn: !Ref HomeInformationSystemELB
-  #     Port: 443
-  #     Protocol: HTTPS  
-
-  # HomeInformationSystemELBTargetGroup: 
-  #   Type: AWS::ElasticLoadBalancingV2::TargetGroup
-  #   Properties: 
-  #     HealthCheckEnabled: True
-  #     HealthCheckPath: /actuator/health
-  #     HealthCheckProtocol: HTTP
-  #     Name: !Ref ELBTargetGroupName
-  #     Port: 80
-  #     Protocol: HTTP
-  #     Tags: 
-  #       - Key: Application
-  #         Value: !Ref ApplicationName
-  #       - Key: Environment
-  #         Value: Production
-  #     VpcId: !Ref HomeInformationSystemVPC
-  #     Targets: 
-  #       - Id: !Ref HomeInformationSystemEC2Instance
-  #         Port: 8080
-  #     TargetType: instance
+  HomeInformationSystemELBTargetGroup: 
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties: 
+      HealthCheckEnabled: True
+      HealthCheckPath: /actuator/health
+      HealthCheckProtocol: HTTP
+      Name: !Ref ELBTargetGroupName
+      Port: 80
+      Protocol: HTTP
+      Tags: 
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: Production
+      VpcId: !Ref HomeInformationSystemVPC
+      Targets: 
+        - Id: !Ref HomeInformationSystemEC2Instance
+          Port: 8080
+      TargetType: instance
