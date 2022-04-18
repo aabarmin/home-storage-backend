@@ -10,6 +10,13 @@ import javax.validation.constraints.NotNull;
  * @author Aleksandr Barmin
  */
 public interface ResourceService {
+  /**
+   * Create a new resource.
+   * @param resource to be created.
+   * @throws IllegalArgumentException in case of validation issues
+   * @throws javax.validation.ConstraintViolationException in case of validation issues
+   * @return
+   */
   ResourceDTO createResource(@NotNull(message = "Resource should be provided")
                              @Valid ResourceDTO resource);
 }

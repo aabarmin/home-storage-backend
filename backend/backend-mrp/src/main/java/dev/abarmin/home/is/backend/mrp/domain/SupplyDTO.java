@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Supply of a resource in a given consignment.
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"consignment"})
 @EqualsAndHashCode(exclude = "consignment")
 public class SupplyDTO implements Comparable<SupplyDTO> {
   /**

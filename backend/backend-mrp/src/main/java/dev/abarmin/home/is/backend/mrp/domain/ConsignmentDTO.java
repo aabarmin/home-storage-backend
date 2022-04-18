@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Resource's consignment.
@@ -21,6 +22,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {
+    "resource",
+    "leftovers",
+    "consumptions",
+    "supplies"
+})
 @EqualsAndHashCode(exclude = {
     "resource",
     "leftovers",
@@ -56,7 +63,6 @@ public class ConsignmentDTO {
    * Associated leftovers.
    */
   @Valid
-  @Size(min = 1, message = "Consignment should have at least one leftover")
   private final Collection<LeftoverDTO> leftovers = Sets.newTreeSet();
 
   /**
@@ -69,6 +75,7 @@ public class ConsignmentDTO {
    * Information about supplies.
    */
   @Valid
+  @Size(min = 1, message = "Consignment should have at least one supply")
   private final Collection<SupplyDTO> supplies = Sets.newTreeSet();
 
   /**
@@ -78,5 +85,14 @@ public class ConsignmentDTO {
   public void addLeftover(final LeftoverDTO leftoverDTO) {
     leftoverDTO.setConsignment(this);
     this.leftovers.add(leftoverDTO);
+  }
+
+  /**
+   * Add supply to the consignment. 
+   * @param supplyDTO
+   */
+  public void addSupply(final SupplyDTO supplyDTO) {
+    supplyDTO.setConsignment(this);
+    this.supplies.add(supplyDTO);
   }
 }

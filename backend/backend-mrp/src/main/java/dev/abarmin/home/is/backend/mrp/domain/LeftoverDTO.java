@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Aleksandr Barmin
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"consignment"})
 @EqualsAndHashCode(exclude = {"consignment"})
 public class LeftoverDTO implements Comparable<LeftoverDTO> {
   /**

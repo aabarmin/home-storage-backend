@@ -14,6 +14,7 @@ import static com.google.common.base.Preconditions.*;
  * @author Aleksandr Barmin
  */
 @Component
+@Deprecated
 public class NewResourceLeftoverValidator {
   public void validate(final ResourceDTO resource) {
     for (ConsignmentDTO consignment : resource.getConsignments()) {

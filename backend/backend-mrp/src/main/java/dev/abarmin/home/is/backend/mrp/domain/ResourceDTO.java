@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -21,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"consignments"})
 @EqualsAndHashCode(exclude = {"consignments"})
 public class ResourceDTO {
   /**
