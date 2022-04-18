@@ -7,13 +7,12 @@ import dev.abarmin.home.is.backend.mrp.domain.LeftoverDTO;
 import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
 import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import dev.abarmin.home.is.backend.mrp.repository.ResourceRepository;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-
-import static com.google.common.base.Preconditions.*;
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * @author Aleksandr Barmin
@@ -73,6 +72,44 @@ public class ResourceServiceImpl implements ResourceService {
      * Update other consignments to have coherent data.
      */
     consignmentUpdater.updateConsignments(resourceDTO);
+    return resourceRepository.save(resourceDTO);
+  }
+
+  @Override
+  public ResourceDTO addSupply(final ResourceDTO resourceDTO,
+                               final ConsignmentDTO consignmentDTO,
+                               final SupplyDTO supplyDTO) {
+
+    /**
+     * Checking that consignment belongs to the given resource.
+     * Also, it's necessary to check that the given supply does not belong
+     * to any resource.
+     */
+    checkArgument(
+        resourceDTO == consignmentDTO.getResource(),
+        "Given resource and consignment are not connected"
+    );
+    checkArgument(
+        supplyDTO.getConsignment() == null,
+        "Supply should not belong to any resource"
+    );
+    /**
+     * Checking if there are any supplies for the given date.
+     */
+    final Optional<SupplyDTO> supplyOptional = consignmentDTO.getSupplyCreatedAt(supplyDTO.getCreatedAt().toLocalDate());
+    checkArgument(
+        supplyOptional.isEmpty(),
+        "There is a supply created for the provided date"
+    );
+    /**
+     * All checks passed, adding supply to consignment.
+     */
+    consignmentDTO.addSupply(supplyDTO);
+    /**
+     * Recalculate leftovers.
+     */
+    consignmentUpdater.updateConsignments(resourceDTO);
+
     return resourceRepository.save(resourceDTO);
   }
 

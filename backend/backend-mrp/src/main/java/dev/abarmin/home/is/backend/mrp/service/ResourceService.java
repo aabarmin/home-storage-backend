@@ -2,6 +2,7 @@ package dev.abarmin.home.is.backend.mrp.service;
 
 import dev.abarmin.home.is.backend.mrp.domain.ConsignmentDTO;
 import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
+import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -34,4 +35,19 @@ public interface ResourceService {
                              @Valid ResourceDTO resourceDTO,
                              @NotNull(message = "Consignment should be provided")
                              @Valid ConsignmentDTO consignmentDTO);
+
+  /**
+   * Add supply to the given consignment.
+   *
+   * @param resourceDTO
+   * @param consignmentDTO
+   * @param supplyDTO
+   * @return
+   */
+  ResourceDTO addSupply(@NotNull(message = "Resource should be provided")
+                        @Valid ResourceDTO resourceDTO,
+                        @NotNull(message = "Consignment should be provided")
+                        @Valid ConsignmentDTO consignmentDTO,
+                        @NotNull(message = "Supply should be provided")
+                        @Valid SupplyDTO supplyDTO);
 }

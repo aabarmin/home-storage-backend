@@ -1,6 +1,7 @@
 package dev.abarmin.home.is.backend.mrp.domain;
 
 import java.time.LocalDateTime;
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +30,7 @@ public class SupplyDTO implements Comparable<SupplyDTO> {
   /**
    * Identifier of a consignment.
    */
-  @NotNull
+  @Nullable
   private ConsignmentDTO consignment;
 
   /**

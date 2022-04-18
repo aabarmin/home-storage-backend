@@ -88,8 +88,9 @@ public class ConsignmentDTO {
    * Information about supplies.
    */
   @Valid
+  @Getter(AccessLevel.NONE)
   @Size(min = 1, message = "Consignment should have at least one supply")
-  private final Collection<SupplyDTO> supplies = Sets.newTreeSet();
+  private final Map<LocalDate, SupplyDTO> supplies = Maps.newTreeMap();
 
   /**
    * Add leftover to the consignment.
@@ -116,12 +117,31 @@ public class ConsignmentDTO {
   }
 
   /**
+   * Get supply created for the given date.
+   *
+   * @param date
+   * @return
+   */
+  public Optional<SupplyDTO> getSupplyCreatedAt(final LocalDate date) {
+    return Optional.ofNullable(supplies.get(date));
+  }
+
+  /**
    * Get all leftovers.
    *
    * @return
    */
   public Collection<LeftoverDTO> getLeftovers() {
     return Collections.unmodifiableCollection(leftovers.values());
+  }
+
+  /**
+   * Get all supplies.
+   *
+   * @return
+   */
+  public Collection<SupplyDTO> getSupplies() {
+    return Collections.unmodifiableCollection(supplies.values());
   }
 
   /**
@@ -147,7 +167,15 @@ public class ConsignmentDTO {
    * @param supplyDTO
    */
   public void addSupply(final SupplyDTO supplyDTO) {
+    checkArgument(
+        getMeasureUnit().equals(supplyDTO.getAmount().getUnit()),
+        "Current consignment and supply have different measurement units"
+    );
+
     supplyDTO.setConsignment(this);
-    this.supplies.add(supplyDTO);
+    this.supplies.put(
+        supplyDTO.getCreatedAt().toLocalDate(),
+        supplyDTO
+    );
   }
 }

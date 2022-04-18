@@ -80,7 +80,7 @@ public class ConsignmentUpdater {
   private LocalDate getEndDate(final ResourceDTO resourceDTO) {
     LocalDate date = null;
     for (ConsignmentDTO consignment : resourceDTO.getConsignments()) {
-      final LocalDate leftoverDate = consignment.getFirstLeftover().getCreatedAt().toLocalDate();
+      final LocalDate leftoverDate = consignment.getLastLeftover().getCreatedAt().toLocalDate();
       if (date == null) {
         date = leftoverDate;
       } else if (leftoverDate.isAfter(date)) {
