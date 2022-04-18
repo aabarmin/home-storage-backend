@@ -1,25 +1,28 @@
 package dev.abarmin.home.is.backend.mrp.domain;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Positive;
+import lombok.Builder;
+import lombok.Value;
 
 /**
  * Amount value object.
  *
  * @author Aleksandr Barmin
  */
-public record Amount(
+@Value
+@Builder
+public class Amount {
     /**
      * Amount of a resource.
      */
     @NotNull
-    @Size(min = 0)
-    Double amount,
+    @Positive(message = "Amount should be positive")
+    private final Double amount;
 
     /**
      * Unit of an amount.
      */
     @NotNull
-    MeasureUnitDTO unit
-) {
+    private final MeasureUnitDTO unit;
 }
