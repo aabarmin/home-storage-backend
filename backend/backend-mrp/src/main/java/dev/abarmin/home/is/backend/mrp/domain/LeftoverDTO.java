@@ -3,22 +3,24 @@ package dev.abarmin.home.is.backend.mrp.domain;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author Aleksandr Barmin
  */
 @Data
-public class LeftoverDTO {
+@EqualsAndHashCode(exclude = {"consignment"})
+public class LeftoverDTO implements Comparable<LeftoverDTO> {
   /**
    * Identifier of a record.
    */
   private Long id;
 
   /**
-   * Identifier of a consignment.
+   * Consignment.
    */
   @NotNull
-  private Long consignmentId;
+  private ConsignmentDTO consignment;
 
   /**
    * A moment when this record was created.
@@ -37,4 +39,9 @@ public class LeftoverDTO {
    */
   @NotNull
   private RecordCreationType creationType;
+
+  @Override
+  public int compareTo(LeftoverDTO that) {
+    return createdAt.compareTo(that.getCreatedAt());
+  }
 }

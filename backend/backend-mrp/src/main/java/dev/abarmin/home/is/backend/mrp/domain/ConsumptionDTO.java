@@ -3,6 +3,7 @@ package dev.abarmin.home.is.backend.mrp.domain;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Consumption of a resource.
@@ -10,17 +11,20 @@ import lombok.Data;
  * @author Aleksandr Barmin
  */
 @Data
-public class ConsumptionDTO {
+@EqualsAndHashCode(exclude = {
+    "consignment"
+})
+public class ConsumptionDTO implements Comparable<ConsumptionDTO> {
   /**
    * Identifier of a record.
    */
   private Long id;
 
   /**
-   * Identifier of a consignment.
+   * Consignment.
    */
   @NotNull
-  private Long consignmentId;
+  private ConsignmentDTO consignment;
 
   /**
    * Moment when a record was created.
@@ -33,4 +37,9 @@ public class ConsumptionDTO {
    */
   @NotNull
   private Amount amount;
+
+  @Override
+  public int compareTo(ConsumptionDTO that) {
+    return createdAt.compareTo(that.getCreatedAt());
+  }
 }

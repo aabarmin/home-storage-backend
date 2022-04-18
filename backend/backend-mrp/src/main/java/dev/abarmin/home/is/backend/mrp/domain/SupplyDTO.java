@@ -3,6 +3,7 @@ package dev.abarmin.home.is.backend.mrp.domain;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Supply of a resource in a given consignment.
@@ -10,7 +11,8 @@ import lombok.Data;
  * @author Aleksandr Barmin
  */
 @Data
-public class SupplyDTO {
+@EqualsAndHashCode(exclude = "consignment")
+public class SupplyDTO implements Comparable<SupplyDTO> {
   /**
    * Identifier of a record.
    */
@@ -20,7 +22,7 @@ public class SupplyDTO {
    * Identifier of a consignment.
    */
   @NotNull
-  private Long consignmentId;
+  private ConsignmentDTO consignment;
 
   /**
    * Moment when a record was created.
@@ -33,4 +35,9 @@ public class SupplyDTO {
    */
   @NotNull
   private Amount amount;
+
+  @Override
+  public int compareTo(SupplyDTO that) {
+    return createdAt.compareTo(that.getCreatedAt());
+  }
 }
