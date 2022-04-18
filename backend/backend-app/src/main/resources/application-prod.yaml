@@ -8,11 +8,3 @@ storage:
   s3:
     region: ${aws-ssm:/prod/home-storage/s3/region}
     bucket: ${aws-ssm:/prod/home-storage/s3/name}
-
-security:
-  cognito:
-    user-pool-id: ${aws-ssm:/prod/home-storage/cognito/pool-id}
-    region: ${aws-ssm:/prod/home-storage/cognito/region}
-    client-id: ${aws-ssm:/prod/home-storage/cognito/client-id}
-    client-secret: ${aws-ssm:/prod/home-storage/cognito/client-secret}
-    target-user-group: ${aws-ssm:/prod/home-storage/cognito/target-group}
