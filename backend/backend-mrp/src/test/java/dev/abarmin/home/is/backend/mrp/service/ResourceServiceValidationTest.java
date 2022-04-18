@@ -44,6 +44,9 @@ class ResourceServiceValidationTest {
   @MockBean
   ResourceRepository resourceRepository;
 
+  @MockBean
+  ConsignmentUpdater consignmentUpdater;
+
   @Test
   @DisplayName("Context should start")
   void check_contextStarts() {

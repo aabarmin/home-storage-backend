@@ -4,16 +4,10 @@ import com.google.common.collect.Iterables;
 import dev.abarmin.home.is.backend.mrp.config.MrpLeftoverCreationProperties;
 import dev.abarmin.home.is.backend.mrp.domain.Amount;
 import dev.abarmin.home.is.backend.mrp.domain.ConsignmentDTO;
-import dev.abarmin.home.is.backend.mrp.domain.ConsumptionType;
-import dev.abarmin.home.is.backend.mrp.domain.LeftoverDTO;
-import dev.abarmin.home.is.backend.mrp.domain.MeasureUnitDTO;
-import dev.abarmin.home.is.backend.mrp.domain.RecordCreationType;
 import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
 import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import dev.abarmin.home.is.backend.mrp.repository.ResourceRepository;
-import dev.abarmin.home.is.backend.mrp.service.validator.NewResourceLeftoverValidator;
-import java.util.Collection;
-import org.junit.jupiter.api.DisplayName;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +18,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -35,15 +28,15 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
     ResourceServiceImpl.class,
-    ConsignmentUpdater.class,
     MethodValidationPostProcessor.class,
-    LeftoverFactory.class
+    LeftoverFactory.class,
+    ConsignmentUpdater.class
 })
 @EnableConfigurationProperties(MrpLeftoverCreationProperties.class)
 @TestPropertySource(properties = {
     "mrp.leftover.planning-horizon=10"
 })
-class ResourceServiceCreationTest {
+class ResourceServiceAddConsignmentTest {
   @Autowired
   ResourceService resourceService;
 
@@ -51,21 +44,64 @@ class ResourceServiceCreationTest {
   ResourceRepository resourceRepository;
 
   @Test
-  @DisplayName("Checking that context starts")
   void check_contextStarts() {
     assertThat(resourceService).isNotNull();
   }
 
   @Test
-  @DisplayName("Should return created resource with leftovers")
-  void createResource_shouldReturnCreatedResourceWithLeftovers() {
+  void addConsignment_shouldReturnUpdatedResource() {
+    final ResourceDTO existingResource = createResource();
+    final ConsignmentDTO newConsignment = ConsignmentDTO.builder()
+        .measureUnit(TestMeasureUnits.kg())
+        .name("Pack 2")
+        .build();
+
+    newConsignment.addSupply(SupplyDTO.builder()
+        .amount(Amount.of(10, TestMeasureUnits.kg()))
+        .build());
+
+    final ResourceDTO updatedResource = resourceService.addConsignment(existingResource, newConsignment);
+
+    assertThat(updatedResource)
+        .isNotNull();
+
+    assertThat(updatedResource.getConsignments())
+        .asList()
+        .hasSize(2);
+
+    assertThat(updatedResource.getConsignments())
+        .allMatch(consignment -> !Iterables.isEmpty(consignment.getSupplies()))
+        .allMatch(consignment -> !Iterables.isEmpty(consignment.getLeftovers()))
+        .allMatch(consignment -> Iterables.isEmpty(consignment.getConsumptions()));
+  }
+
+  @Test
+  void addConsignment_shouldAddLeftoversForDates() {
+    final ResourceDTO existingResource = createResource();
+    final ConsignmentDTO newConsignment = ConsignmentDTO.builder()
+        .measureUnit(TestMeasureUnits.kg())
+        .name("Pack 2")
+        .build();
+
+    newConsignment.addSupply(SupplyDTO.builder()
+        .amount(Amount.of(10, TestMeasureUnits.kg()))
+        .createdAt(LocalDateTime.now().minusDays(10))
+        .build());
+
+    final ResourceDTO savedResource = resourceService.addConsignment(existingResource, newConsignment);
+
+    assertThat(savedResource.getConsignments())
+        .allMatch(consignment -> consignment.getLeftovers().size() == 20);
+  }
+
+  private ResourceDTO createResource() {
     when(resourceRepository.save(any(ResourceDTO.class))).thenAnswer(i -> i.getArgument(0));
 
     final ResourceDTO resource = ResourceDTO.builder()
-        .name("test resource")
+        .name("Potatoes")
         .build();
     final ConsignmentDTO consignment = ConsignmentDTO.builder()
-        .name("Consignment 1")
+        .name("Pack 1")
         .measureUnit(TestMeasureUnits.kg())
         .build();
     consignment.addSupply(SupplyDTO.builder()
@@ -73,24 +109,6 @@ class ResourceServiceCreationTest {
         .build());
     resource.addConsignment(consignment);
 
-    final ResourceDTO createdResource = resourceService.createResource(resource);
-
-    assertThat(createdResource)
-        .isNotNull()
-        .withFailMessage("Created resource was not returned");
-
-    final Collection<LeftoverDTO> leftovers = Iterables.getOnlyElement(createdResource.getConsignments()).getLeftovers();
-    assertThat(leftovers)
-        .isNotNull()
-        .hasSize(10)
-        .withFailMessage("There should be more than one leftover");
-
-    assertThat(leftovers)
-        .allMatch(leftover -> leftover.getConsignment() == consignment)
-        .allMatch(leftover -> leftover.getAmount().equals(
-            Amount.of(10, TestMeasureUnits.kg())
-        ))
-        .allMatch(leftover -> leftover.getCreationType() == RecordCreationType.AUTOMATIC)
-        .allMatch(leftover -> leftover.getCreatedAt() != null);
+    return resourceService.createResource(resource);
   }
 }
