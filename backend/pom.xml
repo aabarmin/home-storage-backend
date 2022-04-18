@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>dev.abarmin.home.is</groupId>
 	<artifactId>backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>backend</name>
 	<description>Backend for the Home IS</description>
 
@@ -40,47 +40,47 @@
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-readings</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-readings-import</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-binary-storage</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-binary-storage-persistence</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-binary-storage-s3</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-readings-persistence</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-security</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-ssm-parameters</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
 				<artifactId>backend-mrp</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
@@ -160,6 +160,13 @@
 							<version>${org.projectlombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
 			</plugin>
 		</plugins>
