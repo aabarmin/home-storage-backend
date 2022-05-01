@@ -1,14 +1,23 @@
 package dev.abarmin.home.is.backend.mrp.domain;
 
 import java.time.LocalDateTime;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Aleksandr Barmin
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"consignment"})
 @EqualsAndHashCode(exclude = {"consignment"})
 public class LeftoverDTO implements Comparable<LeftoverDTO> {
   /**
@@ -26,11 +35,13 @@ public class LeftoverDTO implements Comparable<LeftoverDTO> {
    * A moment when this record was created.
    */
   @NotNull
+  @Builder.Default
   private LocalDateTime createdAt = LocalDateTime.now();
 
   /**
    * Amount of a resource.
    */
+  @Valid
   @NotNull
   private Amount amount;
 
