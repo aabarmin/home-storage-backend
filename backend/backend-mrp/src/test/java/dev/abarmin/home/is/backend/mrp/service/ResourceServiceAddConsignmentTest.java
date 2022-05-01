@@ -7,6 +7,8 @@ import dev.abarmin.home.is.backend.mrp.domain.ConsignmentDTO;
 import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
 import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import dev.abarmin.home.is.backend.mrp.repository.ResourceRepository;
+import dev.abarmin.home.is.backend.mrp.validator.ConsignmentValidator;
+import dev.abarmin.home.is.backend.mrp.validator.ResourceValidator;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +32,9 @@ import static org.mockito.Mockito.when;
     ResourceServiceImpl.class,
     MethodValidationPostProcessor.class,
     LeftoverFactory.class,
-    ConsignmentUpdater.class
+    ConsignmentUpdater.class,
+    ResourceValidator.class,
+    ConsignmentValidator.class
 })
 @EnableConfigurationProperties(MrpLeftoverCreationProperties.class)
 @TestPropertySource(properties = {

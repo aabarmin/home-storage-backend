@@ -1,7 +1,9 @@
 package dev.abarmin.home.is.backend.mrp.domain;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import com.google.common.collect.TreeMultimap;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -82,15 +84,15 @@ public class ConsignmentDTO {
    * Information about consumption.
    */
   @Valid
-  private final Collection<ConsumptionDTO> consumptions = Sets.newTreeSet();
+  @Getter(AccessLevel.NONE)
+  private final Multimap<LocalDate, ConsumptionDTO> consumptions = TreeMultimap.create();
 
   /**
    * Information about supplies.
    */
   @Valid
   @Getter(AccessLevel.NONE)
-  @Size(min = 1, message = "Consignment should have at least one supply")
-  private final Map<LocalDate, SupplyDTO> supplies = Maps.newTreeMap();
+  private final Multimap<LocalDate, SupplyDTO> supplies = TreeMultimap.create();
 
   /**
    * Add leftover to the consignment.
@@ -117,13 +119,32 @@ public class ConsignmentDTO {
   }
 
   /**
+   * Get consumptions created for the given date.
+   *
+   * @param date
+   * @return
+   */
+  public Collection<ConsumptionDTO> getConsumptionCreatedAt(final LocalDate date) {
+    return consumptions.get(date);
+  }
+
+  /**
    * Get supply created for the given date.
    *
    * @param date
    * @return
    */
-  public Optional<SupplyDTO> getSupplyCreatedAt(final LocalDate date) {
-    return Optional.ofNullable(supplies.get(date));
+  public Collection<SupplyDTO> getSupplyCreatedAt(final LocalDate date) {
+    return supplies.get(date);
+  }
+
+  /**
+   * Convenient method in order not to convert LocalDateTime to LocalDate every time.
+   * @param dateTime
+   * @return
+   */
+  public Collection<SupplyDTO> getSupplyCreatedAt(final LocalDateTime dateTime) {
+    return getSupplyCreatedAt(dateTime.toLocalDate());
   }
 
   /**
@@ -133,6 +154,15 @@ public class ConsignmentDTO {
    */
   public Collection<LeftoverDTO> getLeftovers() {
     return Collections.unmodifiableCollection(leftovers.values());
+  }
+
+  /**
+   * Get all consumptions.
+   *
+   * @return
+   */
+  public Collection<ConsumptionDTO> getConsumptions() {
+    return Collections.unmodifiableCollection(consumptions.values());
   }
 
   /**
@@ -160,6 +190,23 @@ public class ConsignmentDTO {
    */
   public LeftoverDTO getLastLeftover() {
     return leftovers.lastEntry().getValue();
+  }
+
+  /**
+   * Add consumption to the consignment.
+   * @param consumptionDTO
+   */
+  public void addConsumption(final ConsumptionDTO consumptionDTO) {
+    checkArgument(
+        getMeasureUnit().equals(consumptionDTO.getAmount().getUnit()),
+        "Current consignment and consumption have different measurement units"
+    );
+
+    consumptionDTO.setConsignment(this);
+    this.consumptions.put(
+        consumptionDTO.getCreatedAt().toLocalDate(),
+        consumptionDTO
+    );
   }
 
   /**

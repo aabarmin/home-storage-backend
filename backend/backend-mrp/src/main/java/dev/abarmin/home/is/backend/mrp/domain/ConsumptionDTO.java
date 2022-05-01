@@ -33,7 +33,6 @@ public class ConsumptionDTO implements Comparable<ConsumptionDTO> {
   /**
    * Consignment.
    */
-  @NotNull
   private ConsignmentDTO consignment;
 
   /**

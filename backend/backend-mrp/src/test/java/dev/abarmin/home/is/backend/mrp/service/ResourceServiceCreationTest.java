@@ -12,6 +12,8 @@ import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
 import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import dev.abarmin.home.is.backend.mrp.repository.ResourceRepository;
 import dev.abarmin.home.is.backend.mrp.service.validator.NewResourceLeftoverValidator;
+import dev.abarmin.home.is.backend.mrp.validator.ConsignmentValidator;
+import dev.abarmin.home.is.backend.mrp.validator.ResourceValidator;
 import java.util.Collection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,7 +39,9 @@ import static org.mockito.Mockito.when;
     ResourceServiceImpl.class,
     ConsignmentUpdater.class,
     MethodValidationPostProcessor.class,
-    LeftoverFactory.class
+    LeftoverFactory.class,
+    ResourceValidator.class,
+    ConsignmentValidator.class
 })
 @EnableConfigurationProperties(MrpLeftoverCreationProperties.class)
 @TestPropertySource(properties = {

@@ -28,6 +28,10 @@ public class Amount {
     @NotNull
     private final MeasureUnitDTO unit;
 
+    public static Amount of(final MeasureUnitDTO unit) {
+        return of(0, unit);
+    }
+
     public static Amount of(final Integer amount, final MeasureUnitDTO unit) {
         return new Amount(
             amount.doubleValue(),

@@ -3,11 +3,13 @@ package dev.abarmin.home.is.backend.mrp.service;
 import dev.abarmin.home.is.backend.mrp.config.MrpLeftoverCreationProperties;
 import dev.abarmin.home.is.backend.mrp.domain.Amount;
 import dev.abarmin.home.is.backend.mrp.domain.ConsignmentDTO;
+import dev.abarmin.home.is.backend.mrp.domain.ConsumptionDTO;
 import dev.abarmin.home.is.backend.mrp.domain.LeftoverDTO;
 import dev.abarmin.home.is.backend.mrp.domain.RecordCreationType;
 import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
+import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.Collection;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -33,26 +35,29 @@ public class ConsignmentUpdater {
       LocalDate currentDate = periodStart;
       while (!currentDate.isEqual(periodEnd)) {
         /**
-         * Perform updates. As for now, only the simplest one.
+         * In common, the calculation should be executing in the following way:
+         * today = yesterday + (sum(supply) - sum(consume))
          */
-        final Optional<LeftoverDTO> leftoverOptional = consignment.getLeftoverCreatedAt(currentDate);
-        if (leftoverOptional.isEmpty()) {
-          /**
-           * No record for the given date, create an empty record.
-           */
-          final LeftoverDTO emptyLeftover = LeftoverDTO.builder()
-              .createdAt(currentDate.atStartOfDay())
-              .creationType(RecordCreationType.AUTOMATIC)
-              .amount(Amount.of(0, consignment.getMeasureUnit()))
-              .build();
-          consignment.addLeftover(emptyLeftover);
-        } else {
-          /**
-           * There is a record for the given date but as for now, no calculation is expected.
-           * In the future, there should be code which updates the current leftover
-           * based on the supply, consumption and the previous manually created points.
-           */
+        Amount currentValue = consignment.getLeftoverCreatedAt(currentDate.minusDays(1))
+            .map(LeftoverDTO::getAmount)
+            .orElse(Amount.of(consignment.getMeasureUnit()));
+
+        final Collection<SupplyDTO> allSupplies = consignment.getSupplyCreatedAt(currentDate);
+        for (SupplyDTO supply : allSupplies) {
+          currentValue = currentValue.plus(supply.getAmount());
         }
+
+        final Collection<ConsumptionDTO> allConsumptions = consignment.getConsumptionCreatedAt(currentDate);
+        for (ConsumptionDTO consumption : allConsumptions) {
+          currentValue = currentValue.minus(consumption.getAmount());
+        }
+
+        final LeftoverDTO emptyLeftover = LeftoverDTO.builder()
+            .createdAt(currentDate.atStartOfDay())
+            .creationType(RecordCreationType.AUTOMATIC)
+            .amount(currentValue)
+            .build();
+        consignment.addLeftover(emptyLeftover);
 
         currentDate = currentDate.plusDays(1);
       }

@@ -9,6 +9,9 @@ import dev.abarmin.home.is.backend.mrp.domain.MeasureUnitDTO;
 import dev.abarmin.home.is.backend.mrp.domain.ResourceDTO;
 import dev.abarmin.home.is.backend.mrp.domain.SupplyDTO;
 import dev.abarmin.home.is.backend.mrp.repository.ResourceRepository;
+import dev.abarmin.home.is.backend.mrp.validator.ConsignmentValidator;
+import dev.abarmin.home.is.backend.mrp.validator.ResourceValidator;
+import dev.abarmin.home.is.backend.mrp.validator.ValidationException;
 import javax.validation.ConstraintViolationException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +32,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @ContextConfiguration(classes = {
     ResourceServiceImpl.class,
     LocalValidatorFactoryBean.class,
-    MethodValidationPostProcessor.class
+    MethodValidationPostProcessor.class,
+    ResourceValidator.class,
+    ConsignmentValidator.class
 })
 class ResourceServiceValidationTest {
   @Autowired
@@ -143,7 +148,7 @@ class ResourceServiceValidationTest {
 
       resourceService.createResource(resource);
     })
-        .isInstanceOf(ConstraintViolationException.class)
+        .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Consignment should have at least one supply");
   }
 
