@@ -4,6 +4,13 @@ on:
   pull_request:
 
 jobs:
+  build-frontend-mrp:
+    uses: ./.github/workflows/build-frontend-mrp.yml
+    with: 
+      source_branch: ${{ github.ref }}
+      artifact_name: frontend-mrp-${{ github.sha }}
+      artifact_upload: false
+
   build-frontend:
     uses: ./.github/workflows/build-frontend.yml
     with: 

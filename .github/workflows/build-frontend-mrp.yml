@@ -1,0 +1,58 @@
+name: Build MRP Frontend
+
+on:
+  workflow_call:
+    inputs:
+      source_branch:
+        description: Branch to build
+        type: string
+        required: true
+      artifact_name: 
+        description: Name of the artifact
+        type: string
+        required: true       
+      artifact_upload:
+        description: Should upload artifacts 
+        type: boolean
+        required: true         
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with: 
+          ref: ${{ inputs.source_branch }}
+      
+      - name: Install NodeJS
+        uses: actions/setup-node@v3.0.0
+        with: 
+          node-version: 17.x
+          
+      - name: Restore cache
+        uses: actions/cache@v3.0.1
+        with: 
+          path: ./frontend-mrp/node_modules
+          key: frontend-${{ hashFiles('./frontend-mrp/package-lock.json') }}
+          
+      - name: Install dependencies
+        run: |
+          cd ./frontend-mrp
+          npm install
+          
+      - name: Build
+        run: |
+          cd ./frontend-mrp
+          npm run build  
+
+      - name: Upload artifacts
+        if: ${{ inputs.artifact_upload == true }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          retention-days: 1
+          path: |
+            ./frontend-mrp/
+            !./frontend-mrp/node_modules/
