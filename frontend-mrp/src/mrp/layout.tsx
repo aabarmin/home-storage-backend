@@ -12,7 +12,7 @@ export function MrpLayout() {
         <Router>
             <MrpNavigation></MrpNavigation>
 
-            <div className='container'>
+            <div className='container-fluid'>
                 <Routes>
                     <Route path="/" element={ <MrpHomePage/> } />
                     <Route path='*' element={ <MrpNotFoundPage/> } />
