@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Resource } from './dummy-data';
-import { PlusCircle, DashCircle, ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
+import { useState } from 'react';
+import { PlusCircle, ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
 import { MrpEditableCell } from './editable-cell';
+import { Resource } from './model/response';
 
 export interface ComponentType {
     resource: Resource
@@ -12,12 +12,12 @@ export function MrpResourceRow(props: ComponentType) {
         opened: false
     });
 
-    const daysEmpty: any[] = [];
+    const daysEmpty: React.ReactNode[] = [];
     for (let i = 1; i < 31; i++) {
         daysEmpty.push(<td>&nbsp;</td>);
     }
 
-    const daysEditable: any[] = [];
+    const daysEditable: React.ReactNode[] = [];
     for (let i = 1; i < 31; i++) {
         daysEditable.push(<MrpEditableCell value={10} />);
     }
@@ -48,7 +48,7 @@ export function MrpResourceRow(props: ComponentType) {
                 <td>Consumption</td>
                 <td style={{ width: '48px', borderRight: '2px solid black' }}>&nbsp;</td>
                 {daysEditable}
-            </tr>
+            </tr>            
         </>
         );
     });
