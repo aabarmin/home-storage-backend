@@ -6,18 +6,19 @@ import {
 import { MrpNavigation } from './navigation';
 import { MrpNotFoundPage } from './pages/404';
 import { MrpHomePage } from './pages/home';
+import { Container } from 'react-bootstrap';
 
 export function MrpLayout() {
     return (
         <Router>
             <MrpNavigation></MrpNavigation>
 
-            <div className='container-fluid'>
+            <Container fluid>
                 <Routes>
                     <Route path="/" element={ <MrpHomePage/> } />
                     <Route path='*' element={ <MrpNotFoundPage/> } />
                 </Routes>
-            </div>
+            </Container>
         </Router>
     );
 }

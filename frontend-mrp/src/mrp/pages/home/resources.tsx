@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Col, Row, Table } from 'react-bootstrap';
 import { PlusCircle } from 'react-bootstrap-icons';
 import { MrpDialogResourceAdd } from './dialog-resource-add';
 import { data, Resource } from './dummy-data'
@@ -15,10 +16,10 @@ export function MrpHomeResources() {
     const toggleDialog = () => setShowDialog(!showDialog);
 
     return (
-        <div className='row'>
-            <div className='col-12'>
+        <Row>
+            <Col>
                 {dialog}
-                <table className='table table-bordered'>
+                <Table bordered>
                     <thead>
                         <tr>
                             <th style={{ width: '48px' }}>
@@ -40,9 +41,9 @@ export function MrpHomeResources() {
                             return <MrpResourceRow resource={r} key={r.id} />
                         })}
                     </tbody>
-                </table>
+                </Table>
 
-            </div>
-        </div>
+            </Col>
+        </Row>
     );
 }

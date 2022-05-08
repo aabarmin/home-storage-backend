@@ -1,13 +1,15 @@
 import React from 'react';
+import { Col, Row } from 'react-bootstrap';
+
 
 export function MrpHomeHeader() {
     return (
-        <div className='row'>
-            <div className='col-12'>
+        <Row>
+            <Col>
                 <h2>
                     Resources
                 </h2>
-            </div>
-        </div>
+            </Col>
+        </Row>
     );
 }

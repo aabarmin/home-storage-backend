@@ -1,20 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Navbar, Container, Nav, NavItem } from 'react-bootstrap';
 
 export function MrpNavigation() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="container-fluid">
+        <Navbar>
+            <Container fluid>
                 <Link to="/" className="navbar-brand">MRP Application</Link>    
 
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
+                <Nav className='me-auto'>
+                    <NavItem>
                         <Link to="/" className="nav-link">
                             Home
                         </Link>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                    </NavItem>
+                </Nav>
+            </Container>
+        </Navbar>
     );
 }
