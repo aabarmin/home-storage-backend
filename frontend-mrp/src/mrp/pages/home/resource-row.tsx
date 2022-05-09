@@ -1,11 +1,26 @@
+import { LocalDate } from '@js-joda/core';
 import { useState } from 'react';
 import { PlusCircle, ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
+import { Resource } from '../../model/resource';
 import { MrpEditableCell } from './editable-cell';
-import { Resource } from './model/response';
 
-export interface ComponentType {
+interface ComponentType {
     resource: Resource
 }
+
+const getDateStart = (resource: Resource): LocalDate => {
+    throw new Error();
+};
+
+const getDateEnd = (resource: Resource): LocalDate => {
+    throw new Error();
+};
+
+const getResourceLeftovers = (resource: Resource, dateStart: LocalDate, dateEnd: LocalDate): any[] => {
+    throw new Error(); 
+};
+
+
 
 export function MrpResourceRow(props: ComponentType) {
     const [state, setState] = useState({

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { PencilFill } from 'react-bootstrap-icons';
 
 export interface Props {

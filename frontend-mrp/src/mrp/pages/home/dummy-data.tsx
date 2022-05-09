@@ -1,9 +1,18 @@
-import { Consignment, DayRecord, Resource } from "./model/response";
 import { v4 as uuid } from 'uuid';
 import { LocalDate } from "@js-joda/core";
 import { Chance } from 'chance';
+import { Consignment } from '../../model/consignment';
+import { DayRecord } from '../../model/day-record';
+import { Resource } from '../../model/resource';
+import { ConsumptionUnit } from '../../model/consumption-unit';
+import { ConsumptionType } from '../../model/consumption-type';
+import { Amount } from '../../model/amount';
 
 const chance = new Chance();
+
+const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
+    "Killogram", "kg", ConsumptionType.UNIT_CONSUMPTION
+);
 
 const generateDummyResource = (name: string, consignments: Consignment[]): Resource => {
     return {
@@ -42,9 +51,13 @@ const generateDayRecords = (dateStart: LocalDate, dateEnd: LocalDate): DayRecord
         result.push({
             id: uuid(), 
             date: currentDate, 
-            supply: supply, 
-            consumption: consume, 
-            leftover: currentValue
+            supply: [
+                Amount.of(supply, dummyConsumptionUnit)
+            ], 
+            consumption: [
+                Amount.of(consume, dummyConsumptionUnit)
+            ], 
+            leftover: Amount.of(currentValue, dummyConsumptionUnit)
         });
         currentDate = currentDate.plusDays(1); 
     }
