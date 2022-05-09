@@ -4,28 +4,37 @@ import { PlusCircle, ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons'
 import { Resource } from '../../model/resource';
 import { MrpEditableCell } from './editable-cell';
 
-interface ComponentType {
-    resource: Resource
+interface ComponentProps {
+    resource: Resource, 
+    dateStart: LocalDate, 
+    dateEnd: LocalDate
 }
 
-const getDateStart = (resource: Resource): LocalDate => {
-    throw new Error();
+const getResourceLeftovers = (resource: Resource, dateStart: LocalDate, dateEnd: LocalDate): React.ReactNode[] => {
+    const result: React.ReactNode[] = [];
+    let currentDate = dateStart; 
+    while (currentDate.isBefore(dateEnd) || currentDate.isEqual(dateEnd)) {
+        const amounts: string[] = resource.getLeftovers(currentDate).map(amount => {
+            return amount.amount + amount.unit.name;
+        })
+        const key = `${resource.id} + ${currentDate}`
+        result.push(<td key={key}>{amounts.join(', ')}</td>); 
+
+        currentDate = currentDate.plusDays(1);
+    }
+    return result; 
 };
 
-const getDateEnd = (resource: Resource): LocalDate => {
-    throw new Error();
-};
-
-const getResourceLeftovers = (resource: Resource, dateStart: LocalDate, dateEnd: LocalDate): any[] => {
-    throw new Error(); 
-};
-
-
-
-export function MrpResourceRow(props: ComponentType) {
+export function MrpResourceRow(props: ComponentProps) {
     const [state, setState] = useState({
         opened: false
     });
+
+    const resourceLeftovers: React.ReactNode[] = getResourceLeftovers(
+        props.resource, 
+        props.dateStart, 
+        props.dateEnd
+    ); 
 
     const daysEmpty: React.ReactNode[] = [];
     for (let i = 1; i < 31; i++) {
@@ -84,7 +93,7 @@ export function MrpResourceRow(props: ComponentType) {
                         <PlusCircle />
                     </button>
                 </td>
-                {daysEmpty}
+                {resourceLeftovers}
             </tr>
             {consignments}
         </>

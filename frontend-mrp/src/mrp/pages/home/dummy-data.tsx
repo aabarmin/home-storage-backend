@@ -15,19 +15,16 @@ const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
 );
 
 const generateDummyResource = (name: string, consignments: Consignment[]): Resource => {
-    return {
-        id: uuid(), 
-        name: name, 
-        consignments: consignments
-    };
+    return new Resource(uuid(), name, consignments);
 };
 
 const generateConsignment = (name: string, records: DayRecord[]): Consignment => {
-    return {
-        id: uuid(), 
-        name: name, 
-        records: records
-    };
+    return new Consignment(
+        uuid(), 
+        name, 
+        dummyConsumptionUnit, 
+        records
+    );
 };
 
 const generateDayRecords = (dateStart: LocalDate, dateEnd: LocalDate): DayRecord[] => {

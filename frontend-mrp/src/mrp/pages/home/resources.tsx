@@ -39,7 +39,10 @@ export class MrpHomeResources extends React.Component<ComponentProps, ComponentS
 
     generateResources = (response: Response): React.ReactNode[] => {
         return response.resources.map(r => {
-            return (<MrpResourceRow resource={r} key={r.id} />);
+            return (<MrpResourceRow resource={r} 
+                                    dateStart={response.dateStart}
+                                    dateEnd={response.dateEnd}
+                                    key={r.id} />);
         }); 
     };
 

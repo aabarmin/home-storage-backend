@@ -13,7 +13,7 @@ export function MrpEditableCell(props: Props) {
     const pencilHide = () => setPencil(false);
 
     const editStart = () => setEditable(true);
-    const editEnd = () => setEditable(false);
+    // const editEnd = () => setEditable(false);
 
     if (editable) {
         return (
