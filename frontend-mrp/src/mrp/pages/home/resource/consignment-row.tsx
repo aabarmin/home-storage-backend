@@ -10,8 +10,9 @@ interface ConsignmentRowProps {
 };
 
 export const MrpResourceConsignmentRow = (props: ConsignmentRowProps) => {
-    const daysEmpty: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, () => {
-        return (<td className='empty-cell'>&nbsp;</td>);
+    const daysEmpty: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, (date: LocalDate) => {
+        const key = `consignment-${props.consignment.id}-empty-${date.toString()}`
+        return (<td className='empty-cell' key={key}>&nbsp;</td>);
     });
 
     return (

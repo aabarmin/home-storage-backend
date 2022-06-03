@@ -9,7 +9,8 @@ const getResourceLeftovers = (resource: Resource, dateStart: LocalDate, dateEnd:
         const amounts: string[] = getLeftovers(resource, currentDate).map(amount => {
             return `${amount.amount}`;
         })
-        return (<td className='data-cell'>{amounts.join(', ')}</td>);
+        const key = `resource-${resource.id}-leftover-${currentDate.toString()}`
+        return (<td className='data-cell' key={key}>{amounts.join(', ')}</td>);
     });
 };
 
@@ -30,8 +31,8 @@ export const MrpResourceRowFirst = (props: FirstRowProps) => {
     ); 
 
     return (
-        <tr>
-            <td className='expander-cell'>
+        <tr key={`resource-${props.resource.id}-name`}>
+            <td className='expander-cell' key={`resource-${props.resource.id}-expander`}>
                 <button className='btn btn-sm' onClick={props.toggleOpen}>
                     {expander}
                 </button>

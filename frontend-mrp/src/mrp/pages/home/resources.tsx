@@ -32,7 +32,7 @@ export function MrpHomeResources() {
         const dayOfWeek = date.dayOfWeek().name().substring(0, 3);
         const day = date.dayOfMonth();
         const label = `${dayOfWeek} ${day}`;
-        return (<td><p className='text-center' style={{margin: '0px'}}>{label}</p></td>);
+        return (<td key={label}>{label}</td>);
     });
     
     const resources = response.resources.map(r => {
@@ -46,22 +46,22 @@ export function MrpHomeResources() {
         <Row>
             <Col>
                 <div className='table-responsive'>
-                <Table bordered className='resources-table'>
-                    <thead>
-                        <tr>
-                            <th style={{ width: '48px' }}>
-                                &nbsp;
-                            </th>
-                            <th style={{ width: '200px' }} colSpan={3} className='row-title-cell'>
-                                Resources
-                            </th>
-                            {dates}
-                        </tr>
-                    </thead>
-                    <tbody key={`resource-body`}>
-                        {resources}
-                    </tbody>
-                </Table>
+                    <Table bordered className='resources-table'>
+                        <thead>
+                            <tr>
+                                <th style={{ width: '48px' }}>
+                                    &nbsp;
+                                </th>
+                                <th style={{ width: '200px' }} colSpan={3} className='row-title-cell'>
+                                    Resources
+                                </th>
+                                {dates}
+                            </tr>
+                        </thead>
+                        <tbody key={`resource-body`}>
+                            {resources}
+                        </tbody>
+                    </Table>
                 </div>
             </Col>
         </Row>

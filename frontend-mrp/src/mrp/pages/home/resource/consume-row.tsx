@@ -11,8 +11,9 @@ interface ConsumeRowProps {
 };
 
 export const MrpResourceConsignmentConsumeRow = (props: ConsumeRowProps) => {
-    const daysEditable: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, () => {
-        return (<MrpEditableCell value={10} />);
+    const daysEditable: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, (date: LocalDate) => {
+        const key=`consumption-${props.consignment.id}-${date.toString()}`
+        return (<MrpEditableCell key={key} value={10} />);
     });
 
     return (
