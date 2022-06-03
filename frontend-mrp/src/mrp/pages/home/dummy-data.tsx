@@ -11,11 +11,15 @@ import { Amount } from '../../model/amount';
 const chance = new Chance();
 
 const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
-    "Killogram", "kg", ConsumptionType.UNIT_CONSUMPTION
+    "Killogram", "kg", "kg", ConsumptionType.UNIT_CONSUMPTION
 );
 
 const generateDummyResource = (name: string, consignments: Consignment[]): Resource => {
-    return new Resource(uuid(), name, consignments);
+    return new Resource(
+        uuid(), 
+        name, 
+        consignments
+    );
 };
 
 const generateConsignment = (name: string, records: DayRecord[]): Consignment => {
@@ -68,6 +72,7 @@ export const generateDummyData = (dateStart: LocalDate, dateEnd: LocalDate): Res
             generateConsignment("Тертая", generateDayRecords(dateStart, dateEnd))
         ]), 
         generateDummyResource("Картошка", []), 
+        generateDummyResource("Рыба", []), 
         generateDummyResource("Коржачий корм", [
             generateConsignment("С рыбой", generateDayRecords(dateStart, dateEnd)),
             generateConsignment("С олениной", generateDayRecords(dateStart, dateEnd))

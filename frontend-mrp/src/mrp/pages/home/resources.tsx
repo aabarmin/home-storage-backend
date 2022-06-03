@@ -1,115 +1,69 @@
 import { LocalDate, Month } from '@js-joda/core';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
-import { PlusCircle } from 'react-bootstrap-icons';
 import { getRecords } from './data-providers';
+import { mapDates } from './date-utils';
 import { Response } from './model/response';
 import { MrpResourceRow } from './resource-row';
 
-interface ComponentProps {}
+export function MrpHomeResources() {
+    const [ dataLoading, setDataLoading ] = useState<boolean>(false);
+    const [ response, setResponse ] = useState<null | Response>(null);
 
-interface ComponentState {
-    dataLoading: boolean;
-    response: Response | null; 
-}
-
-export class MrpHomeResources extends React.Component<ComponentProps, ComponentState> {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            dataLoading: false, 
-            response: null
-        };
-    }
-
-    generateDates = (response: Response): React.ReactNode[] => {
-        const result: React.ReactNode[] = [];
-        let currentDate = response.dateStart;
-        // this implementation looks a little weird but it works. 
-        // maybe I'll fix it next time. 
-        while (currentDate.isBefore(response.dateEnd) || currentDate.isEqual(response.dateEnd)) {
-            const label = String(currentDate.dayOfMonth()).padStart(2, "0") + ". " + 
-                    String(currentDate.monthValue()).padStart(2, "0");
-            result.push((<th key={label}>{label}</th>));
-            currentDate = currentDate.plusDays(1);
-        }
-        return result;
-    };
-
-    generateResources = (response: Response): React.ReactNode[] => {
-        return response.resources.map(r => {
-            return (<MrpResourceRow resource={r} 
-                                    dateStart={response.dateStart}
-                                    dateEnd={response.dateEnd}
-                                    key={r.id} />);
-        }); 
-    };
-
-    componentDidMount() {
-        const startLoading = () => {
-            this.setState((state: ComponentState) => {
-                state.dataLoading = true; 
-                state.response = null; 
-                return state; 
-            }); 
-        }
-
-        const endLoading = (response: Response) => {
-            this.setState((state: ComponentState) => {
-                state.dataLoading = false; 
-                state.response = response;
-                return state; 
-            }); 
-        };
-
-        // dummy data
+    useEffect(() => {
+        // dummy data, should be provided externally
         const dateStart = LocalDate.of(2020, Month.APRIL, 1);
         const dateEnd = LocalDate.of(2020, Month.APRIL, 30);
 
-        // start loading records
-        startLoading(); 
+        setDataLoading(true);
         getRecords(dateStart, dateEnd).then((response: Response) => {
-            endLoading(response);  
+            setDataLoading(false);
+            setResponse(response);
         });
-    }
+    }, []);
 
-    render(): React.ReactNode {
-        if (this.state.dataLoading || this.state.response == null) {
-            return (
-                <ProgressBar animated now={100} />
-            ); 
-        }
-
-        const dates = this.generateDates(this.state.response as Response);
-        const resources = this.generateResources(this.state.response as Response); 
-
+    if (response === null || dataLoading === true) {
         return (
-            <Row>
-                <Col>
-                    <Table bordered>
-                        <thead>
-                            <tr>
-                                <th style={{ width: '48px' }}>
-                                    &nbsp;
-                                </th>
-                                <th style={{ width: '200px' }} colSpan={3}>
-                                    Resources
-                                </th>
-                                <th style={{ width: '48px' }}>
-                                    <button className='btn'>
-                                        <PlusCircle />
-                                    </button>
-                                </th>
-                                {dates}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {resources}
-                        </tbody>
-                    </Table>
-                </Col>
-            </Row>
+            <ProgressBar animated now={100} />
         );
     }
+
+    const dates = mapDates(response.dateStart, response.dateEnd, (date: LocalDate) => {
+        const dayOfWeek = date.dayOfWeek().name().substring(0, 3);
+        const day = date.dayOfMonth();
+        const label = `${dayOfWeek} ${day}`;
+        return (<td><p className='text-center' style={{margin: '0px'}}>{label}</p></td>);
+    });
+    
+    const resources = response.resources.map(r => {
+        return (<MrpResourceRow resource={r} 
+                                dateStart={response.dateStart}
+                                dateEnd={response.dateEnd}
+                                key={`resource-${r.id}`} />);
+    }); 
+
+    return (
+        <Row>
+            <Col>
+                <div className='table-responsive'>
+                <Table bordered className='resources-table'>
+                    <thead>
+                        <tr>
+                            <th style={{ width: '48px' }}>
+                                &nbsp;
+                            </th>
+                            <th style={{ width: '200px' }} colSpan={3} className='row-title-cell'>
+                                Resources
+                            </th>
+                            {dates}
+                        </tr>
+                    </thead>
+                    <tbody key={`resource-body`}>
+                        {resources}
+                    </tbody>
+                </Table>
+                </div>
+            </Col>
+        </Row>
+    );
 }
