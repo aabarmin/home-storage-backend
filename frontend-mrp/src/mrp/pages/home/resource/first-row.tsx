@@ -1,21 +1,21 @@
 import { LocalDate } from '@js-joda/core';
 import React from 'react';
 import { ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
-import { getLeftovers, Resource } from '../../../model/resource';
+import { getLeftovers, ResourceWithConsignments } from '../../../model/resource';
 import { mapDates } from '../date-utils';
 
-const getResourceLeftovers = (resource: Resource, dateStart: LocalDate, dateEnd: LocalDate): React.ReactNode[] => {
+const getResourceLeftovers = (resource: ResourceWithConsignments, dateStart: LocalDate, dateEnd: LocalDate): React.ReactNode[] => {
     return mapDates(dateStart, dateEnd, (currentDate: LocalDate) => {
         const amounts: string[] = getLeftovers(resource, currentDate).map(amount => {
             return `${amount.amount}`;
         })
-        const key = `resource-${resource.id}-leftover-${currentDate.toString()}`
+        const key = `resource-${resource.resourceId}-leftover-${currentDate.toString()}`
         return (<td className='readonly-cell' key={key}>{amounts.join(', ')}</td>);
     });
 };
 
 interface FirstRowProps {
-    resource: Resource, 
+    resource: ResourceWithConsignments, 
     dateStart: LocalDate, 
     dateEnd: LocalDate, 
     opened: boolean, 
@@ -31,8 +31,8 @@ export const MrpResourceRowFirst = (props: FirstRowProps) => {
     ); 
 
     return (
-        <tr key={`resource-${props.resource.id}-name`}>
-            <td className='expander-cell' key={`resource-${props.resource.id}-expander`}>
+        <tr key={`resource-${props.resource.resourceId}-name`}>
+            <td className='expander-cell' key={`resource-${props.resource.resourceId}-expander`}>
                 <button className='btn btn-sm' onClick={props.toggleOpen}>
                     {expander}
                 </button>

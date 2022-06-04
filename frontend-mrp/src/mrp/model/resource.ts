@@ -1,6 +1,18 @@
 import { LocalDate } from "@js-joda/core";
 import { Amount } from "./amount";
-import { Consignment, getLeftover } from "./consignment";
+import { ConsignmentWithResources, getLeftover } from "./consignment";
+
+export interface Resource {
+  readonly resourceId: string;
+  readonly name: string;
+}
+
+/**
+ * Resource description.
+ */
+ export interface ResourceWithConsignments extends Resource {
+  readonly consignments: ConsignmentWithResources[];
+}
 
 /**
  * This function return leftovers for a particular resource. There may be multiple
@@ -10,7 +22,7 @@ import { Consignment, getLeftover } from "./consignment";
  * @param date
  * @returns
  */
-export const getLeftovers = (resource: Resource, date: LocalDate): Amount[] => {
+export const getLeftovers = (resource: ResourceWithConsignments, date: LocalDate): Amount[] => {
   const result: { [key: string]: Amount } = {};
   for (let i = 0; i < resource.consignments.length; i++) {
     const leftover = getLeftover(resource.consignments[i], date);
@@ -23,18 +35,3 @@ export const getLeftovers = (resource: Resource, date: LocalDate): Amount[] => {
   }
   return Object.values(result);
 };
-
-/**
- * Resource description.
- */
-export class Resource {
-  readonly id: string;
-  readonly name: string;
-  readonly consignments: Consignment[];
-
-  constructor(id: string, name: string, consignments: Consignment[]) {
-    this.id = id;
-    this.name = name;
-    this.consignments = consignments;
-  }
-}

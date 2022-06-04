@@ -5,25 +5,20 @@ import { ConsumptionUnit } from "./consumption-unit";
 import { DayRecord } from "./day-record";
 
 /**
+ * Basic data model of a consignment. 
+ */
+export interface Consignment {
+  consignmentId: string;
+  resourceId: string;
+  name: string;
+  unit: ConsumptionUnit;
+}
+
+/**
  * Consignment of a particular resource.
  */
-export class Consignment {
-  readonly id: string;
-  readonly name: string;
-  readonly unit: ConsumptionUnit;
-  readonly records: DayRecord[];
-
-  constructor(
-    id: string,
-    name: string,
-    unit: ConsumptionUnit,
-    records: DayRecord[]
-  ) {
-    this.id = id;
-    this.name = name;
-    this.unit = unit;
-    this.records = records;
-  }
+export interface ConsignmentWithResources extends Consignment {
+  records: DayRecord[];
 }
 
 /**
@@ -33,7 +28,7 @@ export class Consignment {
  * @returns
  */
 export const getSupply = (
-  consignment: Consignment,
+  consignment: ConsignmentWithResources,
   date: LocalDate
 ): Amount => {
   return getDayRecord(consignment, date)
@@ -47,7 +42,7 @@ export const getSupply = (
  * @param date
  */
 export const getConsume = (
-  consignment: Consignment,
+  consignment: ConsignmentWithResources,
   date: LocalDate
 ): Amount => {
   return getDayRecord(consignment, date)
@@ -56,7 +51,7 @@ export const getConsume = (
 };
 
 export const getLeftover = (
-  consignment: Consignment,
+  consignment: ConsignmentWithResources,
   date: LocalDate
 ): Amount => {
   return getDayRecord(consignment, date)
@@ -65,7 +60,7 @@ export const getLeftover = (
 };
 
 export const getDayRecord = (
-  consignment: Consignment,
+  consignment: ConsignmentWithResources,
   date: LocalDate
 ): Optional<DayRecord> => {
   const found = consignment.records.filter((r) => r.date.isEqual(date));

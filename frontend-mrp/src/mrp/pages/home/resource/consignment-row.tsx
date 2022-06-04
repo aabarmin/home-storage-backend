@@ -1,17 +1,17 @@
 import { LocalDate } from '@js-joda/core';
 import React from 'react';
-import { Consignment, getLeftover } from '../../../model/consignment';
+import { ConsignmentWithResources, getLeftover } from '../../../model/consignment';
 import { mapDates } from '../date-utils';
 
 interface ConsignmentRowProps {
-    consignment: Consignment, 
+    consignment: ConsignmentWithResources, 
     dateStart: LocalDate, 
     dateEnd: LocalDate
 };
 
 export const MrpResourceConsignmentRow = (props: ConsignmentRowProps) => {
     const daysEmpty: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, (date: LocalDate) => {
-        const key = `consignment-${props.consignment.id}-empty-${date.toString()}`
+        const key = `consignment-${props.consignment.consignmentId}-empty-${date.toString()}`
         const value = getLeftover(props.consignment, date);
         return (<td className='readonly-cell' key={key}>{value.amount}</td>);
     });

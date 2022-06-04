@@ -39,7 +39,7 @@ export function MrpHomeResources() {
         return (<MrpResourceRow resource={r} 
                                 dateStart={response.dateStart}
                                 dateEnd={response.dateEnd}
-                                key={`resource-${r.id}`} />);
+                                key={`resource-${r.resourceId}`} />);
     }); 
 
     return (

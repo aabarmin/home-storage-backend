@@ -5,7 +5,8 @@ import { Amount } from "./amount";
  * Record about a resource within a particular day.
  */
 export interface DayRecord {
-  id: string;
+  recordId: string;
+  consignmentId: string; 
   date: LocalDate;
   leftover: Amount;
   supply: Amount;

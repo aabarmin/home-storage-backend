@@ -1,9 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import { LocalDate } from "@js-joda/core";
 import { Chance } from 'chance';
-import { Consignment } from '../../model/consignment';
+import { ConsignmentWithResources } from '../../model/consignment';
 import { DayRecord } from '../../model/day-record';
-import { Resource } from '../../model/resource';
+import { ResourceWithConsignments } from '../../model/resource';
 import { ConsumptionUnit } from '../../model/consumption-unit';
 import { ConsumptionType } from '../../model/consumption-type';
 import { Amount } from '../../model/amount';
@@ -14,21 +14,29 @@ const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
     "Kilogram", "kg", "kg", ConsumptionType.UNIT_CONSUMPTION
 );
 
-const generateDummyResource = (name: string, consignments: Consignment[]): Resource => {
-    return new Resource(
-        uuid(), 
-        name, 
-        consignments
-    );
+const generateDummyResource = (name: string, consignments: ConsignmentWithResources[]): ResourceWithConsignments => {
+    const resourceId = uuid()
+
+    consignments.forEach(c => c.resourceId = resourceId);
+
+    return {
+        resourceId: resourceId, 
+        name: name, 
+        consignments: consignments
+    };
 };
 
-const generateConsignment = (name: string, records: DayRecord[]): Consignment => {
-    return new Consignment(
-        uuid(), 
-        name, 
-        dummyConsumptionUnit, 
-        records
-    );
+const generateConsignment = (name: string, records: DayRecord[]): ConsignmentWithResources => {
+    const consignmentId = uuid();
+    records.forEach(r => r.consignmentId = consignmentId);
+
+    return {
+        consignmentId: consignmentId, 
+        resourceId: 'temporaryValue',
+        name: name, 
+        unit: dummyConsumptionUnit, 
+        records: records
+    };
 };
 
 const generateDayRecords = (dateStart: LocalDate, dateEnd: LocalDate): DayRecord[] => {
@@ -50,7 +58,8 @@ const generateDayRecords = (dateStart: LocalDate, dateEnd: LocalDate): DayRecord
             currentValue = 0; 
         }
         result.push({
-            id: uuid(), 
+            recordId: uuid(), 
+            consignmentId: '', 
             date: currentDate, 
             supply: Amount.of(supply, dummyConsumptionUnit), 
             consumption: Amount.of(consume, dummyConsumptionUnit), 
@@ -61,7 +70,7 @@ const generateDayRecords = (dateStart: LocalDate, dateEnd: LocalDate): DayRecord
     return result; 
 };
 
-export const generateDummyData = (dateStart: LocalDate, dateEnd: LocalDate): Resource[] => {
+export const generateDummyData = (dateStart: LocalDate, dateEnd: LocalDate): ResourceWithConsignments[] => {
     return [
         generateDummyResource("Морковь", [
             generateConsignment("В пакете", generateDayRecords(dateStart, dateEnd)),
