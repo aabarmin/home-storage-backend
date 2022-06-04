@@ -1,21 +1,40 @@
-import { LocalDate, Month } from '@js-joda/core';
+import { LocalDate, LocalDateTime, Month } from '@js-joda/core';
 import React, { useState, useEffect } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { getResources } from './data-providers';
 import { mapDates } from './date-utils';
 import { ResourcesResponse } from './model/resources-response';
 import { MrpResourceRow } from './resource-row';
 
+interface Period {
+    dateStart: LocalDate, 
+    dateEnd: LocalDate
+}
+
 export function MrpHomeResources() {
     const [ dataLoading, setDataLoading ] = useState<boolean>(false);
     const [ response, setResponse ] = useState<null | ResourcesResponse>(null);
     const location = useLocation();
+    const [ queryParams ] = useSearchParams();
+
+    const getPeriod = (): Period => {
+        let dateStart = LocalDate.now(); 
+        let dateEnd = dateStart.plusDays(7);
+
+        if (queryParams.has('startDate')) {
+            dateStart = LocalDate.parse(queryParams.get('startDate') as string);
+        }
+        if (queryParams.has('endDate')) {
+            dateEnd = LocalDate.parse(queryParams.get('endDate') as string);
+        }
+
+        return { dateStart, dateEnd };
+    };
 
     useEffect(() => {
         // dummy data, should be provided externally
-        const dateStart = LocalDate.of(2020, Month.APRIL, 1);
-        const dateEnd = LocalDate.of(2020, Month.APRIL, 30);
+        const { dateStart, dateEnd } = getPeriod();
 
         setDataLoading(true);
         getResources(dateStart, dateEnd).then((response: ResourcesResponse) => {
