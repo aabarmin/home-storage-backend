@@ -7,7 +7,7 @@ import { MrpNavigation } from './navigation';
 import { MrpNotFoundPage } from './pages/404';
 import { MrpHomePage } from './pages/home';
 import { Container } from 'react-bootstrap';
-import { MrpDialogEditConsumption } from './pages/home/dialog-edit-consumption';
+import { MrpDialogEditConsumption } from './pages/home/dialog/dialog-edit-consumption';
 
 export function MrpLayout() {
     return (
