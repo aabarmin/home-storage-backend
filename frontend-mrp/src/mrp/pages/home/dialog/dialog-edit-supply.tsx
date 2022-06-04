@@ -8,7 +8,7 @@ import { getDayRecord, patchDayRecord } from '../data-providers';
 import { DayRecordResponse } from '../model/day-record-response';
 import { MrpEditDayRecordForm } from './form-edit-record';
 
-export function MrpDialogEditConsumption() {
+export function MrpDialogEditSupply() {
     const { consignmentId, recordDate } = useParams();
     const navigate = useNavigate();
     const handleClose = () => navigate("/");
@@ -28,7 +28,7 @@ export function MrpDialogEditConsumption() {
         setDataLoading(true);
         setTimeout(() => {
             const record = (response as DayRecordResponse).record;
-            record.consumption = Amount.of(value, (response as DayRecordResponse).consignment.unit);
+            record.supply = Amount.of(value, (response as DayRecordResponse).consignment.unit);
 
             patchDayRecord(record).then(() => {
                 handleClose();
@@ -41,12 +41,12 @@ export function MrpDialogEditConsumption() {
                     onSubmit={onSubmit}
                     date={(response as DayRecordResponse).date}
                     unit={(response as DayRecordResponse).consignment.unit.name}
-                    value={(response as DayRecordResponse).record.consumption.amount} />;
+                    value={(response as DayRecordResponse).record.supply.amount} />;
 
     return (
         <Modal show={true} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Edit Consumption</Modal.Title>
+                <Modal.Title>Edit Supply</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {content}

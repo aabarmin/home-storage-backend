@@ -8,6 +8,7 @@ import { MrpNotFoundPage } from './pages/404';
 import { MrpHomePage } from './pages/home';
 import { Container } from 'react-bootstrap';
 import { MrpDialogEditConsumption } from './pages/home/dialog/dialog-edit-consumption';
+import { MrpDialogEditSupply } from './pages/home/dialog/dialog-edit-supply';
 
 export function MrpLayout() {
     return (
@@ -20,6 +21,9 @@ export function MrpLayout() {
                         <Route 
                                 path="consignments/:consignmentId/records/:recordDate/consumptions" 
                                 element={ <MrpDialogEditConsumption /> } />
+                        <Route 
+                                path="consignments/:consignmentId/records/:recordDate/supplies" 
+                                element={ <MrpDialogEditSupply /> } />
                     </Route>
                     <Route path='*' element={ <MrpNotFoundPage/> } />
                 </Routes>

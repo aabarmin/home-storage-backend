@@ -1,14 +1,12 @@
 import { LocalDate } from '@js-joda/core';
-import React from 'react';
-import { Form, Button, FormGroup } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Consignment } from '../../../model/consignment';
-import { DayRecord } from '../../../model/day-record';
 
 interface ComponentProps {
-    consignment: Consignment,
-    dayRecord: DayRecord, 
-    date: LocalDate
+    date: LocalDate, 
+    unit: string, 
+    value: number, 
+    onSubmit: (value: number) => void
 }
 
 interface FormData {
@@ -17,15 +15,17 @@ interface FormData {
     value: number
 }
 
-export function MrpEditConsumptionForm(props: ComponentProps) {
+export function MrpEditDayRecordForm(props: ComponentProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         defaultValues: {
             date: props.date.toString(), 
-            unit: props.consignment.unit.name, 
-            value: props.dayRecord.consumption.amount
+            unit: props.unit, 
+            value: props.value
         }
     });
-    const onSubmit: SubmitHandler<FormData> = (data) => { console.log(data); };
+    const onSubmit: SubmitHandler<FormData> = (data: FormData) => { 
+        props.onSubmit(data.value);
+    };
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)} noValidate validated={true}>
@@ -50,15 +50,19 @@ export function MrpEditConsumptionForm(props: ComponentProps) {
                 <Form.Control 
                     {...register('value', {
                         required: true, 
+                        min: 0, 
                         pattern: /^\d+$/
                     })}
                     type='text' 
                     placeholder='Consumption value' />
                 <Form.Control.Feedback>
-                    {errors.value?.type == 'pattern' && 'Value should be a number'}
+                    {errors.value?.type === 'pattern' && 'Value should be a number'}
                 </Form.Control.Feedback>
                 <Form.Control.Feedback>
-                    {errors.value?.type == 'required' && 'Value should be provided'}
+                    {errors.value?.type === 'required' && 'Value should be provided'}
+                </Form.Control.Feedback>
+                <Form.Control.Feedback>
+                    {errors.value?.type === 'min' && 'Value should be positive'}
                 </Form.Control.Feedback>
             </Form.Group>
             <Button type='submit'>

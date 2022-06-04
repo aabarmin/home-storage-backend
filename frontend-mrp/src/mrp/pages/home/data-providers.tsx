@@ -1,5 +1,4 @@
 import { LocalDate, Month } from "@js-joda/core";
-import { isTypeReferenceNode } from "typescript";
 import { Consignment } from "../../model/consignment";
 import { DayRecord } from "../../model/day-record";
 import { ResourceWithConsignments } from "../../model/resource";
@@ -55,3 +54,21 @@ export const getDayRecord = (consignmentId: string, date: LocalDate): Promise<Da
         }, 500);
     });
 }
+
+export const patchDayRecord = (record: DayRecord): Promise<void> => {
+    dummyData.forEach(resource => {
+        resource.consignments.forEach(c => {
+            c.records.filter(r => r.recordId === record.recordId)
+                    .forEach(r => {
+                        r.consumption = record.consumption;
+                        r.supply = record.supply;
+                    });
+        });
+    });
+
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve();
+        }, 500);
+    });
+};
