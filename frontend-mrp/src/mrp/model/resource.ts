@@ -1,6 +1,6 @@
 import { LocalDate } from "@js-joda/core";
 import { Amount } from "./amount";
-import { Consignment } from "./consignment";
+import { Consignment, getLeftover } from "./consignment";
 
 /**
  * This function return leftovers for a particular resource. There may be multiple
@@ -13,7 +13,7 @@ import { Consignment } from "./consignment";
 export const getLeftovers = (resource: Resource, date: LocalDate): Amount[] => {
   const result: { [key: string]: Amount } = {};
   for (let i = 0; i < resource.consignments.length; i++) {
-    const leftover = resource.consignments[i].getLeftover(date);
+    const leftover = getLeftover(resource.consignments[i], date);
     let resultLeftover = Amount.of(0, leftover.unit);
     if (leftover.unit.alias in result) {
       resultLeftover = result[leftover.unit.alias];

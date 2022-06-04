@@ -15,23 +15,6 @@ interface ComponentProps {
 export function MrpResourceRow(props: ComponentProps) {
     const [opened, setOpened] = useState(false);
 
-    const addition = !opened ? [] : props.resource.consignments.map(c => {
-        return (
-            <>
-                <MrpResourceConsignmentRow key={`resource-consignment-${c.id}`}
-                                           consignment={c}
-                                           dateStart={props.dateStart}
-                                           dateEnd={props.dateEnd} />
-                {/* <MrpResourceConsignmentConsumeRow consignment={c}
-                                                 dateStart={props.dateStart}
-                                                 dateEnd={props.dateEnd} />
-                <MrpResourceConsignmentSupplyRow consignment={c}
-                                                  dateStart={props.dateStart}
-                                                  dateEnd={props.dateEnd} />                                                  */}
-            </>
-        );
-    });
-
     const mainElement = <MrpResourceRowFirst    key={`resource-row-first-${props.resource.id}`}
                                                 resource={props.resource} 
                                                 opened={opened}

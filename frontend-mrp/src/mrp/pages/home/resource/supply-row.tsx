@@ -1,6 +1,6 @@
 import { LocalDate } from '@js-joda/core';
 import React from 'react';
-import { Consignment } from '../../../model/consignment';
+import { Consignment, getSupply } from '../../../model/consignment';
 import { mapDates } from '../date-utils';
 import { MrpEditableCell } from './editable-cell';
 
@@ -13,7 +13,8 @@ interface SupplyRowProps {
 export const MrpResourceConsignmentSupplyRow = (props: SupplyRowProps) => {
     const daysEditable: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, (date: LocalDate) => {
         const key=`supply-${props.consignment.id}-${date.toString()}`
-        return (<MrpEditableCell key={key} value={10} />);
+        const value = getSupply(props.consignment, date).amount;
+        return (<MrpEditableCell key={key} value={value} onClick={() => {}} />);
     });
 
     return (

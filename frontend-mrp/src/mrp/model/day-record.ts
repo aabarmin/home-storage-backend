@@ -8,6 +8,6 @@ export interface DayRecord {
   id: string;
   date: LocalDate;
   leftover: Amount;
-  supply: Amount[];
-  consumption: Amount[];
+  supply: Amount;
+  consumption: Amount;
 }

@@ -1,6 +1,6 @@
 import { LocalDate } from '@js-joda/core';
 import React from 'react';
-import { ArrowsCollapse, ArrowsExpand, PlusCircle } from 'react-bootstrap-icons';
+import { ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
 import { getLeftovers, Resource } from '../../../model/resource';
 import { mapDates } from '../date-utils';
 
@@ -10,7 +10,7 @@ const getResourceLeftovers = (resource: Resource, dateStart: LocalDate, dateEnd:
             return `${amount.amount}`;
         })
         const key = `resource-${resource.id}-leftover-${currentDate.toString()}`
-        return (<td className='data-cell' key={key}>{amounts.join(', ')}</td>);
+        return (<td className='readonly-cell' key={key}>{amounts.join(', ')}</td>);
     });
 };
 

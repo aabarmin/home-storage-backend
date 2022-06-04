@@ -11,7 +11,7 @@ import { Amount } from '../../model/amount';
 const chance = new Chance();
 
 const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
-    "Killogram", "kg", "kg", ConsumptionType.UNIT_CONSUMPTION
+    "Kilogram", "kg", "kg", ConsumptionType.UNIT_CONSUMPTION
 );
 
 const generateDummyResource = (name: string, consignments: Consignment[]): Resource => {
@@ -52,12 +52,8 @@ const generateDayRecords = (dateStart: LocalDate, dateEnd: LocalDate): DayRecord
         result.push({
             id: uuid(), 
             date: currentDate, 
-            supply: [
-                Amount.of(supply, dummyConsumptionUnit)
-            ], 
-            consumption: [
-                Amount.of(consume, dummyConsumptionUnit)
-            ], 
+            supply: Amount.of(supply, dummyConsumptionUnit), 
+            consumption: Amount.of(consume, dummyConsumptionUnit), 
             leftover: Amount.of(currentValue, dummyConsumptionUnit)
         });
         currentDate = currentDate.plusDays(1); 

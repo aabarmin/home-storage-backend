@@ -1,6 +1,6 @@
 import { LocalDate } from '@js-joda/core';
 import React from 'react';
-import { Consignment } from '../../../model/consignment';
+import { Consignment, getConsume } from '../../../model/consignment';
 import { mapDates } from '../date-utils';
 import { MrpEditableCell } from './editable-cell';
 
@@ -13,7 +13,8 @@ interface ConsumeRowProps {
 export const MrpResourceConsignmentConsumeRow = (props: ConsumeRowProps) => {
     const daysEditable: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, (date: LocalDate) => {
         const key=`consumption-${props.consignment.id}-${date.toString()}`
-        return (<MrpEditableCell key={key} value={10} />);
+        const value = getConsume(props.consignment, date).amount;
+        return (<MrpEditableCell key={key} value={value} onClick={() => {}} />);
     });
 
     return (
