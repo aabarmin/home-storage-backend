@@ -7,6 +7,7 @@ import { MrpNavigation } from './navigation';
 import { MrpNotFoundPage } from './pages/404';
 import { MrpHomePage } from './pages/home';
 import { Container } from 'react-bootstrap';
+import { MrpDialogEditConsumption } from './pages/home/dialog-edit-consumption';
 
 export function MrpLayout() {
     return (
@@ -15,7 +16,11 @@ export function MrpLayout() {
 
             <Container fluid>
                 <Routes>
-                    <Route path="/" element={ <MrpHomePage/> } />
+                    <Route path="/" element={ <MrpHomePage/> }>
+                        <Route 
+                                path="consignments/:consignmentId/records/:recordDate/consumptions" 
+                                element={ <MrpDialogEditConsumption /> } />
+                    </Route>
                     <Route path='*' element={ <MrpNotFoundPage/> } />
                 </Routes>
             </Container>

@@ -1,6 +1,6 @@
 import { LocalDate } from "@js-joda/core";
 import { generateDummyData } from "./dummy-data";
-import { Response } from "./model/response"
+import { ResourcesResponse } from "./model/resources-response"
 
 /**
  * This is the main function to retrieve data from backend. 
@@ -9,9 +9,9 @@ import { Response } from "./model/response"
  * @param dateEnd End date
  * @returns Promise with records
  */
-export const getRecords = (dateStart: LocalDate, dateEnd: LocalDate): Promise<Response> => {
+export const getResources = (dateStart: LocalDate, dateEnd: LocalDate): Promise<ResourcesResponse> => {
     return new Promise((resolve) => {
-        const response: Response = {
+        const response: ResourcesResponse = {
             dateStart: dateStart, 
             dateEnd: dateEnd, 
             resources: generateDummyData(dateStart, dateEnd)

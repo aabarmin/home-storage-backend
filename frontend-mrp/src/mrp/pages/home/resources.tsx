@@ -1,14 +1,14 @@
 import { LocalDate, Month } from '@js-joda/core';
 import React, { useState, useEffect } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
-import { getRecords } from './data-providers';
+import { getResources } from './data-providers';
 import { mapDates } from './date-utils';
-import { Response } from './model/response';
+import { ResourcesResponse } from './model/resources-response';
 import { MrpResourceRow } from './resource-row';
 
 export function MrpHomeResources() {
     const [ dataLoading, setDataLoading ] = useState<boolean>(false);
-    const [ response, setResponse ] = useState<null | Response>(null);
+    const [ response, setResponse ] = useState<null | ResourcesResponse>(null);
 
     useEffect(() => {
         // dummy data, should be provided externally
@@ -16,7 +16,7 @@ export function MrpHomeResources() {
         const dateEnd = LocalDate.of(2020, Month.APRIL, 30);
 
         setDataLoading(true);
-        getRecords(dateStart, dateEnd).then((response: Response) => {
+        getResources(dateStart, dateEnd).then((response: ResourcesResponse) => {
             setDataLoading(false);
             setResponse(response);
         });
