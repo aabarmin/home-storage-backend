@@ -26,14 +26,12 @@ export function MrpDialogEditConsumption() {
 
     const onSubmit = (value: number) => {
         setDataLoading(true);
-        setTimeout(() => {
-            const record = (response as DayRecordResponse).record;
-            record.consumption = Amount.of(value, (response as DayRecordResponse).consignment.unit);
+        const record = (response as DayRecordResponse).record;
+        record.consumption = Amount.of(value, (response as DayRecordResponse).consignment.unit);
 
-            patchDayRecord(record).then(() => {
-                handleClose();
-            });
-        }, 1000);
+        patchDayRecord(record).then(() => {
+            handleClose();
+        });
     };
 
     const content = (dataLoading || response === null) ? <ProgressBar animated now={100} /> : 

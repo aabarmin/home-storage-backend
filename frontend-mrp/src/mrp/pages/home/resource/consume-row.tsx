@@ -14,7 +14,7 @@ export const MrpResourceConsignmentConsumeRow = (props: ConsumeRowProps) => {
     const daysEditable: React.ReactNode[] = mapDates(props.dateStart, props.dateEnd, (date: LocalDate) => {
         const key=`consumption-${props.consignment.consignmentId}-${date.toString()}`
         const value = getConsume(props.consignment, date).amount;
-        const link = `/consignments/${props.consignment.consignmentId}/records/${date.toString()}/consumptions`;
+        const link = `consignments/${props.consignment.consignmentId}/records/${date.toString()}/consumptions`;
         return (<MrpEditableLinkCell key={key} value={value} link={link} />);
     });
 

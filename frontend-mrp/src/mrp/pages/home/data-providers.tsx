@@ -51,7 +51,7 @@ export const getDayRecord = (consignmentId: string, date: LocalDate): Promise<Da
                 consignment: consignment as Consignment, 
                 record: dayRecord as DayRecord
             });
-        }, 500);
+        }, 50);
     });
 }
 
@@ -69,6 +69,6 @@ export const patchDayRecord = (record: DayRecord): Promise<void> => {
     return new Promise(resolve => {
         setTimeout(() => {
             resolve();
-        }, 500);
+        }, 50);
     });
 };

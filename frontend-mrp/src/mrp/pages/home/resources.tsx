@@ -1,6 +1,7 @@
 import { LocalDate, Month } from '@js-joda/core';
 import React, { useState, useEffect } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import { getResources } from './data-providers';
 import { mapDates } from './date-utils';
 import { ResourcesResponse } from './model/resources-response';
@@ -9,6 +10,7 @@ import { MrpResourceRow } from './resource-row';
 export function MrpHomeResources() {
     const [ dataLoading, setDataLoading ] = useState<boolean>(false);
     const [ response, setResponse ] = useState<null | ResourcesResponse>(null);
+    const location = useLocation();
 
     useEffect(() => {
         // dummy data, should be provided externally
@@ -20,7 +22,7 @@ export function MrpHomeResources() {
             setDataLoading(false);
             setResponse(response);
         });
-    }, []);
+    }, [location]);
 
     if (response === null || dataLoading === true) {
         return (
