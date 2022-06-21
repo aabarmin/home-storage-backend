@@ -18,21 +18,21 @@ export function MrpHomeResources() {
     const location = useLocation();
     const [ queryParams ] = useSearchParams();
 
-    const getPeriod = (): Period => {
-        let dateStart = LocalDate.now(); 
-        let dateEnd = dateStart.plusDays(7);
-
-        if (queryParams.has('startDate')) {
-            dateStart = LocalDate.parse(queryParams.get('startDate') as string);
-        }
-        if (queryParams.has('endDate')) {
-            dateEnd = LocalDate.parse(queryParams.get('endDate') as string);
-        }
-
-        return { dateStart, dateEnd };
-    };
-
     useEffect(() => {
+        const getPeriod = (): Period => {
+            let dateStart = LocalDate.now(); 
+            let dateEnd = dateStart.plusDays(7);
+    
+            if (queryParams.has('startDate')) {
+                dateStart = LocalDate.parse(queryParams.get('startDate') as string);
+            }
+            if (queryParams.has('endDate')) {
+                dateEnd = LocalDate.parse(queryParams.get('endDate') as string);
+            }
+    
+            return { dateStart, dateEnd };
+        };
+
         // dummy data, should be provided externally
         const { dateStart, dateEnd } = getPeriod();
 
@@ -41,7 +41,7 @@ export function MrpHomeResources() {
             setDataLoading(false);
             setResponse(response);
         });
-    }, [location]);
+    }, [location, queryParams]);
 
     if (response === null || dataLoading === true) {
         return (

@@ -20,49 +20,44 @@ export function MrpHomeDateSelector() {
     const [ calendarType, setCalendarType ] = useState<'week' | '2weeks' | 'month'>('week');
     const [ maxEndDate, setMaxEndDate ] = useState<LocalDate>(LocalDate.now().plusWeeks(1));
     const [ minEndDate, setMinEndDate ] = useState<LocalDate>(LocalDate.now());
-    const [ queryParams, setQueryParams ] = useSearchParams();
-
-    const syncDates = (startDate: LocalDate, endDate: LocalDate, type: 'week' | '2weeks' | 'month') => {
-        // calculate max possible end date
-        let endDateMax = startDate.plusWeeks(1);
-        if (type === '2weeks') {
-            endDateMax = startDate.plusWeeks(2);
-        } else if (type === 'month') {
-            endDateMax = startDate.plusMonths(1);
-        }
-        if (endDate.isAfter(endDateMax)) {
-            setValue('endDate', endDateMax.toString());
-        }
-
-        // set max/min end dates
-        setMaxEndDate(endDateMax);
-        setMinEndDate(startDate);
-
-        // set value in the location
-        setQueryParams({
-            startDate: startDate.toString(), 
-            endDate: endDateMax.toString()
-        });
-    };
-
+    const [ /** queryParams */, setQueryParams ] = useSearchParams();
     const select = (value: 'week' | '2weeks' | 'month') => {
         setCalendarType(value);
-        syncDates(
-            LocalDate.parse(getValues('startDate')), 
-            LocalDate.parse(getValues('endDate')), 
-            value
-        )
     }
 
     const startDateWatch = useWatch({name: 'startDate', control: control});
     const endDateWatch = useWatch({name: 'endDate', control: control});
+
     useEffect(() => {
+        const syncDates = (startDate: LocalDate, endDate: LocalDate, type: 'week' | '2weeks' | 'month') => {
+            // calculate max possible end date
+            let endDateMax = startDate.plusWeeks(1);
+            if (type === '2weeks') {
+                endDateMax = startDate.plusWeeks(2);
+            } else if (type === 'month') {
+                endDateMax = startDate.plusMonths(1);
+            }
+            if (endDate.isAfter(endDateMax)) {
+                setValue('endDate', endDateMax.toString());
+            }
+    
+            // set max/min end dates
+            setMaxEndDate(endDateMax);
+            setMinEndDate(startDate);
+    
+            // set value in the location
+            setQueryParams({
+                startDate: startDate.toString(), 
+                endDate: endDateMax.toString()
+            });
+        };
+
         syncDates(
             LocalDate.parse(getValues('startDate')), 
             LocalDate.parse(getValues('endDate')), 
             calendarType
         )
-    }, [startDateWatch, endDateWatch]);
+    }, [startDateWatch, endDateWatch, calendarType, getValues, setQueryParams, setValue]);
 
     return (
         <Row style={{paddingBottom: '10px'}}>
