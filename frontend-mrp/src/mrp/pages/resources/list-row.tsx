@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
-import { ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
+import { DropdownButton } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { MrpToggler } from '../../components/toggler';
 import { ConsignmentWithLeftovers } from '../../model/consignment';
 import { ResourceWithLeftovers } from '../../model/resource';
 
@@ -15,16 +15,10 @@ interface MainRowProps extends ComponentProps {
 }
 
 function MrpResourcesListMainRow(props: MainRowProps) {
-    const expander: React.ReactNode = props.opened ? 
-        <ArrowsExpand /> :
-        <ArrowsCollapse />;
-
     return (
         <tr>
             <td className='expander-cell'>
-                <button className='btn btn-sm' onClick={props.toggleOpened}>
-                    {expander}
-                </button>
+                <MrpToggler opened={props.opened} onToggle={props.toggleOpened} />
             </td>
             <td className='data-cell'>
                 {props.resource.name}
@@ -32,7 +26,16 @@ function MrpResourcesListMainRow(props: MainRowProps) {
             <td>&nbsp;</td>
             <td>
                 <DropdownButton title='Actions'>
-                    <Link to={`resources/${props.resource.resourceId}`} className='dropdown-item'>Edit</Link>
+                    <Link 
+                        to={`resources/${props.resource.resourceId}`} 
+                        className='dropdown-item'>
+                            Edit
+                    </Link>
+                    <Link 
+                        to={`resources/${props.resource.resourceId}/consignments/new`} 
+                        className='dropdown-item'>
+                            Add consignment
+                    </Link>
                 </DropdownButton>
             </td>
         </tr>
@@ -57,7 +60,11 @@ function MrpResourcesListConsignmentRow(props: ConsignmentProps) {
             </td>
             <td>
                 <DropdownButton title="Actions">
-                    <Dropdown.Item>Edit</Dropdown.Item>
+                <Link 
+                    to={`resources/${props.consignment.resourceId}/consignments/${props.consignment.consignmentId}`} 
+                    className='dropdown-item'>
+                        Edit
+                </Link>
                 </DropdownButton>
             </td>
         </tr>

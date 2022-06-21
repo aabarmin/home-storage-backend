@@ -2,7 +2,7 @@ import { LocalDate } from '@js-joda/core';
 import React from 'react';
 import { ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
 import { getLeftovers, ResourceWithConsignments } from '../../../model/resource';
-import { mapDates } from '../date-utils';
+import { mapDates } from '../../../utils/date-utils';
 
 const getResourceLeftovers = (resource: ResourceWithConsignments, dateStart: LocalDate, dateEnd: LocalDate): React.ReactNode[] => {
     return mapDates(dateStart, dateEnd, (currentDate: LocalDate) => {

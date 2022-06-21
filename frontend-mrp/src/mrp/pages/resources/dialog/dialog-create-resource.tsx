@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Resource } from '../../../model/resource';
-import { saveResource } from '../../home/data-providers';
+import { saveResource } from '../../../data/data-providers';
 import { MrpResourceEditForm } from './form-edit-resource';
 
 export function MrpDialogCreateResource() {

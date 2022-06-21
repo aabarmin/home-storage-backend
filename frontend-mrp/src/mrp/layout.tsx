@@ -13,6 +13,8 @@ import { MrpDialogEditSupply } from './pages/home/dialog/dialog-edit-supply';
 import { MrpResourcesListPage } from './pages/resources-list';
 import { MrpDialogCreateResource } from './pages/resources/dialog/dialog-create-resource';
 import { MrpDialogEditResource } from './pages/resources/dialog/dialog-edit-resource';
+import { MrpDialogCreateConsignment } from './pages/resources/dialog/dialog-create-consignment';
+import { MrpDialogEditConsignment } from './pages/resources/dialog/dialog-edit-consignment';
 
 export function MrpLayout() {
     return (
@@ -39,6 +41,14 @@ export function MrpLayout() {
                         <Route
                                 path="resources/:resourceId"
                                 element={ <MrpDialogEditResource /> } />
+
+                        <Route
+                                path="resources/:resourceId/consignments/new"
+                                element={ <MrpDialogCreateConsignment /> } />
+
+                        <Route
+                                path="resources/:resourceId/consignments/:consignmentId"
+                                element={ <MrpDialogEditConsignment /> } />                                
                     </Route>
 
                     <Route path='*' element={ <MrpNotFoundPage/> } />

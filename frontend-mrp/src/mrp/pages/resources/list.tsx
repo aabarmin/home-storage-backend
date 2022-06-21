@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { getResourcesList } from '../home/data-providers';
+import { getResourcesList } from '../../data/data-providers';
 import { MrpResourcesListRow } from './list-row';
 import { ResourceListResponse } from './model/resource-list-response';
 

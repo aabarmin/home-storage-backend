@@ -1,13 +1,15 @@
 import { LocalDate, Month } from "@js-joda/core";
-import { Amount } from "../../model/amount";
-import { Consignment, ConsignmentWithLeftovers, ConsignmentWithResources, getLeftover } from "../../model/consignment";
-import { DayRecord } from "../../model/day-record";
-import { Resource, ResourceWithConsignments, ResourceWithLeftovers } from "../../model/resource";
-import { ResourceListResponse } from "../resources/model/resource-list-response";
-import { generateDummyData } from "./dummy-data";
-import { DayRecordResponse } from "./model/day-record-response";
-import { ResourcesResponse } from "./model/resources-response";
+import { Amount } from "../model/amount";
+import { Consignment, ConsignmentWithLeftovers, ConsignmentWithResources, getLeftover } from "../model/consignment";
+import { DayRecord } from "../model/day-record";
+import { Resource, ResourceWithConsignments, ResourceWithLeftovers } from "../model/resource";
+import { ResourceListResponse } from "../pages/resources/model/resource-list-response";
+import { dummyConsumptionUnit, generateDummyData } from "../pages/home/dummy-data";
+import { DayRecordResponse } from "../pages/home/model/day-record-response";
+import { ResourcesResponse } from "../pages/home/model/resources-response";
 import { v4 as uuid } from 'uuid';
+import { ConsumptionUnit } from "../model/consumption-unit";
+import { findFirst, hasItem, replaceFirst } from "../utils/array-utils";
 
 const startDate = LocalDate.now().minusMonths(1);
 const endDate = LocalDate.now().plusMonths(1);
@@ -163,6 +165,76 @@ export const saveResource = (resource: Resource): Promise<ResourceWithLeftovers>
     return new Promise(resolve => {
         setTimeout(() => {
             resolve(newResource);
+        }, 50);
+    });
+}
+
+export const Consignments = {
+    getConsignment: (resourceId: string, consignmentId: string): Promise<Consignment> => {
+        const resource = findFirst(dummyData, (r) => {
+            return r.resourceId === resourceId;
+        })
+        const consignment = findFirst(resource.consignments, (c) => {
+            return c.consignmentId === consignmentId;
+        });
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(consignment); 
+            }, 50);
+        });
+    }, 
+    createConsignment: (resourceId: string): Promise<Consignment> => {
+        return new Promise(resolve => {
+            resolve({
+                name: '', 
+                consignmentId: uuid(),
+                resourceId: resourceId, 
+                unit: dummyConsumptionUnit // TODO: fixit, there should be a real unit
+            });
+        });
+    },
+    saveConsignment: (consignment: Consignment): Promise<Consignment> => {
+        return new Promise(resolve => {
+            const resource = findFirst(dummyData, (r) => { 
+                return r.resourceId === consignment.resourceId 
+            });
+            const alreadyExists = hasItem(resource.consignments, (c) => {
+                return c.consignmentId === consignment.consignmentId;
+            });
+            if (alreadyExists) {
+                const existingConsignment: ConsignmentWithResources = findFirst(resource.consignments, (c) => {
+                    return c.consignmentId === consignment.consignmentId;
+                });
+                existingConsignment.name = consignment.name;
+                existingConsignment.unit = consignment.unit;
+
+                replaceFirst(resource.consignments, existingConsignment, (c) => {
+                    return c.consignmentId === consignment.consignmentId;
+                });
+
+                resolve(existingConsignment);
+            } else {
+                const newConsignment: ConsignmentWithResources = {
+                    name: consignment.name, 
+                    resourceId: consignment.resourceId, 
+                    consignmentId: consignment.consignmentId, 
+                    unit: consignment.unit, 
+                    records: []
+                };
+                resource.consignments.push(newConsignment);
+
+                resolve(newConsignment); 
+            }
+        });
+    }
+}
+
+export const getConsumptionUnits = (): Promise<ConsumptionUnit[]> => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve([
+                dummyConsumptionUnit
+            ]);
         }, 50);
     });
 }

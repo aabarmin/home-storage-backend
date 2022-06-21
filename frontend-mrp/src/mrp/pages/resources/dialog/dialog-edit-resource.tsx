@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MrpProgressBar } from '../../../components/progress-bar';
 import { Resource } from '../../../model/resource';
-import { getResource, saveResource } from '../../home/data-providers';
+import { getResource, saveResource } from '../../../data/data-providers';
 import { MrpResourceEditForm } from './form-edit-resource';
 
 export function MrpDialogEditResource() {
@@ -22,7 +22,7 @@ export function MrpDialogEditResource() {
         getResource(resourceId as string).then(res => {
             setResource(res);
         })
-    }, []); 
+    }, [resourceId]); 
 
     const content: React.ReactNode = (resource === null) ? 
         <MrpProgressBar /> :

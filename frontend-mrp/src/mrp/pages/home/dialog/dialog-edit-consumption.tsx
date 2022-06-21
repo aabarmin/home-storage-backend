@@ -4,7 +4,7 @@ import { ProgressBar } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Amount } from '../../../model/amount';
-import { getDayRecord, patchDayRecord } from '../data-providers';
+import { getDayRecord, patchDayRecord } from '../../../data/data-providers';
 import { DayRecordResponse } from '../model/day-record-response';
 import { MrpEditDayRecordForm } from './form-edit-record';
 

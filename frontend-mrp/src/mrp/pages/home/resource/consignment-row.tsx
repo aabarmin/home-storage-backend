@@ -1,7 +1,7 @@
 import { LocalDate } from '@js-joda/core';
 import React from 'react';
 import { ConsignmentWithResources, getLeftover } from '../../../model/consignment';
-import { mapDates } from '../date-utils';
+import { mapDates } from '../../../utils/date-utils';
 
 interface ConsignmentRowProps {
     consignment: ConsignmentWithResources, 

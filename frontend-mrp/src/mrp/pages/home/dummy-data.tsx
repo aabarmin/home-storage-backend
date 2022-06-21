@@ -10,7 +10,7 @@ import { Amount } from '../../model/amount';
 
 const chance = new Chance();
 
-const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
+export const dummyConsumptionUnit: ConsumptionUnit = new ConsumptionUnit(
     "Kilogram", "kg", "kg", ConsumptionType.UNIT_CONSUMPTION
 );
 
