@@ -2,7 +2,7 @@ import { LocalDate } from '@js-joda/core';
 import { useState, useEffect } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { getResources } from '../../data/data-providers';
+import { Resources } from '../../data/data-providers';
 import { mapDates } from '../../utils/date-utils';
 import { ResourcesResponse } from './model/resources-response';
 import { MrpResourceRow } from './resource-row';
@@ -37,7 +37,7 @@ export function MrpHomeResources() {
         const { dateStart, dateEnd } = getPeriod();
 
         setDataLoading(true);
-        getResources(dateStart, dateEnd).then((response: ResourcesResponse) => {
+        Resources.getResources(dateStart, dateEnd).then((response: ResourcesResponse) => {
             setDataLoading(false);
             setResponse(response);
         });

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { Resources } from '../../../data/data-providers';
 import { Resource } from '../../../model/resource';
-import { saveResource } from '../../../data/data-providers';
 import { MrpResourceEditForm } from './form-edit-resource';
 
 export function MrpDialogCreateResource() {
@@ -13,7 +13,7 @@ export function MrpDialogCreateResource() {
         resourceId: ''
     };
     const onSave = (toSave: Resource) => {
-        saveResource(toSave).then(() => {
+        Resources.saveResource(toSave).then(() => {
             handleClose();
         })
     };

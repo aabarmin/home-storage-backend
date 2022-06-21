@@ -15,28 +15,6 @@ const startDate = LocalDate.now().minusMonths(1);
 const endDate = LocalDate.now().plusMonths(1);
 const dummyData: ResourceWithConsignments[] = generateDummyData(startDate, endDate);
 
-/**
- * This is the main function to retrieve data from backend. 
- * 
- * @param dateStart Start date
- * @param dateEnd End date
- * @returns Promise with records
- */
-export const getResources = (dateStart: LocalDate, dateEnd: LocalDate): Promise<ResourcesResponse> => {
-    return new Promise((resolve) => {
-        const response: ResourcesResponse = {
-            dateStart: dateStart, 
-            dateEnd: dateEnd, 
-            resources: dummyData
-        };
-
-        // to simulate some delay from backend
-        setTimeout(() => {
-            resolve(response); 
-        }, 20);
-    });
-}; 
-
 export const getDayRecord = (consignmentId: string, date: LocalDate): Promise<DayRecordResponse> => {
     let consignment: Consignment | null = null;
     let dayRecord: DayRecord | null = null;
@@ -80,94 +58,94 @@ export const patchDayRecord = (record: DayRecord): Promise<void> => {
     });
 };
 
-/**
- * Used to retrieve a list of available resources
- * @returns A list of resources
- */
-export const getResourcesList = (): Promise<ResourceListResponse> => {
-    const calculateLeftover = (c: ConsignmentWithResources): Amount => {
-        return getLeftover(c, LocalDate.of(2020, Month.APRIL, 30));
-    };
-
-    const resources: ResourceWithLeftovers[] = dummyData.map(r => {
-        return {
-            name: r.name, 
-            resourceId: r.resourceId, 
-            consignments: r.consignments.map(c => {
-                return {
-                    consignmentId: c.consignmentId, 
-                    resourceId: c.resourceId, 
-                    name: c.name, 
-                    unit: c.unit, 
-                    leftover: calculateLeftover(c)
-                } as ConsignmentWithLeftovers;
-            })
-        } as ResourceWithLeftovers;
-    });
-
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve({resources});
-        }, 50)
-    });
-};
-
-/**
- * Get a resource by id. 
- * @param resourceId 
- * @returns 
- */
-export const getResource = (resourceId: string): Promise<Resource> => {
-    return new Promise(resolve => {
-        const found = dummyData.filter(r => r.resourceId === resourceId);
-        setTimeout(() => {
-            resolve(found[0])
-        }, 50);
-    });
-};
-
-/**
- * Create new or update existing resource. 
- * @param resource to create or update
- * @returns 
- */
-export const saveResource = (resource: Resource): Promise<ResourceWithLeftovers> => {
-    // dummy implementation, should be handled by backend
-    const newResource: ResourceWithLeftovers = resource.resourceId === '' ? 
-        {
-            name: resource.name, 
-            resourceId: uuid(), 
-            consignments: []
-        } : 
-        {
-            name: resource.name, 
-            resourceId: resource.resourceId, 
-            consignments: []
-        }
-
-    // actually, need to add to the dummy data
-    const filtered = dummyData.filter(resource => resource.resourceId === newResource.resourceId);
-    if (filtered.length === 0) {
-        dummyData.push({
-            name: newResource.name, 
-            resourceId: newResource.resourceId, 
-            consignments: []
+export const Resources = {
+    getResources: (dateStart: LocalDate, dateEnd: LocalDate): Promise<ResourcesResponse> => {
+        return new Promise((resolve) => {
+            const response: ResourcesResponse = {
+                dateStart: dateStart, 
+                dateEnd: dateEnd, 
+                resources: dummyData
+            };
+    
+            // to simulate some delay from backend
+            setTimeout(() => {
+                resolve(response); 
+            }, 20);
         });
-    } else {
-        const index = dummyData.indexOf(filtered[0]);
-        dummyData[index] = {
-            name: newResource.name, 
-            resourceId: newResource.resourceId, 
-            consignments: filtered[0].consignments
+    }, 
+    getResourcesList: (): Promise<ResourceListResponse> => {
+        const calculateLeftover = (c: ConsignmentWithResources): Amount => {
+            return getLeftover(c, LocalDate.of(2020, Month.APRIL, 30));
         };
+    
+        const resources: ResourceWithLeftovers[] = dummyData.map(r => {
+            return {
+                name: r.name, 
+                resourceId: r.resourceId, 
+                consignments: r.consignments.map(c => {
+                    return {
+                        consignmentId: c.consignmentId, 
+                        resourceId: c.resourceId, 
+                        name: c.name, 
+                        unit: c.unit, 
+                        leftover: calculateLeftover(c)
+                    } as ConsignmentWithLeftovers;
+                })
+            } as ResourceWithLeftovers;
+        });
+    
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve({resources});
+            }, 50)
+        });
+    }, 
+    getResource: (resourceId: string): Promise<Resource> => {
+        return new Promise(resolve => {
+            const found = dummyData.filter(r => r.resourceId === resourceId);
+            setTimeout(() => {
+                resolve(found[0])
+            }, 50);
+        });
+    }, 
+    saveResource: (resource: Resource): Promise<ResourceWithLeftovers> => {
+        // dummy implementation, should be handled by backend
+        const newResource: ResourceWithLeftovers = resource.resourceId === '' ? 
+            {
+                name: resource.name, 
+                resourceId: uuid(), 
+                consignments: []
+            } : 
+            {
+                name: resource.name, 
+                resourceId: resource.resourceId, 
+                consignments: []
+            }
+    
+        // actually, need to add to the dummy data
+        const filtered = dummyData.filter(resource => resource.resourceId === newResource.resourceId);
+        if (filtered.length === 0) {
+            dummyData.push({
+                name: newResource.name, 
+                resourceId: newResource.resourceId, 
+                consignments: []
+            });
+        } else {
+            const index = dummyData.indexOf(filtered[0]);
+            dummyData[index] = {
+                name: newResource.name, 
+                resourceId: newResource.resourceId, 
+                consignments: filtered[0].consignments
+            };
+        }
+    
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(newResource);
+            }, 50);
+        });
     }
-
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(newResource);
-        }, 50);
-    });
-}
+};
 
 export const Consignments = {
     getConsignment: (resourceId: string, consignmentId: string): Promise<Consignment> => {
@@ -229,12 +207,14 @@ export const Consignments = {
     }
 }
 
-export const getConsumptionUnits = (): Promise<ConsumptionUnit[]> => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve([
-                dummyConsumptionUnit
-            ]);
-        }, 50);
-    });
-}
+export const ConsumptionUnits = {
+    getConsumptionUnits: (): Promise<ConsumptionUnit[]> => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve([
+                    dummyConsumptionUnit
+                ]);
+            }, 50);
+        });
+    }
+} 

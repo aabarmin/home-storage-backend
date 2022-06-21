@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { getResourcesList } from '../../data/data-providers';
+import { Resources } from '../../data/data-providers';
 import { MrpResourcesListRow } from './list-row';
 import { ResourceListResponse } from './model/resource-list-response';
 
@@ -13,7 +13,7 @@ export function MrpResourcesList() {
 
     useEffect(() => {
         setDataLoading(true);
-        getResourcesList().then(response => {
+        Resources.getResourcesList().then(response => {
             setDataLoading(false);
             setResponse(response);
         });

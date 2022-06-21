@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MrpProgressBar } from '../../../components/progress-bar';
+import { Resources } from '../../../data/data-providers';
 import { Resource } from '../../../model/resource';
-import { getResource, saveResource } from '../../../data/data-providers';
 import { MrpResourceEditForm } from './form-edit-resource';
 
 export function MrpDialogEditResource() {
@@ -13,13 +13,13 @@ export function MrpDialogEditResource() {
     const [ resource, setResource ] = useState<null | Resource>(null);
 
     const onSave = (toSave: Resource) => {
-        saveResource(toSave).then(() => {
+        Resources.saveResource(toSave).then(() => {
             handleClose();
         })
     };
 
     useEffect(() => {
-        getResource(resourceId as string).then(res => {
+        Resources.getResource(resourceId as string).then(res => {
             setResource(res);
         })
     }, [resourceId]); 

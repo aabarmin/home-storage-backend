@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MrpProgressBar } from '../../../components/progress-bar';
-import { Consignments, getConsumptionUnits } from '../../../data/data-providers';
+import { Consignments, ConsumptionUnits } from '../../../data/data-providers';
 import { Consignment } from '../../../model/consignment';
 import { ConsumptionUnit } from '../../../model/consumption-unit';
 import { MrpConsignmentEditForm } from './form-edit-consignment';
@@ -25,14 +25,14 @@ export function MrpDialogEditConsignment() {
     useEffect(() => {
         Promise.all([
             Consignments.getConsignment(resourceId as string, consignmentId as string), 
-            getConsumptionUnits()
+            ConsumptionUnits.getConsumptionUnits()
         ]).then(([consignment, units]) => {
             setFormData({
                 consignment: consignment, 
                 consumptionUnits: units
             })
         });
-    }, [resourceId]);
+    }, [resourceId, consignmentId]);
 
     const [ formData, setFormData ] = useState<null | FormData>(null);
     const content = formData === null ? 
