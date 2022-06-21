@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 import { ArrowsCollapse, ArrowsExpand } from 'react-bootstrap-icons';
+import { Link } from 'react-router-dom';
 import { ConsignmentWithLeftovers } from '../../model/consignment';
 import { ResourceWithLeftovers } from '../../model/resource';
 
@@ -31,7 +32,7 @@ function MrpResourcesListMainRow(props: MainRowProps) {
             <td>&nbsp;</td>
             <td>
                 <DropdownButton title='Actions'>
-                    <Dropdown.Item>Edit</Dropdown.Item>
+                    <Link to={`resources/${props.resource.resourceId}`} className='dropdown-item'>Edit</Link>
                 </DropdownButton>
             </td>
         </tr>

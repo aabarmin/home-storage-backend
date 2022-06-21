@@ -12,6 +12,7 @@ import { MrpDialogEditConsumption } from './pages/home/dialog/dialog-edit-consum
 import { MrpDialogEditSupply } from './pages/home/dialog/dialog-edit-supply';
 import { MrpResourcesListPage } from './pages/resources-list';
 import { MrpDialogCreateResource } from './pages/resources/dialog/dialog-create-resource';
+import { MrpDialogEditResource } from './pages/resources/dialog/dialog-edit-resource';
 
 export function MrpLayout() {
     return (
@@ -35,6 +36,9 @@ export function MrpLayout() {
                         <Route
                                 path="resources/new"
                                 element={ <MrpDialogCreateResource /> } />
+                        <Route
+                                path="resources/:resourceId"
+                                element={ <MrpDialogEditResource /> } />
                     </Route>
 
                     <Route path='*' element={ <MrpNotFoundPage/> } />

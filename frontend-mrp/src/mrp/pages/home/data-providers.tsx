@@ -110,6 +110,25 @@ export const getResourcesList = (): Promise<ResourceListResponse> => {
     });
 };
 
+/**
+ * Get a resource by id. 
+ * @param resourceId 
+ * @returns 
+ */
+export const getResource = (resourceId: string): Promise<Resource> => {
+    return new Promise(resolve => {
+        const found = dummyData.filter(r => r.resourceId === resourceId);
+        setTimeout(() => {
+            resolve(found[0])
+        }, 50);
+    });
+};
+
+/**
+ * Create new or update existing resource. 
+ * @param resource to create or update
+ * @returns 
+ */
 export const saveResource = (resource: Resource): Promise<ResourceWithLeftovers> => {
     // dummy implementation, should be handled by backend
     const newResource: ResourceWithLeftovers = resource.resourceId === '' ? 
@@ -132,6 +151,13 @@ export const saveResource = (resource: Resource): Promise<ResourceWithLeftovers>
             resourceId: newResource.resourceId, 
             consignments: []
         });
+    } else {
+        const index = dummyData.indexOf(filtered[0]);
+        dummyData[index] = {
+            name: newResource.name, 
+            resourceId: newResource.resourceId, 
+            consignments: filtered[0].consignments
+        };
     }
 
     return new Promise(resolve => {
