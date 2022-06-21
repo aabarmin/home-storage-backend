@@ -1,12 +1,12 @@
-import React from 'react';
-import { Col, Dropdown, DropdownButton, Row } from 'react-bootstrap';
+import { Col, DropdownButton, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 export function MrpResourcesListToolbar() {
     return (
         <Row style={{ paddingBottom: '10px' }}>
             <Col>
                 <DropdownButton title="Create new">
-                    <Dropdown.Item>Resource</Dropdown.Item>
+                    <Link to={'resources/new'} className="dropdown-item">Resource</Link>
                 </DropdownButton>
             </Col>
         </Row>

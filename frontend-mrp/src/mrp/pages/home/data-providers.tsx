@@ -2,13 +2,16 @@ import { LocalDate, Month } from "@js-joda/core";
 import { Amount } from "../../model/amount";
 import { Consignment, ConsignmentWithLeftovers, ConsignmentWithResources, getLeftover } from "../../model/consignment";
 import { DayRecord } from "../../model/day-record";
-import { ResourceWithConsignments, ResourceWithLeftovers } from "../../model/resource";
+import { Resource, ResourceWithConsignments, ResourceWithLeftovers } from "../../model/resource";
 import { ResourceListResponse } from "../resources/model/resource-list-response";
 import { generateDummyData } from "./dummy-data";
 import { DayRecordResponse } from "./model/day-record-response";
 import { ResourcesResponse } from "./model/resources-response";
+import { v4 as uuid } from 'uuid';
 
-const dummyData: ResourceWithConsignments[] = generateDummyData(LocalDate.of(2020, Month.APRIL, 1), LocalDate.of(2020, Month.APRIL, 30));
+const startDate = LocalDate.now().minusMonths(1);
+const endDate = LocalDate.now().plusMonths(1);
+const dummyData: ResourceWithConsignments[] = generateDummyData(startDate, endDate);
 
 /**
  * This is the main function to retrieve data from backend. 
@@ -106,3 +109,34 @@ export const getResourcesList = (): Promise<ResourceListResponse> => {
         }, 50)
     });
 };
+
+export const saveResource = (resource: Resource): Promise<ResourceWithLeftovers> => {
+    // dummy implementation, should be handled by backend
+    const newResource: ResourceWithLeftovers = resource.resourceId === '' ? 
+        {
+            name: resource.name, 
+            resourceId: uuid(), 
+            consignments: []
+        } : 
+        {
+            name: resource.name, 
+            resourceId: resource.resourceId, 
+            consignments: []
+        }
+
+    // actually, need to add to the dummy data
+    const filtered = dummyData.filter(resource => resource.resourceId === newResource.resourceId);
+    if (filtered.length === 0) {
+        dummyData.push({
+            name: newResource.name, 
+            resourceId: newResource.resourceId, 
+            consignments: []
+        });
+    }
+
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(newResource);
+        }, 50);
+    });
+}

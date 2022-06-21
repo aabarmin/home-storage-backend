@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Col, ProgressBar, Row, Table } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import { getResourcesList } from '../home/data-providers';
 import { MrpResourcesListRow } from './list-row';
 import { ResourceListResponse } from './model/resource-list-response';
 
 export function MrpResourcesList() {
 
+    const location = useLocation();
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [response, setResponse] = useState<null | ResourceListResponse>(null);
 
@@ -15,7 +17,7 @@ export function MrpResourcesList() {
             setDataLoading(false);
             setResponse(response);
         });
-    }, []); 
+    }, [location]); 
 
     if (response === null || dataLoading === true) {
         return (<ProgressBar animated now={100} />);
