@@ -1,0 +1,9 @@
+table.resources-list-table td.data-cell {
+    vertical-align: middle;
+}
+
+table.resources-list-table td.expander-cell {
+    text-align: center;
+    vertical-align: middle;
+    width: 50px;
+}
