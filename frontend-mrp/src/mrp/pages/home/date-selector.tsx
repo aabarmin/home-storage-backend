@@ -41,7 +41,7 @@ export function MrpHomeDateSelector() {
         // set value in the location
         setQueryParams({
             startDate: startDate.toString(), 
-            endDate: endDate.toString()
+            endDate: endDateMax.toString()
         });
     };
 
