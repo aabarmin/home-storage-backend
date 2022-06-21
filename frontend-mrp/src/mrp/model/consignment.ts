@@ -5,7 +5,7 @@ import { ConsumptionUnit } from "./consumption-unit";
 import { DayRecord } from "./day-record";
 
 /**
- * Basic data model of a consignment. 
+ * Basic data model of a consignment.
  */
 export interface Consignment {
   consignmentId: string;
@@ -19,6 +19,13 @@ export interface Consignment {
  */
 export interface ConsignmentWithResources extends Consignment {
   records: DayRecord[];
+}
+
+/**
+ * Consignment of a particular resource with leftover.
+ */
+export interface ConsignmentWithLeftovers extends Consignment {
+  leftover: Amount;
 }
 
 /**

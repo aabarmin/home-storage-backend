@@ -6,12 +6,17 @@ export function MrpNavigation() {
     return (
         <Navbar>
             <Container fluid>
-                <Link to="/" className="navbar-brand">MRP Application</Link>    
+                <Link to="/mrp" className="navbar-brand">MRP Application</Link>    
 
                 <Nav className='me-auto'>
                     <NavItem>
-                        <Link to="/" className="nav-link">
+                        <Link to="/mrp" className="nav-link">
                             Home
+                        </Link>
+                    </NavItem>
+                    <NavItem>
+                        <Link to="/mrp/list" className="nav-link">
+                            Resources
                         </Link>
                     </NavItem>
                 </Nav>

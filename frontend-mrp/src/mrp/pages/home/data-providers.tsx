@@ -1,7 +1,9 @@
 import { LocalDate, Month } from "@js-joda/core";
-import { Consignment } from "../../model/consignment";
+import { Amount } from "../../model/amount";
+import { Consignment, ConsignmentWithLeftovers, ConsignmentWithResources, getLeftover } from "../../model/consignment";
 import { DayRecord } from "../../model/day-record";
-import { ResourceWithConsignments } from "../../model/resource";
+import { ResourceWithConsignments, ResourceWithLeftovers } from "../../model/resource";
+import { ResourceListResponse } from "../resources/model/resource-list-response";
 import { generateDummyData } from "./dummy-data";
 import { DayRecordResponse } from "./model/day-record-response";
 import { ResourcesResponse } from "./model/resources-response";
@@ -70,5 +72,37 @@ export const patchDayRecord = (record: DayRecord): Promise<void> => {
         setTimeout(() => {
             resolve();
         }, 50);
+    });
+};
+
+/**
+ * Used to retrieve a list of available resources
+ * @returns A list of resources
+ */
+export const getResourcesList = (): Promise<ResourceListResponse> => {
+    const calculateLeftover = (c: ConsignmentWithResources): Amount => {
+        return getLeftover(c, LocalDate.of(2020, Month.APRIL, 30));
+    };
+
+    const resources: ResourceWithLeftovers[] = dummyData.map(r => {
+        return {
+            name: r.name, 
+            resourceId: r.resourceId, 
+            consignments: r.consignments.map(c => {
+                return {
+                    consignmentId: c.consignmentId, 
+                    resourceId: c.resourceId, 
+                    name: c.name, 
+                    unit: c.unit, 
+                    leftover: calculateLeftover(c)
+                } as ConsignmentWithLeftovers;
+            })
+        } as ResourceWithLeftovers;
+    });
+
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve({resources});
+        }, 50)
     });
 };
