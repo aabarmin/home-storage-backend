@@ -39,15 +39,7 @@
         </dependency>
         <dependency>
             <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.abarmin.home.is</groupId>
             <artifactId>backend-ssm-parameters</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-mrp</artifactId>
         </dependency>
 
         <dependency>
