@@ -36,8 +36,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {
     PreImportChecker.class,
     ConfigFileReader.class,
-    ObjectMapper.class,
-    BinaryService.class
+    ObjectMapper.class
 })
 class PreImportCheckerTest {
   @Value("classpath:/import-config-example.json")
@@ -80,22 +79,11 @@ class PreImportCheckerTest {
     });
     when(binaryServiceHelper.uploadToTemporaryFolder(any(MultipartFile.class))).thenCallRealMethod();
     when(binaryService.download(any(FileInfo.class))).thenAnswer(inv -> {
-      final FileInfo fileInfo = inv.getArgument(0);
-      return new URL("file:///" + fileInfo.filePath());
-    });
-    when(binaryServiceHelper.downloadToTemporaryFolder(any(URL.class))).thenAnswer(inv -> {
-      final URL url = inv.getArgument(0);
-      final String file = url.getFile();
-      return new FileSystemResource(file);
+      return exampleConfig.getFile().toPath();
     });
 
-    final MockMultipartFile config = new MockMultipartFile(
-        "dummy configuration",
-        exampleConfig.getInputStream()
-    );
-    final FileInfo configFileInfo =
-        binaryService.upload(binaryServiceHelper.uploadToTemporaryFolder(config));
-    final ImportConfiguration configuration = configReader.read(configFileInfo);
+    var fileId = binaryService.upload(exampleConfig.getFile().toPath());
+    final ImportConfiguration configuration = configReader.read(fileId);
 
     assertThat(configuration).isNotNull();
 

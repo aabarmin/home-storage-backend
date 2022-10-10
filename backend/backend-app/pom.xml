@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-binary-storage-s3</artifactId>
+            <artifactId>backend-binary-storage-local</artifactId>
         </dependency>
         <dependency>
             <groupId>dev.abarmin.home.is</groupId>

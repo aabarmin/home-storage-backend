@@ -20,7 +20,7 @@ public interface BinaryService {
   /**
    * Get a URL to download a file.
    * @param fileInfo with information about file to download.
-   * @return an URL for download.
+   * @return path to the file to download.
    */
-  URL download(FileInfo fileInfo);
+  Path download(FileInfo fileInfo);
 }

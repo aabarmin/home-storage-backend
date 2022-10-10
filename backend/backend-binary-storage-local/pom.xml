@@ -10,10 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <description>
-        Binary storage implementation that saves files to S3.
+        Binary storage implementation that saves files to local folder.
     </description>
 
-    <artifactId>backend-binary-storage-s3</artifactId>
+    <artifactId>backend-binary-storage-local</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
