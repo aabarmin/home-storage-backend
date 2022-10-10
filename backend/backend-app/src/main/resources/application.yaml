@@ -3,14 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/pguser
     username: pguser
     password: pgpassword
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ${security.google.client-id}
-            client-secret: ${security.google.client-secret}
-
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
 
@@ -19,12 +11,6 @@ storage:
     region: ${aws-ssm:/dev/home-storage/s3/region}
     valid-seconds: 30
     bucket: ${aws-ssm:/dev/home-storage/s3/name}
-
-security:
-  google:
-    client-id: ${aws-ssm:/prod/home-storage/google/client-id}
-    client-secret: ${aws-ssm:/prod/home-storage/google/client-secret}
-    allowed-users: ${aws-ssm:/prod/home-storage/google/allowed-users}
 
 management:
   endpoints:
