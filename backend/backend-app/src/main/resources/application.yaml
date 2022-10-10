@@ -7,10 +7,8 @@ spring:
     change-log: classpath:/db/db.changelog-master.xml
 
 storage:
-  s3:
-    region: ${aws-ssm:/dev/home-storage/s3/region}
-    valid-seconds: 30
-    bucket: ${aws-ssm:/dev/home-storage/s3/name}
+  local:
+    folder: ./storage
 
 management:
   endpoints:

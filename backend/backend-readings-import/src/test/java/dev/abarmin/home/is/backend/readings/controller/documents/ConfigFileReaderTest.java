@@ -20,7 +20,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.multipart.MultipartFile;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -31,8 +30,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {
     ConfigFileReader.class,
-    ObjectMapper.class,
-    BinaryService.class
+    ObjectMapper.class
 })
 class ConfigFileReaderTest {
   @Autowired
@@ -66,20 +64,9 @@ class ConfigFileReaderTest {
           uploadedFile.toString()
       );
     });
-    when(binaryServiceHelper.uploadToTemporaryFolder(any(MultipartFile.class))).thenCallRealMethod();
-    when(binaryService.download(any(FileInfo.class))).thenAnswer(inv -> {
-      final FileInfo fileInfo = inv.getArgument(0);
-      return new URL("file:///" + fileInfo.filePath());
-    });
-    when(binaryServiceHelper.downloadToTemporaryFolder(any(URL.class))).thenAnswer(inv -> {
-      final URL url = inv.getArgument(0);
-      final String file = url.getFile();
-      return new FileSystemResource(file);
-    });
+    when(binaryService.download(any(FileInfo.class))).thenAnswer(inv -> exampleConfigFile.getFile().toPath());
 
-    final MockMultipartFile mockFile = new MockMultipartFile("file", exampleConfigFile.getInputStream());
-    final Path configFile = binaryServiceHelper.uploadToTemporaryFolder(mockFile);
-    final FileInfo configFileId = binaryService.upload(configFile);
+    final FileInfo configFileId = binaryService.upload(exampleConfigFile.getFile().toPath());
     final ImportConfiguration result = reader.read(configFileId);
 
     assertThat(result).isNotNull();

@@ -28,7 +28,7 @@
         <module>backend-app</module>
 		<module>backend-binary-storage</module>
         <module>backend-binary-storage-persistence</module>
-        <module>backend-binary-storage-s3</module>
+        <module>backend-binary-storage-local</module>
         <module>backend-readings-persistence</module>
         <module>backend-ssm-parameters</module>
         <module>backend-mrp</module>
@@ -58,7 +58,7 @@
 			</dependency>
 			<dependency>
 				<groupId>dev.abarmin.home.is</groupId>
-				<artifactId>backend-binary-storage-s3</artifactId>
+				<artifactId>backend-binary-storage-local</artifactId>
 				<version>0.0.2-SNAPSHOT</version>
 			</dependency>
 			<dependency>
