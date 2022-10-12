@@ -5,6 +5,5 @@ spring:
     password: ${aws-ssm:/prod/home-storage/rds/password}
 
 storage:
-  s3:
-    region: ${aws-ssm:/prod/home-storage/s3/region}
-    bucket: ${aws-ssm:/prod/home-storage/s3/name}
+  local:
+    folder: ./storage
