@@ -34,7 +34,7 @@ public abstract class DeviceReadingEntityTransformer {
   }
 
   protected AggregateReference<FlatEntity, Integer> mapFlat(final Flat flat) {
-    return AggregateReference.to(flat.id());
+    return AggregateReference.to(flat.getId());
   }
 
   protected Integer mapReading(final Optional<Integer> reading) {

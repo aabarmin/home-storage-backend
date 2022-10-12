@@ -18,6 +18,6 @@ public abstract class DeviceEntityTransformer {
   public abstract Device toDomain(DeviceEntity device);
 
   protected AggregateReference<FlatEntity, Integer> mapFlat(final Flat flat) {
-    return AggregateReference.to(flat.id());
+    return AggregateReference.to(flat.getId());
   }
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Readings - Flats</title>
+</head>
+<body>
+    <div layout:fragment="title">
+        <h2>Edit a flat</h2>
+    </div>
+
+    <div layout:fragment="toolbar">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/readings/flats}">
+                    Back
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div layout:fragment="content">
+        <form th:action="@{/readings/flats}"
+              method="post"
+              th:object="${flat}">
+
+            <div th:replace="forms::errors" />
+            <div th:replace="forms::text('Title', 'title', true)" />
+            <div th:replace="forms::text('Alias', 'alias', false)" />
+
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
