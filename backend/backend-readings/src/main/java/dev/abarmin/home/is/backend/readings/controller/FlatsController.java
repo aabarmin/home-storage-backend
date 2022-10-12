@@ -31,10 +31,9 @@ public class FlatsController {
   }
 
   @GetMapping
-  public ModelAndView viewAll(final ModelAndView modelAndView) {
-    modelAndView.setViewName("flats/index");
+  public String viewAll(final ModelAndView modelAndView) {
     modelAndView.addObject("flats", flatService.findAll());
-    return modelAndView;
+    return "flats/index";
   }
 
   @GetMapping("/new")
