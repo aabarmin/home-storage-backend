@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import static com.codeborne.selenide.Selenide.*;
@@ -16,7 +17,7 @@ import static com.codeborne.selenide.Selenide.*;
 /**
  * @author Aleksandr Barmin
  */
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BackendSpringApplicationWebTest {
   @LocalServerPort
   private int port = 8080;
