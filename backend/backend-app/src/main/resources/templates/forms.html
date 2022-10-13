@@ -23,6 +23,10 @@
         </div>
     </div>
 
+    <div th:fragment="hidden(name)" class="row">
+        <input type="hidden" th:field="*{__${name}__}" />
+    </div>
+
     <div th:fragment="errors" class="row" th:if="${#fields.hasErrors('*')}">
         <div class="col alert alert-secondary">
             <ul>

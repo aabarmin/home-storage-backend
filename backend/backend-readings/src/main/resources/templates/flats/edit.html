@@ -27,6 +27,7 @@
               th:object="${flat}">
 
             <div th:replace="forms::errors" />
+            <div th:replace="forms::hidden('id')" />
             <div th:replace="forms::text('Title', 'title', true)" />
             <div th:replace="forms::text('Alias', 'alias', false)" />
 

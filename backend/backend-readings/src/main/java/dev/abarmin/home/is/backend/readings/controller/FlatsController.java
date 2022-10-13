@@ -6,9 +6,11 @@ import dev.abarmin.home.is.backend.readings.service.FlatService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,13 +33,21 @@ public class FlatsController {
   }
 
   @GetMapping
-  public String viewAll(final ModelAndView modelAndView) {
-    modelAndView.addObject("flats", flatService.findAll());
+  public String viewAll(final Model model) {
+    model.addAttribute("flats", flatService.findAll());
     return "flats/index";
   }
 
   @GetMapping("/new")
   public String createNew() {
+    return "flats/edit";
+  }
+
+  @GetMapping("/{id}")
+  public String edit(final @PathVariable("id") int id,
+                     final Model model) {
+
+    model.addAttribute("flat", flatService.findOneById(id).orElseThrow());
     return "flats/edit";
   }
 

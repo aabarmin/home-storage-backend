@@ -24,13 +24,28 @@
     <div layout:fragment="content">
         <table class="table">
             <thead>
-            <th>
-            <td>#</td>
-            <td>Title</td>
-            <td>Alias</td>
-            <td>Actions</td>
-            </th>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Alias</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
+
+            <tbody>
+                <tr th:each="flat : ${flats}">
+                    <td th:text="${flat.id}" />
+                    <td th:text="${flat.title}" />
+                    <td th:text="${flat.alias}" />
+                    <td>
+                        <div class="btn-group">
+                            <a th:href="@{/readings/flats/{id}(id=${flat.id})}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </body>
