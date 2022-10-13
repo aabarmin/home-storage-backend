@@ -16,4 +16,6 @@ public interface FlatRepository {
   Collection<Flat> findAll();
 
   Optional<Flat> findFirstByAlias(String alias);
+
+  void deleteById(int id);
 }

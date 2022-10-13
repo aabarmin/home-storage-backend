@@ -44,7 +44,7 @@ public class DeviceReadingRepositoryImpl implements DeviceReadingRepository {
 
     return repository.findDeviceReadingByFlatAndDeviceAndDate(
         flat.getId(),
-        device.id(),
+        device.getId(),
         date
         )
             .map(transformer::toDomain);

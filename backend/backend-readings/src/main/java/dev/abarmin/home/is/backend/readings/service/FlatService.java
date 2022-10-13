@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
  * @author Aleksandr Barmin
  */
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class FlatService {
   private final FlatRepository flatRepository;

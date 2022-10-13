@@ -18,6 +18,12 @@
                     Back
                 </a>
             </li>
+            <li class="nav-item" th:if="${flat.id != null}">
+                <a class="nav-link"
+                   th:href="@{/readings/flats/{flatId}/devices/new(flatId=${flat.id})}">
+                    Create a new device
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -37,6 +43,28 @@
                 </div>
             </div>
         </form>
+
+        <h2>
+            Devices
+        </h2>
+
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Alias</th>
+                <th>Actions</th>
+            </tr>
+
+            <tr th:each="device : ${devices}">
+                <td th:text="${device.id}" />
+                <td th:text="${device.title}" />
+                <td th:text="${device.alias}" />
+                <td>
+                    123
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>

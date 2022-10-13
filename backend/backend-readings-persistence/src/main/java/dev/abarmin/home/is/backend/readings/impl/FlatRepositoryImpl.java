@@ -46,4 +46,9 @@ public class FlatRepositoryImpl implements FlatRepository {
     return repository.findFlatEntityByAlias(alias)
         .map(transformer::toDomain);
   }
+
+  @Override
+  public void deleteById(int id) {
+    repository.deleteById(id);
+  }
 }

@@ -16,10 +16,8 @@ public abstract class DeviceModelTransformer {
   @Autowired
   private FlatService flatService;
 
-  @Mapping(target = "flatId", source = "flat.id")
   public abstract DeviceModel toModel(final Device domain);
 
-  @Mapping(target = "flat", source = "flatId")
   public abstract Device toDomain(final DeviceModel model);
 
   protected Flat mapFlat(final int flatId) {
