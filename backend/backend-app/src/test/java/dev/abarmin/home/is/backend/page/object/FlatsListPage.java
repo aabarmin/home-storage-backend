@@ -14,7 +14,10 @@ public class FlatsListPage {
     return page(FlatsEditPage.class);
   }
 
-  public ElementsCollection allFlats() {
-    return $$x(".//table");
+  public FlatsEditPage edithFlatWithName(final String name) {
+    var editButtonXPath = ".//tr[.//td[text()='" + name + ("']]//a[.//i[contains(@class, 'bi-pencil')]]");
+    var editButton = $$x(editButtonXPath).first();
+    editButton.click();
+    return page(FlatsEditPage.class);
   }
 }

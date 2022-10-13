@@ -1,19 +1,16 @@
 package dev.abarmin.home.is.backend;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Driver;
 import dev.abarmin.home.is.backend.page.object.FlatsEditPage;
 import dev.abarmin.home.is.backend.page.object.FlatsListPage;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-import org.openqa.selenium.WebElement;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import static com.codeborne.selenide.Selenide.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static com.codeborne.selenide.Condition.*;
 
 /**
  * @author Aleksandr Barmin
@@ -34,12 +31,13 @@ class BackendSpringApplicationWebTest {
     var flatsPage = open("http://localhost:" + port + "/readings/flats", FlatsListPage.class);
     var createFlatPage = flatsPage.createFlat();
 
-    createFlatPage.title(values.get("title"));
-    createFlatPage.alias(values.get("alias"));
+    createFlatPage.setTitle(values.get("title"));
+    createFlatPage.setAlias(values.get("alias"));
     var withNewFlat = createFlatPage.save();
 
-    withNewFlat.allFlats().shouldHave(CollectionCondition.texts(values.get("title")));
+    var editFlatPage = withNewFlat.edithFlatWithName(values.get("title"));
 
-
+    editFlatPage.getTitle().shouldHave(value(values.get("title")));
+    editFlatPage.getAlias().shouldHave(value(values.get("alias")));
   }
 }

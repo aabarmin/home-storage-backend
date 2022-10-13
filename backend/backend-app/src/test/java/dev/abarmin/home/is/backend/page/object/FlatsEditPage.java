@@ -7,16 +7,20 @@ import static com.codeborne.selenide.Selenide.*;
  * @author Aleksandr Barmin
  */
 public class FlatsEditPage {
-  public SelenideElement title(final String title) {
-    var titleElement = $$x(".//input[@name='title']").first();
-    titleElement.setValue(title);
-    return titleElement;
+  public SelenideElement setTitle(final String title) {
+    return getTitle().setValue(title);
   }
 
-  public SelenideElement alias(final String alias) {
-    var aliasElement = $$x(".//input[@name='alias']").first();
-    aliasElement.setValue(alias);
-    return aliasElement;
+  public SelenideElement getTitle() {
+    return $$x(".//input[@name='title']").first();
+  }
+
+  public SelenideElement getAlias() {
+    return $$x(".//input[@name='alias']").first();
+  }
+
+  public SelenideElement setAlias(final String alias) {
+    return getAlias().setValue(alias);
   }
 
   public FlatsListPage save() {
