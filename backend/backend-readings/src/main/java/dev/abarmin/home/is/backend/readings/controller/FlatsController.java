@@ -1,6 +1,8 @@
 package dev.abarmin.home.is.backend.readings.controller;
 
+import dev.abarmin.home.is.backend.readings.domain.Device;
 import dev.abarmin.home.is.backend.readings.domain.Flat;
+import dev.abarmin.home.is.backend.readings.repository.DeviceRepository;
 import dev.abarmin.home.is.backend.readings.repository.FlatRepository;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,9 @@ public class FlatsController {
   @Autowired
   private FlatRepository flatRepository;
 
+  @Autowired
+  private DeviceRepository deviceRepository;
+
   @ModelAttribute("flat")
   public Flat flatModel() {
     return new Flat();
@@ -42,7 +47,11 @@ public class FlatsController {
   public String edit(final @PathVariable("id") int id,
                      final Model model) {
 
-    model.addAttribute("flat", flatRepository.findById(id).orElseThrow());
+    var flat = flatRepository.findById(id).orElseThrow();
+    var devices = deviceRepository.findDevicesByFlat(flat);
+
+    model.addAttribute("flat", flat);
+    model.addAttribute("devices", devices);
     return "flats/edit";
   }
 

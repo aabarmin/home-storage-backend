@@ -85,9 +85,10 @@ public class DocumentImporter {
     for (ImportDevice device : devices) {
       deviceService.findByAlias(device.getAlias())
           .orElseGet(() -> deviceService.save(new Device(
+              null,
               device.getName(),
               device.getAlias(),
-              flat,
+              flat.getId(),
               hasFeature(device, ImportDeviceFeature.READINGS),
               hasFeature(device, ImportDeviceFeature.INVOICES),
               hasFeature(device, ImportDeviceFeature.RECEIPTS)

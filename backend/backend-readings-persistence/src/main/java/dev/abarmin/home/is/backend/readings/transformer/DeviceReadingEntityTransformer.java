@@ -30,7 +30,7 @@ public abstract class DeviceReadingEntityTransformer {
   public abstract DeviceReadingEntity toEntity(final DeviceReading domain);
 
   protected AggregateReference<DeviceEntity, Integer> mapDevice(final Device device) {
-    return AggregateReference.to(device.id());
+    return AggregateReference.to(device.getId());
   }
 
   protected AggregateReference<FlatEntity, Integer> mapFlat(final Flat flat) {
