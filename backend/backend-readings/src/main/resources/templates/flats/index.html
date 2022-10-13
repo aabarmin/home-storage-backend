@@ -39,8 +39,14 @@
                     <td th:text="${flat.alias}" />
                     <td>
                         <div class="btn-group">
-                            <a th:href="@{/readings/flats/{id}(id=${flat.id})}">
+                            <a th:href="@{/readings/flats/{id}(id=${flat.id})}"
+                               class="btn btn-primary">
                                 <i class="bi bi-pencil"></i>
+                            </a>
+                            <a th:href="@{/readings/flats/{id}/delete(id=${flat.id})}"
+                               onclick="return confirm('Are you sure?')"
+                               class="btn btn-danger">
+                                <i class="bi bi-trash-fill"></i>
                             </a>
                         </div>
                     </td>
