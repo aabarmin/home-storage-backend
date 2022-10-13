@@ -54,7 +54,7 @@ public class FlatsController {
 
   @PostMapping
   public String save(final @Valid @ModelAttribute("flat") Flat model,
-                           final BindingResult result) {
+                     final BindingResult result) {
     if (result.hasErrors()) {
       return "flats/edit";
     }

@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Aleksandr Barmin
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class BackendSpringApplicationTest {
+class BackendSpringApplicationRestTest {
   @Autowired
   private RestTemplate restTemplate;
 
