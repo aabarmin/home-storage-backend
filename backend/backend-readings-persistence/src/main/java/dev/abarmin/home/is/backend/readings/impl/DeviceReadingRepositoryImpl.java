@@ -43,7 +43,7 @@ public class DeviceReadingRepositoryImpl implements DeviceReadingRepository {
                                                                          LocalDate date) {
 
     return repository.findDeviceReadingByFlatAndDeviceAndDate(
-        flat.id(),
+        flat.getId(),
         device.id(),
         date
         )
@@ -53,7 +53,7 @@ public class DeviceReadingRepositoryImpl implements DeviceReadingRepository {
   @Override
   public Collection<DeviceReading> findDeviceReadingByFlat(Flat flat) {
     return StreamSupport.stream(
-            repository.findDeviceReadingByFlat(flat.id()).spliterator(),
+            repository.findDeviceReadingByFlat(flat.getId()).spliterator(),
             false
         )
         .map(transformer::toDomain)
@@ -64,7 +64,7 @@ public class DeviceReadingRepositoryImpl implements DeviceReadingRepository {
   public Collection<DeviceReading> findDeviceReadingByYearAndFlat(int year, Flat flat) {
     final Iterable<DeviceReadingEntity> iterable = repository.findDeviceReadingByYearAndFlat(
         year,
-        flat.id()
+        flat.getId()
     );
 
     return StreamSupport.stream(iterable.spliterator(), false)

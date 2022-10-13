@@ -8,4 +8,8 @@ public record FlatModel(
     String title,
     String alias
 ) {
+
+  public FlatModel() {
+    this(null, "", "");
+  }
 }

@@ -67,29 +67,4 @@ public abstract class DeviceReadingTransformer {
     }
     return fileInfoService.findById(fileId);
   }
-
-//  default Integer mapReference(final AggregateReference<?, Integer> reference) {
-//    return Optional.ofNullable(reference)
-//        .map(AggregateReference::getId)
-//        .orElse(null);
-//  }
-//
-//  default AggregateReference<FileInfo, Integer> mapFile(final Integer fileId) {
-//    return Optional.ofNullable(fileId)
-//        .map(value -> AggregateReference.<FileInfo, Integer>to(value))
-//        .orElse(null);
-//  }
-//
-//  default AggregateReference<Device, Integer> mapDevice(final Integer deviceId) {
-//    return Optional.ofNullable(deviceId)
-//        .map(value -> AggregateReference.<Device, Integer>to(value))
-//        .orElse(null);
-//  }
-//
-//  default AggregateReference<Flat, Integer> mapFlat(final Integer flatId) {
-//    return Optional.ofNullable(flatId)
-//        .map(value -> AggregateReference.<Flat, Integer>to(value))
-//        .orElse(null);
-//  }
-//
 }
