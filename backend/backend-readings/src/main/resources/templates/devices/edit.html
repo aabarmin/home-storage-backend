@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>Readings - Devices</title>
+</head>
+<body>
+  <div layout:fragment="title">
+    <h2>Edit a Device</h2>
+  </div>
+
+  <div layout:fragment="toolbar">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" th:href="@{/readings/flats/{flatId}(flatId=${device.flatId})}">
+          Back
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div layout:fragment="content">
+    <form th:action="@{/readings/flats/{flatId}/devices(flatId=${device.flatId})}"
+          method="post"
+          th:object="${device}">
+
+      <div th:replace="forms::errors" />
+      <div th:replace="forms::hidden('id')" />
+      <div th:replace="forms::select('Flat', 'flatId', ${flats}, true)" />
+      <div th:replace="forms::text('Title', 'title', true)" />
+      <div th:replace="forms::text('Alias', 'alias', true)" />
+      <div th:replace="forms::checkbox('Need Readings', 'needReadings')" />
+      <div th:replace="forms::checkbox('Need Invoices', 'needInvoices')" />
+      <div th:replace="forms::checkbox('Need Receipts', 'needReceipts')" />
+
+      <div class="row">
+        <div class="col">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

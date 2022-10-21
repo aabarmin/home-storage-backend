@@ -12,7 +12,6 @@ public interface FlatRepository {
 
   Optional<Flat> findById(int id);
 
-  @Deprecated
   Collection<Flat> findAll();
 
   Optional<Flat> findFirstByAlias(String alias);

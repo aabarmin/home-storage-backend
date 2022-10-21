@@ -13,6 +13,8 @@ public interface DeviceRepository {
 
   Optional<Device> findById(int id);
 
+  void deleteById(int id);
+
   @Deprecated
   Collection<Device> findAll();
 

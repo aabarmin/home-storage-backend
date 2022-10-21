@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
  * @author Aleksandr Barmin
  */
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class DeviceService {
   private final DeviceRepository deviceRepository;

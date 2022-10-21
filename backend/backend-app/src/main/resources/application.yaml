@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:storage_in_memory
+    url: jdbc:h2:file:./storage/database-dev.db
   liquibase:
     change-log: classpath:/db/db.changelog-master.xml
 

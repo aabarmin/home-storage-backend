@@ -36,6 +36,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
   }
 
   @Override
+  public void deleteById(int id) {
+    repository.deleteById(id);
+  }
+
+  @Override
   public Collection<Device> findAll() {
     return StreamSupport.stream(
         repository.findAll().spliterator(),
