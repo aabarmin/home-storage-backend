@@ -36,6 +36,11 @@ public class DeviceRepositoryImpl implements DeviceRepository {
   }
 
   @Override
+  public void deleteById(int id) {
+    repository.deleteById(id);
+  }
+
+  @Override
   public Collection<Device> findAll() {
     return StreamSupport.stream(
         repository.findAll().spliterator(),
@@ -47,7 +52,7 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 
   @Override
   public Iterable<Device> findDevicesByFlat(Flat flat) {
-    final Iterable<DeviceEntity> iterable = repository.findDevicesByFlat(flat.id());
+    final Iterable<DeviceEntity> iterable = repository.findDevicesByFlat(flat.getId());
 
     return StreamSupport.stream(iterable.spliterator(), false)
         .map(transformer::toDomain)

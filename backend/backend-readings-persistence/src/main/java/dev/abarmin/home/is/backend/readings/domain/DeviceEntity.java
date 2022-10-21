@@ -8,13 +8,13 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * @author Aleksandr Barmin
  */
-@Table("devices")
+@Table("DEVICES")
 public record DeviceEntity(
-    @Id @Column("device_id") Integer id,
-    @Column("device_title") String title,
-    @Column("device_alias") String alias,
-    @Column("device_flat_id") AggregateReference<FlatEntity, Integer> flat,
-    @Column("device_need_readings") boolean needReadings,
-    @Column("device_need_invoices") boolean needInvoices,
-    @Column("device_need_receipts") boolean needReceipts) {
+    @Id @Column("DEVICE_ID") Integer id,
+    @Column("DEVICE_TITLE") String title,
+    @Column("DEVICE_ALIAS") String alias,
+    @Column("DEVICE_FLAT_ID") AggregateReference<FlatEntity, Integer> flat,
+    @Column("DEVICE_NEED_READINGS") boolean needReadings,
+    @Column("DEVICE_NEED_INVOICES") boolean needInvoices,
+    @Column("DEVICE_NEED_RECEIPTS") boolean needReceipts) {
 }

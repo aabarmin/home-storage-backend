@@ -7,11 +7,11 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * @author Aleksandr Barmin
  */
-@Table("flats")
+@Table("FLATS")
 public record FlatEntity(
-    @Id @Column("flat_id") Integer id,
-    @Column("flat_title") String title,
-    @Column("flat_alias") String alias
+    @Id @Column("FLAT_ID") Integer id,
+    @Column("FLAT_TITLE") String title,
+    @Column("FLAT_ALIAS") String alias
 ) {
 
 }

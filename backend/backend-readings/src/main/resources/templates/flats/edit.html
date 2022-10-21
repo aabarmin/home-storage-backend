@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>Readings - Flats</title>
+</head>
+<body>
+    <div layout:fragment="title">
+        <h2>Edit a flat</h2>
+    </div>
+
+    <div layout:fragment="toolbar">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{/readings/flats}">
+                    Back
+                </a>
+            </li>
+            <li class="nav-item" th:if="${flat.id != null}">
+                <a class="nav-link"
+                   th:href="@{/readings/flats/{flatId}/devices/new(flatId=${flat.id})}">
+                    Create a new device
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div layout:fragment="content">
+        <form th:action="@{/readings/flats}"
+              method="post"
+              th:object="${flat}">
+
+            <div th:replace="forms::errors" />
+            <div th:replace="forms::hidden('id')" />
+            <div th:replace="forms::text('Title', 'title', true)" />
+            <div th:replace="forms::text('Alias', 'alias', false)" />
+
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </form>
+
+        <h2>
+            Devices
+        </h2>
+
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Features</th>
+                <th>Alias</th>
+                <th>Actions</th>
+            </tr>
+
+            <tr th:each="device : ${devices}">
+                <td th:text="${device.id}" />
+                <td th:text="${device.title}" />
+                <td>
+                    <ul>
+                        <li th:if="${device.needReadings}">
+                            Supports readings
+                        </li>
+                        <li th:if="${device.needInvoices}">
+                            Supports invoices
+                        </li>
+                        <li th:if="${device.needReceipts}">
+                            Supports receipts
+                        </li>
+                    </ul>
+                </td>
+                <td th:text="${device.alias}" />
+                <td>
+                    <div class="btn-group">
+                        <a
+                                class="btn btn-primary"
+                                th:href="@{/readings/flats/{flatId}/devices/{deviceId}(flatId=${device.flatId}, deviceId=${device.id})}">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a
+                                class="btn btn-danger"
+                                onclick="return confirm('Are you sure?')"
+                                th:href="@{/readings/flats/{flatId}/devices/{deviceId}/delete(flatId=${device.flatId}, deviceId=${device.id})}">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

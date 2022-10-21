@@ -1,27 +1,33 @@
 package dev.abarmin.home.is.backend.readings.domain;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Aleksandr Barmin
  */
-public record Device(
-    Integer id,
-    String title,
-    String alias,
-    Flat flat,
-    boolean needReadings,
-    boolean needInvoices,
-    boolean needReceipts
-) {
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Device {
+    private Integer id;
 
-  public Device {
-  }
+    @NotEmpty
+    private String title;
 
-  public Device(String title,
-                String alias,
-                Flat flat,
-                boolean needReadings,
-                boolean needInvoices,
-                boolean needReceipts) {
-    this(null, title, alias, flat, needReadings, needInvoices, needReceipts);
-  }
+    @NotEmpty
+    private String alias;
+
+    @Positive
+    private int flatId;
+
+    boolean needReadings;
+    boolean needInvoices;
+    boolean needReceipts;
 }

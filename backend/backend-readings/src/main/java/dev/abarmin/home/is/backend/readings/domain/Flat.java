@@ -1,18 +1,22 @@
 package dev.abarmin.home.is.backend.readings.domain;
 
+import javax.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author Aleksandr Barmin
  */
-public record Flat(
-    Integer id,
-    String title,
-    String alias
-) {
-  public Flat {}
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Flat {
+  private Integer id;
 
-  public Flat(String title,
-              String alias) {
+  @NotEmpty
+  private String title;
 
-    this(null, title, alias);
-  }
+  @NotEmpty
+  private String alias;
 }

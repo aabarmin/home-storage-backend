@@ -7,10 +7,10 @@ import org.springframework.data.relational.core.mapping.Table;
 /**
  * @author Aleksandr Barmin
  */
-@Table("files")
+@Table("FILES")
 public record FileInfoEntity(
-    @Id @Column("file_id") Integer id,
-    @Column("file_name") String fileName,
-    @Column("file_type") String fileType,
-    @Column("file_path") String filePath) {
+    @Id @Column("FILE_ID") Integer id,
+    @Column("FILE_NAME") String fileName,
+    @Column("FILE_TYPE") String fileType,
+    @Column("FILE_PATH") String filePath) {
 }

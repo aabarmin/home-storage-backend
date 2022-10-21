@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
  * @author Aleksandr Barmin
  */
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class FlatService {
   private final FlatRepository flatRepository;
 
-  @Deprecated
   public Iterable<Flat> findAll() {
     return flatRepository.findAll();
   }

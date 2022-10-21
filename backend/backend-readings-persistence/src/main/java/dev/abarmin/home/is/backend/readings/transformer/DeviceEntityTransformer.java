@@ -11,13 +11,19 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference;
 /**
  * @author Aleksandr Barmin
  */
-@Mapper(componentModel = "spring", uses = FlatEntityTransformer.class)
+@Mapper(componentModel = "spring")
 public abstract class DeviceEntityTransformer {
+  @Mapping(source = "flatId", target = "flat")
   public abstract DeviceEntity toEntity(Device device);
 
+  @Mapping(source = "flat", target = "flatId")
   public abstract Device toDomain(DeviceEntity device);
 
-  protected AggregateReference<FlatEntity, Integer> mapFlat(final Flat flat) {
-    return AggregateReference.to(flat.id());
+  protected AggregateReference<FlatEntity, Integer> mapFlat(final Integer flat) {
+    return AggregateReference.to(flat);
+  }
+
+  protected Integer mapFlat(final AggregateReference<FlatEntity, Integer> reference) {
+    return reference.getId();
   }
 }

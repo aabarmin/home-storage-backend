@@ -1,10 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${aws-ssm:/prod/home-storage/rds/host}:${aws-ssm:/prod/home-storage/rds/port}/${aws-ssm:/prod/home-storage/rds/name}
-    username: ${aws-ssm:/prod/home-storage/rds/username}
-    password: ${aws-ssm:/prod/home-storage/rds/password}
+    url: jdbc:h2:file:./storage/database.db
 
 storage:
-  s3:
-    region: ${aws-ssm:/prod/home-storage/s3/region}
-    bucket: ${aws-ssm:/prod/home-storage/s3/name}
+  local:
+    folder: ./storage

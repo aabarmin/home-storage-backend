@@ -31,23 +31,11 @@
         </dependency>
         <dependency>
             <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-binary-storage-s3</artifactId>
+            <artifactId>backend-binary-storage-local</artifactId>
         </dependency>
         <dependency>
             <groupId>dev.abarmin.home.is</groupId>
             <artifactId>backend-readings-persistence</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-ssm-parameters</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>dev.abarmin.home.is</groupId>
-            <artifactId>backend-mrp</artifactId>
         </dependency>
 
         <dependency>
@@ -59,77 +47,39 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>bootstrap</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>bootstrap-icons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.9.1</version>
-                <executions>
-                    <execution>
-                        <id>Install Node and NPM</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                    </execution>
-                    <execution>
-                        <id>Install frontend resources</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Build the frontend</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <arguments>run build</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <nodeVersion>v17.8.0</nodeVersion>
-                    <workingDirectory>${project.basedir}/../../frontend</workingDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>Copy frontend</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target name="Copy frontend">
-                                <copy toDir="${project.basedir}/target/classes/static">
-                                    <fileset
-                                            dir="${project.basedir}/../../frontend/dist/frontend" />
-                                </copy>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
