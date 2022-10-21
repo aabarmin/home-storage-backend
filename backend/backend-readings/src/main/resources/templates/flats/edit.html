@@ -52,6 +52,7 @@
             <tr>
                 <th>#</th>
                 <th>Title</th>
+                <th>Features</th>
                 <th>Alias</th>
                 <th>Actions</th>
             </tr>
@@ -59,9 +60,34 @@
             <tr th:each="device : ${devices}">
                 <td th:text="${device.id}" />
                 <td th:text="${device.title}" />
+                <td>
+                    <ul>
+                        <li th:if="${device.needReadings}">
+                            Supports readings
+                        </li>
+                        <li th:if="${device.needInvoices}">
+                            Supports invoices
+                        </li>
+                        <li th:if="${device.needReceipts}">
+                            Supports receipts
+                        </li>
+                    </ul>
+                </td>
                 <td th:text="${device.alias}" />
                 <td>
-                    123
+                    <div class="btn-group">
+                        <a
+                                class="btn btn-primary"
+                                th:href="@{/readings/flats/{flatId}/devices/{deviceId}(flatId=${device.flatId}, deviceId=${device.id})}">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a
+                                class="btn btn-danger"
+                                onclick="return confirm('Are you sure?')"
+                                th:href="@{/readings/flats/{flatId}/devices/{deviceId}/delete(flatId=${device.flatId}, deviceId=${device.id})}">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </div>
                 </td>
             </tr>
         </table>

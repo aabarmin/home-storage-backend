@@ -2,7 +2,9 @@ package dev.abarmin.home.is.backend.readings.domain;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +12,7 @@ import lombok.NoArgsConstructor;
  * @author Aleksandr Barmin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Device {
@@ -21,8 +24,8 @@ public class Device {
     @NotEmpty
     private String alias;
 
-    @NotNull
-    private Integer flatId;
+    @Positive
+    private int flatId;
 
     boolean needReadings;
     boolean needInvoices;
